@@ -18,7 +18,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 	    <section id="smb_my_od">
 	        <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
 	       
-	
+	<div></div>
 	        <div class="smb_my_more">
 	            <a href="./orderinquiry.php">더보기</a>
 	        </div>
