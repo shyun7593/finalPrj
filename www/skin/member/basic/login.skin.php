@@ -58,7 +58,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 <input type="text" name="mb_hp" id="mb_hp" required class="frm_input required" size="20" maxLength="12" placeholder="휴대폰번호('-' 제외)">
                 <div class="mgb-10"></div>
                 <label for="mb_sex" class="sound_only">성별<strong class="sound_only"> 필수</strong></label>
-                <select require class="frm_input required" name="mb_sex" id="mb_sex">
+                <select require class="frm_input " name="mb_sex" id="mb_sex">
                     <option value="M" selected>남자</option>
                     <option value="F">여자</option>
                 </select>
@@ -91,6 +91,14 @@ jQuery(function($){
     });
 });
 
+$("#login_id, #login_pw").on('keydown',function(e){
+    if(document.querySelector('.btn_submit.active').id == 'login-btn'){
+        if(e.keyCode == 13){
+            doAct('login');
+        }
+    }
+});
+
 function flogin_submit(f)
 {
     if( $( document.body ).triggerHandler( 'login_sumit', [f, 'flogin'] ) !== false ){
@@ -100,6 +108,22 @@ function flogin_submit(f)
 }
 
 function doAct(type){
+    if(type == 'reg'){
+        if(
+            !$("#login_id").val() ||
+            !$("#login_pw").val() ||
+            !$("#mb_sex").val() ||
+            !$("#mb_hp").val() ||
+            !$("#mb_birth").val() ||
+            !$("#mb_name").val()
+        ){
+            swal('','모든 입력값은 필수 입니다.','error');
+            setTimeout(() => {
+                   swal.close();
+            }, 1200);
+            return false;
+        }
+    }
     $.ajax({
         url: "<?php echo $login_action_url ?>",
         type: "POST",
@@ -119,17 +143,50 @@ function doAct(type){
         },
         success: function(data) {
             if(type == 'reg'){
-                if(data == 'success'){
-                    alert('회원가입 성공');
-                    location.reload();
+                switch(data){
+                    case 'success':
+                        swal('','회원가입에 성공했습니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                            location.reload();
+                        }, 1200);
+                        break;
+                    case 'exist':
+                        swal('','이미 존재하는 아이디입니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
                 }
             } else {
-                if(data=='success'){
-                    alert('로그인 성공');
-                    location.href = "/shop";
-                    // location.reload();
-                } else {
-                    alert(data);
+                switch(data){
+                    case 'success':
+                        location.href = "/shop";        
+                        break;
+                    case 'exist':
+                        swal('','이미 존재하는 아이디입니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
+                    case 'wrong':
+                        swal('','아이디 또는 비밀번호가 틀립니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
+                    case 'deined':
+                        swal('','차단된 아이디 입니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
+                    case 'outed':
+                        swal('','탈퇴한 아이디 입니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
                 }
             }
         }

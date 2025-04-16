@@ -21,9 +21,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 	    <!-- 학생 리스트 시작 { -->
 	    <section id="smb_my_od">
 	        <h2>학생 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
-	        <div class="smb_my_more">
+	        <!-- <div class="smb_my_more">
 	            <a href="./orderinquiry.php">더보기</a>
-	        </div>
+	        </div> -->
             <div class="tbl_wrap" >
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
@@ -84,9 +84,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 	    <!-- 성적 정보 시작 { -->
 	    <section id="smb_my_od">
 	        <h2>성적 정보</h2>
-	        <div class="smb_my_more" id="goStudentPage">
+	        <!-- <div class="smb_my_more" id="goStudentPage">
 	            <a href="#">페이지 이동</a>
-	        </div>
+	        </div> -->
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_one_color">
                     <tr style="text-align: center;">

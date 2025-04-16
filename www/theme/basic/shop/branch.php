@@ -77,9 +77,9 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
             <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
 
 
-            <div class="smb_my_more">
+            <!-- <div class="smb_my_more">
                 <a href="./orderinquiry.php">더보기</a>
-            </div>
+            </div> -->
             <div class="tbl_wrap">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
