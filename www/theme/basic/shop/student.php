@@ -4,6 +4,10 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '학생관리';
 include_once('./_head.php');
 
+if($_SESSION['mb_profile'] == '3' || $_SESSION['mb_profile'] == '4'){
+    goto_url('/index');
+}
+
 $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_member
                         where mb_id NOT IN ( '{$member['mb_id']}')
@@ -14,9 +18,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 <div id="smb_my">
 
 	<div id="smb_my_list">
-	    <!-- 최근 주문내역 시작 { -->
+	    <!-- 학생 리스트 시작 { -->
 	    <section id="smb_my_od">
-	        <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
+	        <h2>학생 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
 	        <div class="smb_my_more">
 	            <a href="./orderinquiry.php">더보기</a>
 	        </div>
@@ -66,7 +70,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                     <td><?= $m['mb_2']?></td>
                                     <td><?= $gender?></td>
                                     <td><?= hyphen_hp_number($m['mb_hp'])?></td>
-                                    <td>9</td>
+                                    <td></td>
                                 </tr>
                                 <?}
                     ?>
@@ -74,10 +78,178 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                 </table>
             </div>
 	    </section>
-	    <!-- } 최근 주문내역 끝 -->
+	    <!-- } 학생 리스트 끝 -->
 	</div>
+    <div id="smb_my_list">
+	    <!-- 성적 정보 시작 { -->
+	    <section id="smb_my_od">
+	        <h2>성적 정보</h2>
+	        <div class="smb_my_more" id="goStudentPage">
+	            <a href="#">페이지 이동</a>
+	        </div>
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_one_color">
+                    <tr style="text-align: center;">
+                        <th>소속</th>
+                        <td><?= $m['branchName']?>
+                        <th>이름</th>
+                        <td><?= $m['mb_name']?>
+                        <th>학교</th>
+                        <td><?= $m['mb_1']?>
+                        <th>학년</th>
+                        <td><?= $m['mb_2']?>
+                        <th>성별</th>
+                        <td><?= $gender?>
+                    </tr>
+                </table>
+            </div>
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_2n_color">
+                    <thead>
+                        <th>구분</th>
+                        <th colspan="5">국어</th>
+                        <th colspan="5">수학</th>
+                        <th colspan="2">영어</th>
+                        <th colspan="5">탐구Ⅰ</th>
+                        <th colspan="5">탐구Ⅱ</th>
+                        <th colspan="2">한국사</th>
+                        <th colspan="3">제2외국어</th>
+                    </thead>
+                    <tbody>
+                        <tr style="text-align: center;" class="onaction">
+                            <td>구분</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>등</td>
+                        </tr>
+                    <?
+                        $msql = " select *
+                        from g5_member m
+                        LEFT JOIN g5_branch b on
+                        b.idx = m.mb_signature
+                        where mb_id NOT IN ( '{$member['mb_id']}')
+                        AND mb_id != 'admin'";
+                        $mres = sql_query($msql);
+                        foreach($mres as $ms => $m){
+                            $gender = '';
+                            switch($m['mb_sex']){
+                                case 'M':
+                                    $gender = '남';
+                                    break;
+                                case 'F':
+                                    $gender = '여';
+                                    break;
+                            }
+                            ?>
+                            
+                                <tr style="text-align: center;">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <?}
+                    ?>
+                    </tbody>
+                </table>
+            </div>
+	    </section>
+	    <!-- } 성적 정보 끝 -->
+	</div>
+    <div id="smb_my_list" style="width: 100%;">
+        <!-- 지원대학 시작 { -->
+        <section id="smb_my_od">
+            <h2>지원대학</h2>
+
+            <div class="tbl_wrap">
+                <table class="tbl_head01">
+                    <colgroup width="*">
+                    <colgroup width="*">
+                    <colgroup width="*">
+                    <colgroup width="*">
+                    <colgroup width="10%">
+                    <thead>
+                        <th>학교명</th>
+                        <th>본인점수</th>
+                        <th>지원가능여부</th>
+                        <th>저장시간</th>
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        <?
+                            $myCampus = sql_query("");
+                            foreach($myCampus as $mcc => $mc){
+                        ?>
+                        <tr style="text-align: center;">
+                            <td style="text-align: left;">
+                                국어<br>
+                                <select id="korean" name="korean" class="frm_input" style="width: 100%;">
+                                    <option value="">선택하세요</option>
+                                    <option value="kor1">화법과 작문</option>
+                                    <option value="kor2">언어와 매체</option>
+                                </select>
+                            </td>
+                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanOrigin" name="koreanOrigin"></td>
+                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanSScore" name="koreanSScore"></td>
+                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanPScore" name="koreanPScore"></td>
+                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanGrade" name="koreanGrade"></td>
+                        </tr>
+                        <?}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- } 지원대학 끝 -->
+    </div>
 </div>
-<div id="popupBackground"></div>
 
 <div id="memberPopup">
     <div class="mb20" id="memberDiv">

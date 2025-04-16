@@ -12,13 +12,13 @@ $od_id = isset($_POST['od_id']) ? safe_replace_regex($_POST['od_id'], 'od_id') :
 
 // url 체크
 check_url_host($url);
-
+$url = G5_URL . '/shop';
 // 이미 로그인 중이라면
 if ($is_member) {
     if ($url)
         goto_url($url);
     else
-        goto_url(G5_URL);
+        goto_url(G5_URL.'/shop');
 }
 
 $login_url        = login_url($url);

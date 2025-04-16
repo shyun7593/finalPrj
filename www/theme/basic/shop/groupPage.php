@@ -1,6 +1,10 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
+if($_SESSION['mb_profile'] != '1'){
+    goto_url('/index');
+}
+
 $g5['title'] = '등급관리';
 include_once('./_head.php');
 
@@ -10,10 +14,10 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         AND mb_id != 'admin'");
 ?>
 
-<!-- 마이페이지 시작 { -->
+<!-- 등급관리 시작 { -->
 <div id="smb_my">
 	<div id="smb_my_list">
-	    <!-- 최근 주문내역 시작 { -->
+	    <!-- 사용자 리스트 시작 { -->
 	    <section id="smb_my_od">
 	        <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
 	       
@@ -40,7 +44,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <th>승인여부</th>
                     </thead>
                     <tbody>
-                    <?
+                    <?  
                         $msql = " select *
                         from g5_member m
                         LEFT JOIN g5_branch b on
@@ -100,10 +104,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                 </table>
             </div>
 	    </section>
-	    <!-- } 최근 주문내역 끝 -->
+	    <!-- } 사용자 리스트 끝 -->
 	</div>
 </div>
-<div id="popupBackground"></div>
 
 <div id="memberPopup">
     <div class="mb20" id="memberDiv">

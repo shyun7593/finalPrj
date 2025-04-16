@@ -4,6 +4,9 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '학원관리';
 include_once('./_head.php');
 
+if($_SESSION['mb_profile'] == '3' || $_SESSION['mb_profile'] == '4'){
+    goto_url('/index');
+}
 
 $bcnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_branch");
@@ -137,9 +140,6 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
         <!-- } 최근 주문내역 끝 -->
     </div>
 </div>
-
-
-<div id="popupBackground"></div>
 
 <div id="branchPopup">
     <div class="mb20" id="branchDiv">

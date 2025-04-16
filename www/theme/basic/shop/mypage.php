@@ -275,9 +275,6 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
     </div>
 </div>
 
-
-<div id="popupBackground"></div>
-
 <div id="branchPopup">
     <div class="mb20" id="branchDiv">
         <div class="tbl_frm01 tbl_wrap">
@@ -518,7 +515,7 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
             function(isConfirm){
                 if(isConfirm){
                     $.ajax({
-                        url: "/bbs/update_branch.php",
+                        url: "/bbs/update_grade.php",
                         type: "POST",
                         data: {
                             korean : $("#korean").val(),
