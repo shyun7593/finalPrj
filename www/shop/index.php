@@ -2,7 +2,11 @@
 include_once('./_common.php');
 
 if(defined('G5_THEME_PATH')) {
-    require_once(G5_THEME_SHOP_PATH.'/index.php');
+    if($_SESSION['mb_profile'] == 4 || $_SESSION['mb_profile'] == 3){
+        require_once(G5_THEME_SHOP_PATH.'/mypage.php');
+    } else {
+        require_once(G5_THEME_SHOP_PATH.'/student.php');
+    }
     return;
 }
 

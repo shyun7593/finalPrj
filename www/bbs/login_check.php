@@ -12,7 +12,11 @@ $mb_birth = isset($_POST['mb_birth']) ? trim($_POST['mb_birth']) : '';
 $mb_name = isset($_POST['mb_name']) ? trim($_POST['mb_name']) : '';
 
 if($type == 'reg'){
-    
+    $isexist = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member WHERE mb_id = '{$mb_id}'");
+    if($isexist['cnt']>0){
+        echo 'exist';
+        exit;
+    }
     sql_query("INSERT INTO g5_member SET
         mb_id = '{$mb_id}',
         mb_password = '".get_encrypt_string($mb_password)."',
@@ -88,22 +92,27 @@ $is_need_not_password = run_replace('login_check_need_not_password', $is_social_
 // 회원아이디를 입력해 보고 맞으면 또 비밀번호를 입력해보는 경우를 방지하기 위해서입니다.
 // 불법사용자의 경우 회원아이디가 틀린지, 비밀번호가 틀린지를 알기까지는 많은 시간이 소요되기 때문입니다.
 if (!$is_need_not_password && (! (isset($mb['mb_id']) && $mb['mb_id']) || !login_password_check($mb, $mb_password, $mb['mb_password'])) ) {
-
-    run_event('password_is_wrong', 'login', $mb);
-
-    alert('가입된 회원아이디가 아니거나 비밀번호가 틀립니다.\\n비밀번호는 대소문자를 구분합니다.');
+    echo 'wrong';
+    exit;
+    // run_event('password_is_wrong', 'login', $mb);
+    
+    // alert('가입된 회원아이디가 아니거나 비밀번호가 틀립니다.\\n비밀번호는 대소문자를 구분합니다.');
 }
 
 // 차단된 아이디인가?
 if ($mb['mb_intercept_date'] && $mb['mb_intercept_date'] <= date("Ymd", G5_SERVER_TIME)) {
-    $date = preg_replace("/([0-9]{4})([0-9]{2})([0-9]{2})/", "\\1년 \\2월 \\3일", $mb['mb_intercept_date']);
-    alert('회원님의 아이디는 접근이 금지되어 있습니다.\n처리일 : '.$date);
+    echo 'deined';
+    exit;
+    // $date = preg_replace("/([0-9]{4})([0-9]{2})([0-9]{2})/", "\\1년 \\2월 \\3일", $mb['mb_intercept_date']);
+    // alert('회원님의 아이디는 접근이 금지되어 있습니다.\n처리일 : '.$date);
 }
 
 // 탈퇴한 아이디인가?
 if ($mb['mb_leave_date'] && $mb['mb_leave_date'] <= date("Ymd", G5_SERVER_TIME)) {
-    $date = preg_replace("/([0-9]{4})([0-9]{2})([0-9]{2})/", "\\1년 \\2월 \\3일", $mb['mb_leave_date']);
-    alert('탈퇴한 아이디이므로 접근하실 수 없습니다.\n탈퇴일 : '.$date);
+    echo 'outed';
+    exit;
+    // $date = preg_replace("/([0-9]{4})([0-9]{2})([0-9]{2})/", "\\1년 \\2월 \\3일", $mb['mb_leave_date']);
+    // alert('탈퇴한 아이디이므로 접근하실 수 없습니다.\n탈퇴일 : '.$date);
 }
 
 // 메일인증 설정이 되어 있다면
@@ -242,3 +251,4 @@ if($mb_id == 'admin'){
 }
 
 echo 'success';
+exit;

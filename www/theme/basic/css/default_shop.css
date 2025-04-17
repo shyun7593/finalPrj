@@ -49,13 +49,13 @@ box-sizing:border-box;
     color:black;
 }
 
-.btn-n.btn-gray:hover{
+.btn-n:hover{
     background-color: black;
     color: white;
 }
 
-.btn-n.btn-gray.active{
-    background-color: black;
+.btn-n.active{
+    background-color: black !important;
     color: white;
 }
 
@@ -66,6 +66,41 @@ box-sizing:border-box;
 .btn-n.btn-large{
     width: 100px;
     height: 40px;
+}
+
+.iswrite{
+    background-color: #089bff;
+}
+
+.tbl_2n_color td:not(:first-child){
+    border-left: 1px solid white;
+}
+
+.tbl_2n_color tr:nth-child(2n){
+    background-color: #a2c8e1;
+}
+
+.tbl_one_color th{
+    background-color: #141f55;
+    color: white;
+    font-weight: 700;
+}
+/* .tbl_one_color td:not(:first-child){
+    background-color: #8cb8c9;
+    color: black;
+    font-weight: 700;
+} */
+.tbl_one_color td{
+    background-color: #8cb8c9;
+    color: black;
+    font-weight: 700;
+}
+
+.auto_input{
+    background-color: unset !important;
+    border: none !important;
+    pointer-events: none;
+    box-shadow: unset !important;
 }
 
 /* 팝업 배경 (화면을 덮는 반투명 배경) */
