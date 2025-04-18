@@ -24,6 +24,7 @@ if($type == 'reg'){
         mb_hp = replace('{$mb_hp}','-',''),
         mb_birth = replace('{$mb_birth}','-',''),
         mb_name = '{$mb_name}',
+        mb_profile = 'C40000004',
         mb_level = 0
     ");
     echo 'success';

@@ -152,7 +152,7 @@ function doAct(type){
             if(type == 'reg'){
                 switch(data){
                     case 'success':
-                        swal('','회원가입에 성공했습니다.','error');
+                        swal('','회원가입에 성공했습니다.','success');
                         setTimeout(() => {
                             swal.close();
                             location.reload();
