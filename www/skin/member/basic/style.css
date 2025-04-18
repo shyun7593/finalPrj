@@ -17,7 +17,7 @@
 }
 
 .login-view:hover{
-  background-color: #179b77;
+  background-color: #1313f3;
   transition: 0.5s ease;
 }
 
@@ -27,7 +27,7 @@
   transition: 0.5s ease;
 }
 .login-view.active{
-  background-color: #1ab188;
+  background-color: #0000f3;
   color: white;
   transition: 0.5s ease;
 }

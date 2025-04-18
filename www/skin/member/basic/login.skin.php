@@ -7,30 +7,31 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <style>
     body{
         /* background-color: #c1bdba; */
+        background-image: url("/img/final_login_background.png");
     }
     #mb_login{
         width: 600px;
         padding: 40px;
     }
     .mbskin, .mb_log_cate{
-        background-color: rgba(19, 35, 47, 0.9) !important;
+        background-color: rgba(255, 255, 255, 1) !important;
     }
     .mbskin_box{
         background-color: unset !important;
         border: unset !important;
     }
     #login_fs{
-        padding: 35px 0 !important;
+        padding: 20px 0 !important;
     }
     
 
 </style>
 <!-- 로그인 시작 { -->
-<div id="mb_login" class="mbskin">
-    <div class="mbskin_box">
-        <h1><?php echo $g5['title'] ?></h1>
+<div id="mb_login" class="mbskin" style="margin:10em auto;border-radius:10px;">
+    <h2 style="font-size: 3em;margin-bottom:20px;">파이널 체대입시</h2>
+    <div class="mbskin_box" style="font-size: 1.5em;">
         <div class="mb_log_cate">
-            <h2 class="cursor login-view active" id="loginFormView" onclick="viewLogin()"><span>로그인</span></h2>
+            <h2 class="cursor login-view active" style="border-right: 1px solid white;" id="loginFormView" onclick="viewLogin()"><span>로그인</span></h2>
             <h2 class="cursor login-view" id="regFormView" onclick="viewLogin()"><span>회원가입</span></h2>
         </div>
         <form name="flogin" action="<?php echo $login_action_url ?>" onsubmit="return flogin_submit(this);" method="post">
@@ -38,11 +39,11 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         
         <fieldset id="login_fs">
             <legend>회원로그인</legend>
-            <div style="color:white; text-align:left;margin-bottom:5px;">아이디</div>
+            <div style="color:black; text-align:left;margin-bottom:5px;">아이디</div>
             <label for="login_id" class="sound_only">회원아이디<strong class="sound_only"> 필수</strong></label>
             <input type="text" name="mb_id" id="login_id" required class="frm_input required" size="20" maxLength="20" placeholder="아이디">
             
-            <div style="color:white; text-align:left;margin-bottom:5px;">비밀번호</div>
+            <div style="color:black; text-align:left;margin-bottom:5px;">비밀번호</div>
             <label for="login_pw" class="sound_only">비밀번호<strong class="sound_only"> 필수</strong></label>
             <input type="password" name="mb_password" id="login_pw" required class="frm_input required" size="20" maxLength="20" placeholder="비밀번호">
             <div class="mgb-10"></div>
