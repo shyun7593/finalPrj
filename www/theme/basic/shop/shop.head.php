@@ -12,6 +12,16 @@ $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
 //         alert('접속 권한이 없습니다.','/shop');
 //     }
 // }
+
+$conte=explode('/',$_SERVER['PHP_SELF']);
+$nowUrl = str_replace('.php', '', $conte[count($conte) - 1]);
+if($nowUrl == 'index'){
+    if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){
+        $nowUrl = 'mypage';
+    } else {
+        $nowUrl = 'student';
+    }
+}
 if(G5_IS_MOBILE) {
     include_once(G5_THEME_MSHOP_PATH.'/shop.head.php');
     return;
@@ -46,7 +56,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_use = 1 ORDER BY me_order");
                 foreach($menus as $mu => $m){
             ?>
-                <li style="width: auto;min-width:200px;"><a href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
+                <li style="width: auto;min-width:200px;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
             <?}?>
         </ul>
     </div> 

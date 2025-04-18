@@ -299,10 +299,12 @@ border:1px solid #558ab7 !important;
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.083em}
 .hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
-.hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center}
-.hd_menu li:last-child a {border-right:0}
-.hd_menu li a {display:block;color:#fff;border-right:1px solid #333}
-
+.hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center;border-right: 1px solid #fff;}
+.hd_menu li:last-child {border-right:0}
+.hd_menu li a {display:block;color:#fff;}
+.hd_menu li.active{background-color: #f6f6f6 !important;}
+.hd_menu li.active a{color : black;}
+.hd_menu li:hover{background-color: #c7bebebe;}
 
 /*사이드 메뉴*/
 #side_menu {height:100%;position:fixed;top:0;right:0;background:#fff;border-left:1px solid #e5e7ea;z-index:120;padding-left:50px;-webkit-box-shadow:0 1px 5px #d6d6d6;
