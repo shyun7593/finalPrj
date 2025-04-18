@@ -6,7 +6,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 ?>
 <style>
     body{
-        background-color: #c1bdba;
+        /* background-color: #c1bdba; */
     }
     #mb_login{
         width: 600px;
