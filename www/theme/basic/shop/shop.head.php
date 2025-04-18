@@ -17,7 +17,7 @@ $conte=explode('/',$_SERVER['PHP_SELF']);
 $nowUrl = str_replace('.php', '', $conte[count($conte) - 1]);
 if($nowUrl == 'index'){
     if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){
-        $nowUrl = 'mypage';
+        $nowUrl = 'myscore';
     } else {
         $nowUrl = 'student';
     }

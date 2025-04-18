@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$g5['title'] = '마이페이지';
+$g5['title'] = '성적입력';
 include_once('./_head.php');
 
 if(!$month){
@@ -162,7 +162,7 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
 
     function viewMonth(e){
         let id = e.currentTarget.id;
-        location.href = './mypage?month=' + id;
+        location.href = './myscore?month=' + id;
     }
 
     function saveGrade(){

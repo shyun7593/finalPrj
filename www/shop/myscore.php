@@ -2,19 +2,19 @@
 include_once('./_common.php');
 
 if (!$is_member)
-    goto_url(G5_BBS_URL."/login.php?url=".urlencode(G5_SHOP_URL."/mypage.php"));
+    goto_url(G5_BBS_URL."/login.php?url=".urlencode(G5_SHOP_URL."/myscore.php"));
 
 // 읽지 않은 쪽지수
 $memo_not_read = isset($member['mb_memo_cnt']) ? (int) $member['mb_memo_cnt'] : 0;
 
 if (G5_IS_MOBILE) {
-    include_once(G5_MSHOP_PATH.'/mypage.php');
+    include_once(G5_MSHOP_PATH.'/myscore.php');
     return;
 }
 
 // 테마에 mypage.php 있으면 include
 if(defined('G5_THEME_SHOP_PATH')) {
-    $theme_mypage_file = G5_THEME_SHOP_PATH.'/mypage.php';
+    $theme_mypage_file = G5_THEME_SHOP_PATH.'/myscore.php';
     if(is_file($theme_mypage_file)) {
         include_once($theme_mypage_file);
         return;
@@ -22,7 +22,7 @@ if(defined('G5_THEME_SHOP_PATH')) {
     }
 }
 
-$g5['title'] = '마이페이지';
+$g5['title'] = '성적입력';
 include_once('./_head.php');
 
 // 쿠폰
