@@ -353,7 +353,7 @@ box-shadow:0 2px 5px rgba(0,0,0,0.2)}
 
 /* 중간 레이아웃 */
 /* #wrapper {z-index:5;margin:0 auto;width:1200px;position:relative} */
-#wrapper {z-index:5;position:relative;width:100%;background:#f6f6f6;font-size: 1.2em;min-width: 1400px;}
+#wrapper {z-index:5;position:relative;width:100%;background:#f6f6f6;font-size: 1.2em;min-width: 1400px;height: calc(100vh - 50px);}
 #wrapper.is_community{background:#fff}
 #wrapper:after {display:block;visibility:hidden;clear:both;content:""}
 #wrapper_title {padding:20px 0;font-size:2em;font-weight:bold}
