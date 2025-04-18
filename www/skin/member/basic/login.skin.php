@@ -17,7 +17,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         padding: 40px;
     }
     .mbskin, .mb_log_cate{
-        background-color: rgba(255, 255, 255, 1) !important;
+        background-color: rgba(255, 255, 255, 0.99) !important;
     }
     .mbskin_box{
         background-color: unset !important;
@@ -72,8 +72,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                     </select>
                 </div>
                 <div class="mgb-20"></div>
-                <button type="button" onclick="doAct('login')" class="btn_submit btn-view active" id="login-btn">로그인</button>
-                <button type="button" onclick="doAct('reg')" class="btn_submit btn-view" id="reg-btn">회원가입</button>
+                <button type="button" style="background-color: #000 !important;padding:15px 0;height:auto;" onclick="doAct('login')" class="btn_submit btn-view active" id="login-btn">로그인</button>
+                <button type="button" style="background-color: #000 !important;padding:15px 0;height:auto;" onclick="doAct('reg')" class="btn_submit btn-view" id="reg-btn">회원가입</button>
                 
                 <!-- <div id="login_info">
                     <div class="login_if_auto chk_box">
