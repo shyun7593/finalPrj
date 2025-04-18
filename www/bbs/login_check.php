@@ -37,7 +37,7 @@ if($type == 'reg'){
     $mb_signature = isset($_POST['mb_signature']) ? trim($_POST['mb_signature']) : '';
     $mb_level = isset($_POST['mb_level']) ? trim($_POST['mb_level']) : '0';
     if($mb_level == 0){
-        $mb_profile = '4';
+        $mb_profile = 'C40000004';
     }
     
     sql_query("UPDATE g5_member SET
