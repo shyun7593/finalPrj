@@ -4,7 +4,7 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '학원관리';
 include_once('./_head.php');
 
-if($_SESSION['mb_profile'] == '3' || $_SESSION['mb_profile'] == '4'){
+if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C40000004'){
     goto_url('/index');
 }
 

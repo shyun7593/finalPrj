@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-if($_SESSION['mb_profile'] != '1'){
+if($_SESSION['mb_profile'] != 'C40000001'){
     goto_url('/index');
 }
 
@@ -49,27 +49,16 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_member m
                         LEFT JOIN g5_branch b on
                         b.idx = m.mb_signature
+                        LEFT JOIN g5_cmmn_code gcc on
+                        gcc.code = m.mb_profile
                         where mb_id NOT IN ( '{$member['mb_id']}')
                         AND mb_id != 'admin'";
                         $mres = sql_query($msql);
                         foreach($mres as $ms => $m){
-                            $grade = '';
+                          
                             $gender = '';
                             $level = '';
-                            switch($m['mb_profile']){
-                                case '4':
-                                    $grade='일반';
-                                    break;
-                                case '3':
-                                    $grade='원내학생';
-                                    break;
-                                case '2':
-                                    $grade='원장';
-                                    break;
-                                case '1':
-                                    $grade='관리자';
-                                    break;
-                            }
+                          
                             switch($m['mb_sex']){
                                 case 'M':
                                     $gender = '(남)';
@@ -95,7 +84,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                     <td><?= $m['mb_name'] . $gender?></td>
                                     <td><?= hyphen_birth_number($m['mb_birth'])?></td>
                                     <td><?= hyphen_hp_number($m['mb_hp'])?></td>
-                                    <td><?= $grade?></td>
+                                    <td><?= $m['codeName']?></td>
                                     <td><?= $level?></td>
                                 </tr>
                                 <?}
@@ -187,10 +176,12 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <th>권한</th>
                         <td>
                             <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;">
-                                <option value="1">관리자</option>
-                                <option value="2">원장</option>
-                                <option value="3">원내학생</option>
-                                <option value="4">일반</option>
+                                <?
+                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' ORDER BY code");
+                                    foreach($ggsql as $ggs => $g){?>
+                                      <option value="<?=$g['code']?>"><?=$g['codeName']?></option>  
+                                    <?}
+                                ?>
                             </select>
                         </td>
                     </tr>
