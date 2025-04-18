@@ -11,6 +11,7 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
 $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_member
                         where mb_id NOT IN ( '{$member['mb_id']}')
+                        AND mb_profile in ('C40000003','C40000004')
                         AND mb_id != 'admin'");
 ?>
 
@@ -49,6 +50,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         LEFT JOIN g5_branch b on
                         b.idx = m.mb_signature
                         where mb_id NOT IN ( '{$member['mb_id']}')
+                        AND mb_profile in ('C40000003','C40000004')
                         AND mb_id != 'admin'";
                         $mres = sql_query($msql);
                         foreach($mres as $ms => $m){

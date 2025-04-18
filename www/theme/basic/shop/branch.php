@@ -13,6 +13,7 @@ $bcnt = sql_fetch("select COUNT(*) as 'cnt'
 
 $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_member where mb_id NOT IN ( '{$member['mb_id']}')
+                        AND mb_profile in ('C40000003','C40000004')
                         AND mb_id != 'admin'");
 ?>
 
@@ -107,7 +108,8 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         LEFT JOIN g5_branch b on
                         b.idx = m.mb_signature
                         where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_id != 'admin'";
+                        AND mb_id != 'admin'
+                        AND m.mb_profile in ('C40000003','C40000004')";
                                                 $mres = sql_query($msql);
                                                 foreach ($mres as $ms => $m) {
                                                     $gender = '';

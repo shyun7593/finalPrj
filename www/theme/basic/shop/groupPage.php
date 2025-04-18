@@ -132,7 +132,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             <input type="text" class="frm_input" id="mb_hp" name="mb_hp" value="" autocomplete="off" style="width: 100%;">
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="onlyStudent">
                         <th>학교</th>
                         <td>
                             <input type="text" class="frm_input" id="mb_1" name="mb_1" value="" autocomplete="off" style="width: 100%;">
@@ -273,17 +273,30 @@ function updateMember(no){
                     $("#mb_signature").val(obj.mb_signature);
                     $("#mb_level").val(obj.mb_level);
                     $("#mb_id").val(obj.mb_id);
-                    // $('#selectJaje').append($('<option>', {
-                    //     value: obj.idx,
-                    //     text: obj.ojName
-                    // }));
+                    setTimeout(() => {
+                        if(obj.mb_profile == 'C40000001' || obj.mb_profile == 'C40000002'){
+                            $(".onlyStudent").css('display','none');
+                        } else if(obj.mb_profile == 'C40000003' || obj.mb_profile == 'C40000004'){
+                            $(".onlyStudent").css('display','');
+                        }
+                    }, 0);
                 });
-                console.log(json);
             }
         });
         $('#popupBackground').fadeIn(); // 배경 표시
         $('#memberPopup').fadeIn(); // 팝업 표시
     }
+    $("#mb_profile").on('change',function(){
+        let nowS = $(this).val();
+        switch(nowS){
+            case 'C40000001' : case 'C40000002':
+                $(".onlyStudent").css('display','none');
+                break;
+            case 'C40000003' : case 'C40000004':
+                $(".onlyStudent").css('display','');
+                break;
+        }
+    });
 
     $('#closePopup, #popupBackground').click(function() {
         $('#popupBackground').fadeOut(); // 배경 숨기기
