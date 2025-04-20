@@ -30,9 +30,9 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
 </style>
 <!-- 로그인 시작 { -->
- <div style="display: grid;grid-template-columns:1.5fr 2fr;height:100vh;">
-    <div></div>
-    <div style="width: 100%;height:100%;">
+ <div style="height:100vh;">
+    
+    
         <div id="mb_login" class="mbskin" style="margin:20em auto;border-radius:10px;height:fit-content;">
         <img style="width: 150px;margin-bottom:30px;" src="/img/final_logo.png">
 
@@ -60,7 +60,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                     <input type="text" name="mb_name" id="mb_name" required class="frm_input required" size="20" maxLength="8" placeholder="이름">
                     <div class="mgb-10"></div>
                     <label for="birth" class="sound_only">생년월일<strong class="sound_only"> 필수</strong></label>
-                    <input type="text" name="mb_birth" id="mb_birth" required class="frm_input required" size="20" maxLength="8" placeholder="생년월일(ex.19801212)">
+                    <input type="text" name="mb_birth" id="mb_birth" required class="frm_input required" maxlength="8" pattern="\d{8}" size="20" maxLength="8" placeholder="생년월일(ex.19801212)">
                     <div class="mgb-10"></div>
                     <label for="mb_hp" class="sound_only">휴대폰번호<strong class="sound_only"> 필수</strong></label>
                     <input type="text" name="mb_hp" id="mb_hp" required class="frm_input required" size="20" maxLength="12" placeholder="휴대폰번호('-' 제외)">
@@ -87,7 +87,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             </fieldset> 
             </form>
         </div>
-    </div>
+    
 </div>
 <script>
 jQuery(function($){
@@ -97,6 +97,30 @@ jQuery(function($){
         }
     });
 });
+
+document.getElementById("mb_birth").addEventListener("blur", function() {
+  const val = this.value;
+  if (!/^\d{8}$/.test(val)) {
+    swal('','생년월일은 8자리 숫자로 입력해주세요. (예: 19981202)','warning');
+    $("#mb_birth").val('');
+    return;
+  }
+
+  const year = parseInt(val.slice(0, 4), 10);
+  const month = parseInt(val.slice(4, 6), 10) - 1;
+  const day = parseInt(val.slice(6, 8), 10);
+  const date = new Date(year, month, day);
+
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month ||
+    date.getDate() !== day
+  ) {
+    swal("","유효하지 않은 날짜입니다.","warning");
+    $("#mb_birth").val('');
+  }
+});
+
 
 $("#login_id, #login_pw").on('keydown',function(e){
     if(document.querySelector('.btn_submit.active').id == 'login-btn'){
@@ -113,6 +137,8 @@ function flogin_submit(f)
     }
     return false;
 }
+
+
 
 function doAct(type){
     if(type == 'reg'){
