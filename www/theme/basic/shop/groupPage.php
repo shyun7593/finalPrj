@@ -157,7 +157,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         </td>
                         <th>생년월일</th>
                         <td>
-                            <input type="text" class="frm_input" id="mb_birth" name="mb_birth" value="" autocomplete="off" style="width: 100%;">
+                            <input type="text" name="mb_birth" id="mb_birth" required class="frm_input" maxlength="8" pattern="\d{8}" size="20" maxLength="8" placeholder="생년월일(ex.19801212)">
                         </td>
                     </tr>
                     <tr>
@@ -242,6 +242,29 @@ function fwishlist_check(f, act)
 
     return true;
 }
+
+document.getElementById("mb_birth").addEventListener("blur", function() {
+  const val = this.value;
+  if (!/^\d{8}$/.test(val)) {
+    swal('','생년월일은 8자리 숫자로 입력해주세요. (예: 19981202)','warning');
+    $("#mb_birth").val('');
+    return;
+  }
+
+  const year = parseInt(val.slice(0, 4), 10);
+  const month = parseInt(val.slice(4, 6), 10) - 1;
+  const day = parseInt(val.slice(6, 8), 10);
+  const date = new Date(year, month, day);
+
+  if (
+    date.getFullYear() !== year ||
+    date.getMonth() !== month ||
+    date.getDate() !== day
+  ) {
+    swal("","유효하지 않은 날짜입니다.","warning");
+    $("#mb_birth").val('');
+  }
+});
 
 function updateMember(no){
         $("#mb_no").val(no);

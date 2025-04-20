@@ -253,7 +253,7 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         </td>
                         <th>생년월일</th>
                         <td>
-                            <input type="text" class="frm_input" id="mb_birth" name="mb_birth" value="" autocomplete="off" style="width: 100%;">
+                            <input type="text" name="mb_birth" id="mb_birth" required class="frm_input" maxlength="8" pattern="\d{8}" size="20" maxLength="8" placeholder="생년월일(ex.19801212)">
                         </td>
                     </tr>
                     <tr>
@@ -272,10 +272,12 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         <th>권한</th>
                         <td>
                             <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
-                                <option value="1">관리자</option>
-                                <option value="2">원장</option>
-                                <option value="3">원내학생</option>
-                                <option value="4">일반</option>
+                                <?
+                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' ORDER BY code");
+                                    foreach($ggsql as $ggs => $g){?>
+                                      <option value="<?=$g['code']?>"><?=$g['codeName']?></option>  
+                                    <?}
+                                ?>
                             </select>
                         </td>
                     </tr>
@@ -574,6 +576,29 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                 }
             }
         );
+    });
+
+    document.getElementById("mb_birth").addEventListener("blur", function() {
+    const val = this.value;
+    if (!/^\d{8}$/.test(val)) {
+        swal('','생년월일은 8자리 숫자로 입력해주세요. (예: 19981202)','warning');
+        $("#mb_birth").val('');
+        return;
+    }
+
+    const year = parseInt(val.slice(0, 4), 10);
+    const month = parseInt(val.slice(4, 6), 10) - 1;
+    const day = parseInt(val.slice(6, 8), 10);
+    const date = new Date(year, month, day);
+
+    if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month ||
+        date.getDate() !== day
+    ) {
+        swal("","유효하지 않은 날짜입니다.","warning");
+        $("#mb_birth").val('');
+    }
     });
 </script>
 <!-- } 마이페이지 끝 -->
