@@ -7,6 +7,13 @@ include_once('./_head.php');
 if(!$month){
     $month = 'm_3';
 }
+
+if(!$year){
+    $year = date('Y');
+}
+
+$scores = sql_query("SELECT * FROM g5_gradeCut FROM gradeType = '{$month}' AND gradeYear = '{$year}'");
+
 if($_SESSION['mb_student']){
     $membId = $_SESSION['mb_student'];
 } else {
@@ -61,8 +68,9 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                     <tbody>
                         <?
                         $subs = sql_query("SELECT code, codeName,upperCode FROM g5_cmmn_code gcc WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '과목' AND useYn = 1) ORDER BY codeDesc");
-                        $i=1;
                         foreach($subs as $sub => $s){
+                            $i = 0;
+                            $sub = "";
                             $memberGrade = sql_fetch("SELECT gms.* FROM g5_member_score gms WHERE gms.memId = '{$membId}' AND gms.scoreMonth = '{$month}' AND upperCode = '{$s['code']}'");
                             ?>
                             <tr style="text-align: center;" class="mySubgrade">
@@ -72,16 +80,30 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                                     <select name="subject" class="frm_input" style="width: 100%;">
                                         <option value="">선택하세요</option>
                                         <?$jsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
-                                        foreach($jsql as $js => $j){?>
-                                            <option value="<?=$j['code']?>" <?if($memberGrade['subject'] == $j['code']) echo 'selected';?>><?=$j['codeName']?></option>
-                                        <?}?>
+                                        foreach($jsql as $js => $j){
+                                            if(!$memberGrade['subject']){
+                                                if(strstr($s['code'],'C2005')){
+                                                    $i2 = 1;
+                                                    if($i == 1){
+                                                        $sub = $j['code'];
+                                                    }
+                                                } else {
+                                                    $i2 = 0;
+                                                    if($i == 0){
+                                                        $sub = $j['code'];
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code']) || (!$memberGrade['subject'] && $i==$i2)) echo 'selected';?>><?=$j['codeName']?></option>
+                                        <?$i++;}?>
                                     </select>
-                                    <input type="hidden" name="subjectCode" value="<?=$memberGrade['subject']?>">
+                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}else{echo "{$sub}";}?>">
                                     <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                 </td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="pscore" value="<?=$memberGrade['pscore']?>"></td>
+                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
                                 <?} else{?>
                                     <td style="text-align: left;">
@@ -95,7 +117,7 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                                     <td><br><input type="text" class="frm_input" style="text-align:center;width: 100%;" name="grade" value="<?=$memberGrade['grade']?>"></td>    
                                 <?}?>
                             </tr>
-                        <?$i++;}?>
+                        <?}?>
                         
                         <tr style="text-align: center;">
                             <td style="text-align:left;">
@@ -157,8 +179,6 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
 
 
 <script>
-
-    
 
     function viewMonth(e){
         let id = e.currentTarget.id;
@@ -237,6 +257,50 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
     $("select[name='subject']").on("change",function(){
         $(this).closest('tr').find('input[name="subjectCode"]').val($(this).val());
     });
+
+
+    const cache = {};
+
+    $('input[name="origin"]').on('change', function () {
+        
+        const $row = $(this).closest('tr');
+        const subjectCode = $row.find('input[name="subjectCode"]').val();
+
+        if(!subjectCode){
+            swal('','과목을 선택해 주세요.','warning');
+            return;
+        }
+
+        const month = "<?=$month?>";
+        const score = $(this).val();
+        const key = `${subjectCode}-${month}-${score}`; // origin 값 포함!
+        
+            console.log('여기');
+            if (cache[key]) {
+                applyScore($row, cache[key]);
+                return;
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/bbs/get_gradeCut.php',
+                data: { subjectCode, month, score },
+                success: function (res) {
+                    const data = JSON.parse(res);
+                    cache[key] = data;
+                    applyScore($row, data);
+                }
+            });
+        
+        
+    });
+
+    function applyScore($row, data) {
+        $row.find('input[name="sscore"]').val(data.sscore);
+        $row.find('input[name="pscore"]').val(data.pscore);
+        $row.find('input[name="grade"]').val(data.gGrade);
+    }
+
 </script>
 <!-- } 마이페이지 끝 -->
 
