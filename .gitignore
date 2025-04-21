@@ -1,3 +1,4 @@
 /www/data/cache/*
 /www/data/session/*
 /www/vendor/
+/www/api/*.json
