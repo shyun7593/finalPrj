@@ -29,7 +29,6 @@ function getCodeMap() {
     static $map = null;
     if ($map === null) {
         $result = sql_query("SELECT code, codeName FROM g5_cmmn_code WHERE code like '%C200%' AND depth = 2 AND upperCode not like '%C2005%'");
-        var_dump($result);
         $map = [];
         while ($rows = sql_fetch_array($result)) {
             $map[$rows['codeName']] = $rows['code'];
