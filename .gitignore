@@ -1,5 +1,5 @@
 /www/data/cache/*
 /www/data/session/*
 /www/vendor/
-www/api/*.json
+/www/api/*.json
 "www/api/*.json" 
