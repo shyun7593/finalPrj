@@ -9,6 +9,10 @@ $pscore = $_REQUEST['pscore'];
 $grade = $_REQUEST['grade'];
 $month = $_REQUEST['month'];
 $upperCode = $_REQUEST['upperCode'];
+
+$totalGrade = $_REQUEST['totalGrade'];
+$admitt = $_REQUEST['admitt'];
+
 $id = $_REQUEST['id'];
 
 $length = count($subject);
@@ -39,6 +43,34 @@ for($i = 0; $i < $length; $i++){
                 insID = '{$_SESSION['ss_mb_id']}'
         ");
     }
+}
+
+$lastG = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$id}' AND upperCode = '{$admitt}' AND scoreMonth = '{$month}'");
+
+if($lastG['cnt'] > 0){
+    sql_query("UPDATE g5_member_score SET
+                        origin = '',
+                        sscore = '',
+                        pscore = '',
+                        grade = '',
+                        `subject` = '{$totalGrade}',
+                        upperCode = '{$admitt}',
+                        updDate = '".G5_TIME_YMDHIS."',
+                        updID = '{$_SESSION['ss_mb_id']}'
+                    WHERE memId = '{$id}' AND scoreMonth = '{$month}' AND upperCode = '{$admitt}'
+        ");
+} else {
+    sql_query("INSERT INTO g5_member_score SET
+                `subject` = '{$totalGrade}',
+                memId = '{$id}' ,
+                origin = '',
+                sscore = '',
+                pscore = '',
+                grade = '',
+                scoreMonth = '{$month}',
+                upperCode = '{$admitt}',
+                insID = '{$_SESSION['ss_mb_id']}'
+        ");
 }
 
 echo 'success';

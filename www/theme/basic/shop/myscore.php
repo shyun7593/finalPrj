@@ -126,16 +126,15 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                             <td colspan="4">
                                 <select class="frm_input" id="grade" name="grade" style="width: 100%;">
                                     <option value="">선택하세요.</option>
-                                    <option value="1">1등급</option>
-                                    <option value="2">2등급</option>
-                                    <option value="3">3등급</option>
-                                    <option value="4">4등급</option>
-                                    <option value="5">5등급</option>
-                                    <option value="6">6등급</option>
-                                    <option value="7">7등급</option>
-                                    <option value="8">8등급</option>
-                                    <option value="9">9등급</option>
+                                    <?
+                                        $admitt = sql_query("SELECT code, codeName FROM g5_cmmn_code WHERE upperCode = 'C50000000' AND useYN = 1");
+                                        $memberGrade = sql_fetch("SELECT gms.* FROM g5_member_score gms WHERE gms.memId = '{$membId}' AND gms.scoreMonth = '{$month}' AND upperCode = 'C50000000'");
+                                        foreach($admitt as $adm => $a){
+                                    ?>
+                                    <option value="<?=$a['code']?>" <?if($memberGrade['subject'] == $a['code']) echo 'selected';?>><?=$a['codeName']?></option>
+                                    <?}?>
                                 </select>
+                                <input type="hidden" name="admittupperCode" id="admittupperCode" value="C50000000">
                             </td>
                         </tr>
                     </tbody>
@@ -196,6 +195,9 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
         let sscore = [];
         let pscore = [];
         let grade = [];
+
+        let totalGrade = $("#grade").val();
+        let admitt = $("#admittupperCode").val();
         
         
         for(let i = 0; i < gradeArray.length; i++){
@@ -221,8 +223,8 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
             subject.push(row.find('td:eq(0)').find('input[name="subjectCode"]').val());
             upperCode.push(row.find('td:eq(0)').find('input[name="upperCode"]').val());
             origin.push(row.find('td:eq(1)').find('input[type="text"]').val());
-            sscore.push(row.find('td:eq(2)').find('input[type="text"]').val());
-            pscore.push(row.find('td:eq(3)').find('input[type="text"]').val());
+            pscore.push(row.find('td:eq(2)').find('input[type="text"]').val());
+            sscore.push(row.find('td:eq(3)').find('input[type="text"]').val());
             grade.push(row.find('td:eq(4)').find('input[type="text"]').val());
         }
         
@@ -237,6 +239,8 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                 pscore : pscore,
                 grade : grade,
                 month : month,
+                totalGrade : totalGrade,
+                admitt:admitt,
                 id : '<?=$membId?>',
             },
             async: false,
@@ -256,8 +260,6 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
     }
 
     $("select[name='subject']").on("change",function(){
-        
-        
             const $row = $(this).closest('tr');
             $row.find('input[name="origin"]').val('');
             $row.find('input[name="sscore"]').val('');
@@ -284,7 +286,6 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
         const score = $(this).val();
         const key = `${subjectCode}-${month}-${score}`; // origin 값 포함!
         
-            console.log('여기');
             if (cache[key]) {
                 applyScore($row, cache[key]);
                 return;
