@@ -202,13 +202,14 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
             
             let row = $(gradeArray[i]);
 
-            if(i != 5){
+            if(i != 5 && i != 2 && i != 7 && i != 6){
                 if(!row.find('td:eq(0)').find('input[name="subjectCode"]').val() ||
                 !row.find('td:eq(1)').find('input[type="text"]').val() ||
                 !row.find('td:eq(2)').find('input[type="text"]').val() ||
                 !row.find('td:eq(3)').find('input[type="text"]').val() ||
                 !row.find('td:eq(4)').find('input[type="text"]').val()
             ){
+                console.log(i);
                 swal("경고!",'제2외국어를 제외한 과목은 필수로 입력해주세요.','warning');
                 setTimeout(() => {
                     swal.close();
@@ -255,6 +256,14 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
     }
 
     $("select[name='subject']").on("change",function(){
+        
+        
+            const $row = $(this).closest('tr');
+            $row.find('input[name="origin"]').val('');
+            $row.find('input[name="sscore"]').val('');
+            $row.find('input[name="pscore"]').val('');
+            $row.find('input[name="grade"]').val('');
+        
         $(this).closest('tr').find('input[name="subjectCode"]').val($(this).val());
     });
 
