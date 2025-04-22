@@ -56,7 +56,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_use = 1 ORDER BY me_order");
                 foreach($menus as $mu => $m){
             ?>
-                <li style="width: auto;min-width:200px;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
+                <li style="width: auto;min-width:200px;padding:0 ;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;" href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
             <?}?>
         </ul>
     </div> 

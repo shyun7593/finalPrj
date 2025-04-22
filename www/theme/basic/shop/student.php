@@ -13,7 +13,17 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         where mb_id NOT IN ( '{$member['mb_id']}')
                         AND mb_profile in ('C40000003','C40000004')
                         AND mb_id != 'admin'");
+
+
+if(!$student){
+    $res = "";
+} else {
+    $membId = sql_fetch("SELECT * FROM g5_member WHERE mb_no = '{$student}'");
+    $res = sql_query("SELECT * FROM g5_member_score WHERE memId = '{$membId['mb_no']}' ORDER BY scoreMonth, `subject`");
+}
 ?>
+
+
 
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -65,7 +75,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             }
                             ?>
                             
-                                <tr style="text-align: center;" class="onaction">
+                                <tr style="text-align: center;" class="onaction<?if($student == $m['mb_no']) echo ' isactive';?>" onclick="viewStudent('<?=$m['mb_no']?>')">
                                     <td><?= $m['branchName']?></td>
                                     <td><?= $m['mb_name']?></td>
                                     <td><?= $m['mb_1']?></td>
@@ -82,13 +92,11 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 	    </section>
 	    <!-- } 학생 리스트 끝 -->
 	</div>
+    <?if($res){?>
     <div id="smb_my_list">
 	    <!-- 성적 정보 시작 { -->
 	    <section id="smb_my_od">
 	        <h2>성적 정보</h2>
-	        <!-- <div class="smb_my_more" id="goStudentPage">
-	            <a href="#">페이지 이동</a>
-	        </div> -->
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_one_color">
                     <tr style="text-align: center;">
@@ -251,6 +259,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
         </section>
         <!-- } 지원대학 끝 -->
     </div>
+    <?}?>
 </div>
 
 <div id="memberPopup">
