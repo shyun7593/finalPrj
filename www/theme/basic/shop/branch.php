@@ -96,8 +96,8 @@ $query_string = http_build_query(array(
                     <table class="tbl_head01">
                         <colgroup width="5%">
                         <colgroup width="20%">
-                        <colgroup width="65%">
-                        <colgroup width="10%">
+                        <colgroup width="70%">
+                        <colgroup width="5%">
                         <tbody style="background-color: unset;">
                             <tr>
                                 <td style="text-align: center;">지점</td>
