@@ -244,7 +244,6 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                 !row.find('td:eq(3)').find('input[type="text"]').val() ||
                 !row.find('td:eq(4)').find('input[type="text"]').val()
             ){
-                console.log(i);
                 swal("경고!",'제2외국어를 제외한 과목은 필수로 입력해주세요.','warning');
                 setTimeout(() => {
                     swal.close();
@@ -252,6 +251,31 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                 return false;
                 }
             }
+
+            if(i == 2 || i == 5){
+                if(!row.find('td:eq(1)').find('input[type="text"]').val() || 
+                !row.find('td:eq(4)').find('input[type="text"]').val()){
+                    swal("경고!",'점수, 등급을 필수로 입력해주세요.','warning');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1500);
+                    return false;
+                }
+            }
+            
+
+            if(i == 6){
+                if(!row.find('td:eq(0)').find('input[name="subjectCode"]').val() ||
+                !row.find('td:eq(1)').find('input[type="text"]').val() || 
+                !row.find('td:eq(4)').find('input[type="text"]').val()){
+                    swal("경고!",'과목, 점수, 등급을 필수로 입력해주세요.','warning');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1500);
+                    return false;
+                }
+            }
+            
 
             subject.push(row.find('td:eq(0)').find('input[name="subjectCode"]').val());
             upperCode.push(row.find('td:eq(0)').find('input[name="upperCode"]').val());
