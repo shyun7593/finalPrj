@@ -5,7 +5,7 @@ $g5['title'] = '성적입력';
 include_once('./_head.php');
 
 if(!$month){
-    $month = 'm_3';
+    $month = 'C60000001';
 }
 
 if(!$year){
@@ -23,11 +23,7 @@ if($_SESSION['mb_student']){
 $bcnt = sql_query("select COUNT(*) as 'cnt'
                         from g5_branch");
 
-$m0 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = 'm_0'");
-$m1 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = 'm_1'");
-$m3 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = 'm_3'");
-$m6 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = 'm_6'");
-$m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = 'm_9'");
+$m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
 
 
 ?>
@@ -42,11 +38,12 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                 <h2 style="margin: unset;">성적 입력</h2>
                 <div style="display: flex;gap:10px;">
                     <button class="btn-n btn-green btn-bold" type="buttton" onclick="saveGrade()">저장</button>
-                    <button class="btn-n <?if($month == 'm_3') echo "active";?> <?if($m3['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="m_3" onclick="viewMonth(event)" type="buttton">3모</button>
-                    <button class="btn-n <?if($month == 'm_6') echo "active";?> <?if($m6['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="m_6" onclick="viewMonth(event)" type="buttton">6모</button>
-                    <button class="btn-n <?if($month == 'm_9') echo "active";?> <?if($m9['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="m_9" onclick="viewMonth(event)" type="buttton">9모</button>
-                    <button class="btn-n <?if($month == 'm_0') echo "active";?> <?if($m0['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="m_0" onclick="viewMonth(event)" type="buttton">수능가채점</button>
-                    <button class="btn-n <?if($month == 'm_1') echo "active";?> <?if($m1['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="m_1" onclick="viewMonth(event)" type="buttton">수능</button>
+                    <?
+                        foreach($m_cmmn as $mcm => $m){
+                            $cnt = sql_fetch("SELECT COUNT(*) as cnt FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = '{$m['code']}'");
+                            ?>
+                        <button class="btn-n <?if($month == $m['code']) echo "active";?> <?if($cnt['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="<?=$m['code']?>" onclick="viewMonth(event)" type="buttton"><?=$m['codeName']?></button>
+                    <?}?>
                 </div>
             </div>
 

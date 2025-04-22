@@ -68,7 +68,6 @@ if (empty($values3)) {
     // $prevSub = '';
     foreach ($values3 as $row) {
         $subCode = subjectCode($row[0]);
-        echo $subCode;
         sql_query("INSERT INTO g5_gradeCut set
             gradeYear = '2025',
             gradeCode = '{$subCode}',
@@ -77,7 +76,7 @@ if (empty($values3)) {
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'm_3'
+            gradeType = 'C60000001'
         ");
         if(strstr($subCode,'C2004')){
             $subCode2 = str_replace('C2004', 'C2005', $subCode);
@@ -89,7 +88,7 @@ if (empty($values3)) {
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'm_3'
+                gradeType = 'C60000001'
             ");
         }
     }
@@ -114,7 +113,7 @@ if (empty($values6)) {
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'm_6'
+            gradeType = 'C60000002'
         ");
 
         if(strstr($subCode,'C2004')){
@@ -127,7 +126,7 @@ if (empty($values6)) {
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'm_3'
+                gradeType = 'C60000002'
             ");
         }
     }
@@ -151,7 +150,7 @@ if (empty($values9)) {
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'm_9'
+            gradeType = 'C60000003'
         ");
         if(strstr($subCode,'C2004')){
             $subCode2 = str_replace('C2004', 'C2005', $subCode);
@@ -163,7 +162,7 @@ if (empty($values9)) {
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'm_3'
+                gradeType = 'C60000003'
             ");
         }
     }
@@ -187,7 +186,7 @@ if (empty($values0)) {
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'm_0'
+            gradeType = 'C60000004'
         ");
         if(strstr($subCode,'C2004')){
             $subCode2 = str_replace('C2004', 'C2005', $subCode);
@@ -199,7 +198,7 @@ if (empty($values0)) {
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'm_3'
+                gradeType = 'C60000004'
             ");
         }
     }
@@ -223,7 +222,7 @@ if (empty($values1)) {
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'm_1'
+            gradeType = 'C60000005'
         ");
         if(strstr($subCode,'C2004')){
             $subCode2 = str_replace('C2004', 'C2005', $subCode);
@@ -235,7 +234,7 @@ if (empty($values1)) {
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'm_3'
+                gradeType = 'C60000005'
             ");
         }
     }
