@@ -113,7 +113,7 @@ $query_string = http_build_query(array(
                                     </select>
                                 </td>
                                 <td><input type="text" name="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
-                                <td><input type="submit" style="cursor:pointer;background: url(../img/mobile/gnb_sch.png);width: 30px;height: 30px;background-position: center;background-repeat: no-repeat;border: unset;background-size: contain;" value=""></td>
+                                <td><input type="submit" class="search-btn" value=""></td>
                             </tr>
                         </tbody>
                     </table>

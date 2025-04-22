@@ -103,6 +103,17 @@ box-sizing:border-box;
     box-shadow: unset !important;
 }
 
+.search-btn{
+    cursor:pointer;
+    background: url('/img/mobile/gnb_sch.png');
+    width: 30px;
+    height: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: unset;
+    background-size: contain;
+}
+
 /* 팝업 배경 (화면을 덮는 반투명 배경) */
 #popupBackground {
     display: none;
