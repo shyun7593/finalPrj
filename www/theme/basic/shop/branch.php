@@ -92,18 +92,18 @@ $query_string = http_build_query(array(
         <section id="smb_my_od">
             <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
-                <div class="tbl_wrap">
+                <div class="tbl_wrap" style="margin-bottom: 15px;">
                     <table class="tbl_head01">
-                        <colgroup width="5%">
+                        <colgroup width="10%">
                         <colgroup width="20%">
-                        <colgroup width="70%">
+                        <colgroup width="65%">
                         <colgroup width="5%">
-                        <tbody style="background-color: unset;">
+                        <tbody>
                             <tr>
-                                <td style="text-align: center;">지점</td>
-                                <td>
+                                <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
+                                <td style="padding:10px;">
                                     <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
-                                        <option value="" <?if(!$bid) echo "selected";?>>전체</option>
+                                        <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
                                             foreach($bsql as $bs => $b){?>
@@ -112,8 +112,8 @@ $query_string = http_build_query(array(
                                         ?>
                                     </select>
                                 </td>
-                                <td><input type="text" name="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
-                                <td><input type="submit" class="search-btn" value=""></td>
+                                <td style="padding:10px;"><input type="text" name="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
+                                <td style="padding:10px;"><input type="submit" class="search-btn" value=""></td>
                             </tr>
                         </tbody>
                     </table>
