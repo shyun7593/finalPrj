@@ -11,7 +11,7 @@ $client->setScopes([
     Google_Service_Sheets::SPREADSHEETS_READONLY  // 읽기 전용 권한
 ]);
 // $client->setAuthConfig('/api/spreadsheet-457500-2c59f048e424.json');
-$client->setAuthConfig('./api/spreadsheet-457500-2c59f048e424.json');
+$client->setAuthConfig('./api/spreadsheet-457500-cb4d1dabeba0.json');
 $client->setAccessType('offline');
 
 $service = new Google_Service_Sheets($client);
@@ -67,34 +67,39 @@ if (empty($values3)) {
 } else {
     // $prevSub = '';
     foreach ($values3 as $row) {
-       
-        $subCode = subjectCode($row[0]);
-        echo $subCode;
-        sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
-            gradeCode = '{$subCode}',
-            gradeScore = '{$row[1]}',
-            gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
-            gGrade = '{$row[4]}',
-            regId = '{$regId}',
-            gradeType = 'm_3'
-        ");
-        if(strstr($subCode,'C2004')){
-            $subCode2 = str_replace('C2004', 'C2005', $subCode);
-            sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
-                gradeCode = '{$subCode2}',
-                gradeScore = '{$row[1]}',
-                gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
-                gGrade = '{$row[4]}',
-                regId = '{$regId}',
-                gradeType = 'm_3'
-            ");
-        }
+       echo '<br>';
+       print_r($row);
+       echo '<br>';
+        // $subCode = subjectCode($row[0]);
+        // echo $subCode;
+        // sql_query("INSERT INTO g5_gradeCut set
+        //     gradeYear = '2025',
+        //     gradeCode = '{$subCode}',
+        //     gradeScore = '{$row[1]}',
+        //     gradePscore = '{$row[2]}',
+        //     gradeSscore = '{$row[3]}',
+        //     gGrade = '{$row[4]}',
+        //     regId = '{$regId}',
+        //     gradeType = 'm_3'
+        // ");
+        // if(strstr($subCode,'C2004')){
+        //     $subCode2 = str_replace('C2004', 'C2005', $subCode);
+        //     sql_query("INSERT INTO g5_gradeCut set
+        //         gradeYear = '2025',
+        //         gradeCode = '{$subCode2}',
+        //         gradeScore = '{$row[1]}',
+        //         gradePscore = '{$row[2]}',
+        //         gradeSscore = '{$row[3]}',
+        //         gGrade = '{$row[4]}',
+        //         regId = '{$regId}',
+        //         gradeType = 'm_3'
+        //     ");
+        // }
     }
 }
+
+exit;
+
 // 6월
 echo '<br>6월<br>';
 $response6 = $service->spreadsheets_values->get($spreadsheetId, $range6);
