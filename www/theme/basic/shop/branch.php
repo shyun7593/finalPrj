@@ -38,7 +38,7 @@ $query_string = http_build_query(array(
 ?>
 
 <!-- 마이페이지 시작 { -->
-<div id="smb_my" style="display: grid;grid-template-columns:1fr 2.5fr;gap:10px;">
+<div id="smb_my" style="display: grid;grid-template-columns:1fr 2.5fr;column-gap:20px;">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
