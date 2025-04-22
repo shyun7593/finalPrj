@@ -8,38 +8,54 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
     goto_url('/index');
 }
 
+$sql_add = " 1=1 ";
+
+if($bid){
+    $sql_add .= " AND gb.idx = {$bid} ";
+}
+
+if($text){
+    $sql_add .= " AND (gm.mb_name like '%{$text}%' OR replace(gm.mb_hp,'-','') like '%{$text}%' OR gm.mb_1 like '%{$text}%')";
+}
+
 $bcnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_branch");
 
 $mcnt = sql_fetch("select COUNT(*) as 'cnt'
-                        from g5_member where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_profile in ('C40000003','C40000004')
-                        AND mb_id != 'admin'");
+                        from g5_member gm 
+                        LEFT JOIN g5_branch gb on
+                        gm.mb_signature = gb.idx
+                        where 
+                        {$sql_add}
+                        AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                        AND gm.mb_profile in ('C40000003','C40000004')
+                        AND gm.mb_id != 'admin'");
+
+$query_string = http_build_query(array(
+    'bid' => $_GET['bid'],
+    'text' => $_GET['text'],
+));
 ?>
 
 <!-- 마이페이지 시작 { -->
-<div id="smb_my">
+<div id="smb_my" style="display: grid;grid-template-columns:1fr 2.5fr;gap:10px;">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
             <h2>지점 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 지점수 : <?= $bcnt['cnt'] ?></span></h2>
-
-
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
             <div class="tbl_wrap">
                 <table class="tbl_head01">
-                    <colgroup width="25%">
-                        <colgroup width="25%">
-                            <colgroup width="25%">
-                                <colgroup width="25%">
-                                <thead>
-                                    <th>지점명</th>
-                                    <th>담당자</th>
-                                    <th>연락처</th>
-                                    <th>관리</th>
-                                </thead>
+                    <colgroup width="30%">
+                    <colgroup width="30%">
+                    <colgroup width="30%">
+                    <thead>
+                        <th>지점명</th>
+                        <th>담당자</th>
+                        <th>관리</th>
+                    </thead>
                             <tbody>
                                 <?
                                 $msql = " select *
@@ -61,7 +77,6 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         <tr style="text-align: center;" class="onaction" onclick="popupBranch('update','<?=$m['idx']?>')">
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['branchManager'] ?></td>
-                            <td><?= hyphen_hp_number($m['branchHp']) ?></td>
                             <td><?=$act?></td>
                         </tr>
                     <? }
@@ -76,66 +91,98 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
             <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
-
-
-            <!-- <div class="smb_my_more">
-                <a href="./orderinquiry.php">더보기</a>
-            </div> -->
+            <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                <div class="tbl_wrap">
+                    <table class="tbl_head01">
+                        <colgroup width="5%">
+                        <colgroup width="20%">
+                        <colgroup width="65%">
+                        <colgroup width="10%">
+                        <tbody style="background-color: unset;">
+                            <tr>
+                                <td style="text-align: center;">지점</td>
+                                <td>
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                        <option value="" <?if(!$bid) echo "selected";?>>전체</option>
+                                        <?
+                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                            foreach($bsql as $bs => $b){?>
+                                            <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
+                                            <?}
+                                        ?>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
+                                <td><input type="submit" style="background: url(../img/mobile/gnb_sch.png);width: 30px;height: 30px;background-position: center;background-repeat: no-repeat;border: unset;background-size: contain;" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
             <div class="tbl_wrap">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
-                        <colgroup width="12.5%">
-                            <colgroup width="12.5%">
-                                <colgroup width="12.5%">
-                                    <colgroup width="12.5%">
-                                        <colgroup width="12.5%">
-                                            <colgroup width="12.5%">
-                                                <colgroup width="12.5%">
-                                                <thead>
-                                                    <th>아이디</th>
-                                                    <th>소속</th>
-                                                    <th>이름</th>
-                                                    <th>학교</th>
-                                                    <th>학년</th>
-                                                    <th>성별</th>
-                                                    <th>휴대폰번호</th>
-                                                    <th>생년월일</th>
-                                                </thead>
-                                            <tbody>
-                                                <?
-                                                $msql = " select *
-                        from g5_member m
-                        LEFT JOIN g5_branch b on
-                        b.idx = m.mb_signature
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_id != 'admin'
-                        AND m.mb_profile in ('C40000003','C40000004')";
-                                                $mres = sql_query($msql);
-                                                foreach ($mres as $ms => $m) {
-                                                    $gender = '';
-                                                    switch ($m['mb_sex']) {
-                                                        case 'M':
-                                                            $gender = '남';
-                                                            break;
-                                                        case 'F':
-                                                            $gender = '여';
-                                                            break;
-                                                    }
-                                                ?>
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <colgroup width="12.5%">
+                    <thead>
+                        <th>아이디</th>
+                        <th>소속</th>
+                        <th>이름</th>
+                        <th>학교</th>
+                        <th>학년</th>
+                        <th>성별</th>
+                        <th>휴대폰번호</th>
+                        <th>생년월일</th>
+                    </thead>
+                    <tbody>
+                        <?
+                        $msql = " select *
+                            from g5_member gm
+                            LEFT JOIN g5_branch gb on
+                            gb.idx = gm.mb_signature
+                            where 
+                            {$sql_add}
+                            AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                            AND gm.mb_id != 'admin'
+                            AND gm.mb_profile in ('C40000003','C40000004')";
+                        if($mcnt['cnt']>0){
 
-                                        <tr style="text-align: center;" class="onaction" onclick="updateMember('<?=$m['mb_no']?>')">
-                                            <td><?= $m['mb_id'] ?></td>
-                                            <td><?= $m['branchName'] ?></td>
-                                            <td><?= $m['mb_name'] ?></td>
-                                            <td><?= $m['mb_1'] ?></td>
-                                            <td><?= $m['mb_2'] ?></td>
-                                            <td><?= $gender ?></td>
-                                            <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
-                                            <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
-                                        </tr>
-                                    <? }
-                                    ?>
-                                    </tbody>
+                        
+                        $mres = sql_query($msql);
+
+                        foreach ($mres as $ms => $m) {
+                            $gender = '';
+                            switch ($m['mb_sex']) {
+                                case 'M':
+                                    $gender = '남';
+                                    break;
+                                case 'F':
+                                    $gender = '여';
+                                    break;
+                            }
+                        ?>
+                        <tr style="text-align: center;" class="onaction" onclick="updateMember('<?=$m['mb_no']?>')">
+                            
+                            <td><?= $m['mb_id'] ?></td>
+                            <td><?= $m['branchName'] ?></td>
+                            <td><?= $m['mb_name'] ?></td>
+                            <td><?= $m['mb_1'] ?></td>
+                            <td><?= $m['mb_2'] ?></td>
+                            <td><?= $gender ?></td>
+                            <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
+                            <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
+                        </tr>
+                    <?}}else{?>
+                        <tr style="text-align: center;">
+                            <td colspan="8">검색 결과가 없습니다.</td>
+                        </tr>
+                    <?}?>
+                    </tbody>
                 </table>
             </div>
         </section>
@@ -288,6 +335,27 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
     <button id="closePopup">닫기</button>
     <button id="memberBtn">수정</button>
     <button id="resetBtn">비밀번호 초기화</button>
+    <?php
+	// 배열을 쉼표로 구분된 문자열로 변환
+	if (is_array($selectedPartners)) {
+		$selectedPartners = implode(',', array_map(function ($item) {
+			return "'" . trim($item) . "'";
+		}, $selectedPartners));
+	}
+
+	// + 기호를 URL에서 올바르게 전달하기 위해 rawurlencode() 사용
+	$selectedPartnersEncoded = rawurlencode($selectedPartners);
+
+	// 페이징 링크 생성
+	echo get_paging(
+		$config['cf_write_pages'],
+		$page,
+		$total_page,
+		'?' . $qstr .
+			'&amp;bid=' . rawurlencode($bid) .
+			'&amp;page=' . rawurlencode($page) .
+			'&amp;text=' . rawurlencode($text)
+	);?>
 </div>
 
 <script>
@@ -599,6 +667,13 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
         swal("","유효하지 않은 날짜입니다.","warning");
         $("#mb_birth").val('');
     }
+    });
+
+    function fsearch_submit(e) {
+    }
+
+    $("#bid").on("change",function(){
+        $("#fsearch").submit();
     });
 </script>
 <!-- } 마이페이지 끝 -->
