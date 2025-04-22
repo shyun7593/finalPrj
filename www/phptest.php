@@ -67,38 +67,33 @@ if (empty($values3)) {
 } else {
     // $prevSub = '';
     foreach ($values3 as $row) {
-       echo '<br>';
-       print_r($row);
-       echo '<br>';
-        // $subCode = subjectCode($row[0]);
-        // echo $subCode;
-        // sql_query("INSERT INTO g5_gradeCut set
-        //     gradeYear = '2025',
-        //     gradeCode = '{$subCode}',
-        //     gradeScore = '{$row[1]}',
-        //     gradePscore = '{$row[2]}',
-        //     gradeSscore = '{$row[3]}',
-        //     gGrade = '{$row[4]}',
-        //     regId = '{$regId}',
-        //     gradeType = 'm_3'
-        // ");
-        // if(strstr($subCode,'C2004')){
-        //     $subCode2 = str_replace('C2004', 'C2005', $subCode);
-        //     sql_query("INSERT INTO g5_gradeCut set
-        //         gradeYear = '2025',
-        //         gradeCode = '{$subCode2}',
-        //         gradeScore = '{$row[1]}',
-        //         gradePscore = '{$row[2]}',
-        //         gradeSscore = '{$row[3]}',
-        //         gGrade = '{$row[4]}',
-        //         regId = '{$regId}',
-        //         gradeType = 'm_3'
-        //     ");
-        // }
+        $subCode = subjectCode($row[0]);
+        echo $subCode;
+        sql_query("INSERT INTO g5_gradeCut set
+            gradeYear = '2025',
+            gradeCode = '{$subCode}',
+            gradeScore = '{$row[1]}',
+            gradePscore = '{$row[2]}',
+            gradeSscore = '{$row[3]}',
+            gGrade = '{$row[4]}',
+            regId = '{$regId}',
+            gradeType = 'm_3'
+        ");
+        if(strstr($subCode,'C2004')){
+            $subCode2 = str_replace('C2004', 'C2005', $subCode);
+            sql_query("INSERT INTO g5_gradeCut set
+                gradeYear = '2025',
+                gradeCode = '{$subCode2}',
+                gradeScore = '{$row[1]}',
+                gradePscore = '{$row[2]}',
+                gradeSscore = '{$row[3]}',
+                gGrade = '{$row[4]}',
+                regId = '{$regId}',
+                gradeType = 'm_3'
+            ");
+        }
     }
 }
-
-exit;
 
 // 6월
 echo '<br>6월<br>';
