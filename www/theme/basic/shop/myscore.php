@@ -74,7 +74,7 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                             $memberGrade = sql_fetch("SELECT gms.* FROM g5_member_score gms WHERE gms.memId = '{$membId}' AND gms.scoreMonth = '{$month}' AND upperCode = '{$s['code']}'");
                             ?>
                             <tr style="text-align: center;" class="mySubgrade">
-                                <?if($s['codeName'] != '영어' && $s['codeName'] != '한국사'){?>
+                                <?if($s['codeName'] != '영어' && $s['codeName'] != '한국사' && $s['codeName'] != '제2외국어/한문'){?>
                                 <td style="text-align: left;">
                                     <?=$s['codeName']?><br>
                                     <select name="subject" class="frm_input" style="width: 100%;">
@@ -105,13 +105,46 @@ $m9 = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member_score WHERE memId = '{$
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="pscore" value="<?=$memberGrade['pscore']?>"></td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
-                                <?} else{?>
+                                <?} else if($s['codeName'] == '제2외국어/한문'){?>
+                                    <td style="text-align: left;">
+                                    <?=$s['codeName']?><br>
+                                    <select name="subject" class="frm_input" style="width: 100%;">
+                                        <option value="">선택하세요</option>
+                                        <?$jsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
+                                        foreach($jsql as $js => $j){
+                                            if(!$memberGrade['subject']){
+                                                if(strstr($s['code'],'C2005')){
+                                                    $i2 = 1;
+                                                    if($i == 1){
+                                                        $sub = $j['code'];
+                                                    }
+                                                } else {
+                                                    $i2 = 0;
+                                                    if($i == 0){
+                                                        $sub = $j['code'];
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code']) || (!$memberGrade['subject'] && $i==$i2)) echo 'selected';?>><?=$j['codeName']?></option>
+                                        <?$i++;}?>
+                                    </select>
+                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}else{echo "{$sub}";}?>">
+                                    <input type="hidden" name="upperCode" value="<?=$s['code']?>">
+                                </td>
+                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
+                                <td><br>-</td>
+                                <td><br>-</td>
+                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
+                                <?} else{
+                                    $subJectCd = sql_fetch("SELECT code FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
+                                    ?>
                                     <td style="text-align: left;">
                                         <?=$s['codeName']?>
-                                        <input type="hidden" name="subjectCode" value="<?=$s['code']?>">
+                                        <input type="hidden" name="subjectCode" value="<?=$subJectCd['code']?>">
                                         <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                     </td>
-                                    <td><br>-</td>
+                                    <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
                                     <td><br>-</td>
                                     <td><br>-</td>
                                     <td><br><input type="text" class="frm_input" style="text-align:center;width: 100%;" name="grade" value="<?=$memberGrade['grade']?>"></td>    
