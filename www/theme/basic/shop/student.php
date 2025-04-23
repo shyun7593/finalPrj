@@ -18,9 +18,24 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 if(!$student){
     $res = "";
 } else {
-    $membId = sql_fetch("SELECT * FROM g5_member WHERE mb_no = '{$student}'");
-    $res = sql_query("SELECT * FROM g5_member_score WHERE memId = '{$membId['mb_no']}' ORDER BY scoreMonth, `subject`");
+    // $memb = sql_fetch("SELECT * FROM g5_member m 
+    //                     LEFT JOIN g5_branch b on
+    //                     b.idx = m.mb_signature
+    //                     LEFT JOIN g5_cmmn_code gcc on
+    //                     gcc.code = m.mb_profile on m. WHERE m.mb_no = '{$student}'");
+    $memb = sql_fetch("select *
+                            from g5_member m
+                            LEFT JOIN g5_branch b on
+                            b.idx = m.mb_signature
+                            where mb_no = '{$student}'");
+
+    $res = sql_query("SELECT * FROM g5_member_score WHERE memId = '{$memb['mb_no']}' ORDER BY scoreMonth, `subject`");
 }
+
+$query_string = http_build_query(array(
+    'student' => $_GET['student'],
+    'text' => $_GET['text'],
+));
 ?>
 
 
@@ -35,60 +50,69 @@ if(!$student){
 	        <!-- <div class="smb_my_more">
 	            <a href="./orderinquiry.php">더보기</a>
 	        </div> -->
-            <div class="tbl_wrap" >
-                <table class="tbl_head01">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <thead>
-                        <th>소속</th>
-                        <th>이름</th>
-                        <th>학교</th>
-                        <th>학년</th>
-                        <th>성별</th>
-                        <th>연락처</th>
-                        <th>내신</th>
-                    </thead>
-                    <tbody>
-                    <?
-                        $msql = " select *
-                        from g5_member m
-                        LEFT JOIN g5_branch b on
-                        b.idx = m.mb_signature
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_profile in ('C40000003','C40000004')
-                        AND mb_id != 'admin'";
-                        $mres = sql_query($msql);
-                        foreach($mres as $ms => $m){
-                            $gender = '';
-                            switch($m['mb_sex']){
-                                case 'M':
-                                    $gender = '남';
-                                    break;
-                                case 'F':
-                                    $gender = '여';
-                                    break;
-                            }
-                            ?>
-                            
-                                <tr style="text-align: center;" class="onaction<?if($student == $m['mb_no']) echo ' isactive';?>" onclick="viewStudent('<?=$m['mb_no']?>')">
-                                    <td><?= $m['branchName']?></td>
-                                    <td><?= $m['mb_name']?></td>
-                                    <td><?= $m['mb_1']?></td>
-                                    <td><?= $m['mb_2']?></td>
-                                    <td><?= $gender?></td>
-                                    <td><?= hyphen_hp_number($m['mb_hp'])?></td>
-                                    <td></td>
-                                </tr>
-                                <?}
-                    ?>
-                    </tbody>
-                </table>
-            </div>
+            <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                <input type="hidden" name="student" id="student" value="<?=$student?>">
+                <div class="tbl_wrap scroll-y">
+                    <table class="tbl_head01">
+                        <colgroup width="5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <colgroup width="12.5%">
+                        <thead>
+                            <tr>
+                                <th class="scroll-sticky">순번</th>
+                                <th class="scroll-sticky">소속</th>
+                                <th class="scroll-sticky">이름</th>
+                                <th class="scroll-sticky">학교</th>
+                                <th class="scroll-sticky">학년</th>
+                                <th class="scroll-sticky">성별</th>
+                                <th class="scroll-sticky">연락처</th>
+                                <th class="scroll-sticky">내신</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?
+                            $msql = " select *
+                            from g5_member m
+                            LEFT JOIN g5_branch b on
+                            b.idx = m.mb_signature
+                            where mb_id NOT IN ( '{$member['mb_id']}')
+                            AND mb_profile in ('C40000003','C40000004')
+                            AND mb_id != 'admin'";
+                            $mres = sql_query($msql);
+                            $i=1;
+                            foreach($mres as $ms => $m){
+                                $gender = '';
+                                switch($m['mb_sex']){
+                                    case 'M':
+                                        $gender = '남';
+                                        break;
+                                    case 'F':
+                                        $gender = '여';
+                                        break;
+                                }
+                                ?>
+                                
+                                    <tr style="text-align: center;" class="onaction<?if($student == $m['mb_no']) echo ' isactive';?>" onclick="viewStudent('<?=$m['mb_no']?>')">
+                                        <td><?= $i?></td>
+                                        <td><?= $m['branchName']?></td>
+                                        <td><?= $m['mb_name']?></td>
+                                        <td><?= $m['mb_1']?></td>
+                                        <td><?= $m['mb_2']?></td>
+                                        <td><?= $gender?></td>
+                                        <td><?= hyphen_hp_number($m['mb_hp'])?></td>
+                                        <td></td>
+                                    </tr>
+                                    <?$i++;}
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
 	    </section>
 	    <!-- } 학생 리스트 끝 -->
 	</div>
@@ -101,13 +125,13 @@ if(!$student){
                 <table class="tbl_head01 tbl_one_color">
                     <tr style="text-align: center;">
                         <th>소속</th>
-                        <td><?= $m['branchName']?>
+                        <td><?= $memb['branchName']?>
                         <th>이름</th>
-                        <td><?= $m['mb_name']?>
+                        <td><?= $memb['mb_name']?>
                         <th>학교</th>
-                        <td><?= $m['mb_1']?>
+                        <td><?= $memb['mb_1']?>
                         <th>학년</th>
-                        <td><?= $m['mb_2']?>
+                        <td><?= $memb['mb_2']?>
                         <th>성별</th>
                         <td><?= $gender?>
                     </tr>
@@ -126,7 +150,7 @@ if(!$student){
                         <th colspan="3">제2외국어</th>
                     </thead>
                     <tbody>
-                        <tr style="text-align: center;" class="onaction">
+                        <tr style="text-align: center; background-color:#eee">
                             <td>구분</td>
                             <td>과목</td>
                             <td>원</td>
@@ -157,54 +181,109 @@ if(!$student){
                             <td>등</td>
                         </tr>
                     <?
-                        $msql = " select *
-                        from g5_member m
-                        LEFT JOIN g5_branch b on
-                        b.idx = m.mb_signature
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_id != 'admin'";
+                        $msql = "WITH RECURSIVE dateMonth AS (
+                                    SELECT code,codeName
+                                    FROM g5_cmmn_code gcc 
+                                    WHERE upperCode = 'C60000000'
+                                )
+                                SELECT 
+                                    gms.scoreMonth,
+                                    d.codeName,
+                                    (SELECT 
+                                        codeName
+                                    FROM g5_cmmn_code gcc 
+                                    WHERE gcc.code = gms.subject 
+                                    ) as 'subject',
+                                    (SELECT 
+                                        codeName
+                                    FROM g5_cmmn_code gcc 
+                                    WHERE gcc.code = gms.upperCode  
+                                    ) as 'subjectSub',
+                                    gms.origin,
+                                    gms.pscore ,
+                                    gms.sscore ,
+                                    gms.grade
+                                FROM
+                                    dateMonth d
+                                LEFT JOIN g5_member_score gms on
+                                    d.code = gms.scoreMonth
+                                WHERE 
+                                    gms.memId = '{$memb['mb_id']}'
+                                    AND gms.upperCode != 'C50000000'
+                                GROUP BY
+                                    d.code,
+                                    gms.upperCode 
+                                ORDER BY
+                                    d.code;";
                         $mres = sql_query($msql);
-                        foreach($mres as $ms => $m){
-                            $gender = '';
-                            switch($m['mb_sex']){
-                                case 'M':
-                                    $gender = '남';
-                                    break;
-                                case 'F':
-                                    $gender = '여';
-                                    break;
+                        $data = [];
+                        foreach($mres as $k => $v){
+                            $scoreMonth = $v['scoreMonth']; // 코드
+                            $monthNm = $v['codeName']; // 3모, 6모, 9모 등등
+                            $subject = $v['subject']; // 화법과작문, 확률과통계 등등
+                            $subjectSub = $v['subjectSub']; // 국,영,수 등등
+                            $origin = $v['origin']; // 원점수
+                            $pscore = $v['pscore']; // 표준점수
+                            $sscore = $v['sscore']; // 백분위
+                            $grade = $v['grade']; // 등급
+                        
+                            // 배열 초기화
+                            if (!isset($data[$scoreMonth])) {
+                                $data[$scoreMonth] = [
+                                    'scoreMonth' => $scoreMonth, // 월코드
+                                    'monthNm' => $monthNm, // 모의고사 월
+                                    'data' => []
+                                ];
                             }
+                            if (!isset($data[$scoreMonth]['data'][$subjectSub])) {
+                                $data[$scoreMonth]['data'][$subjectSub] = [
+                                    'subject' => $subject, // 선택과목이름
+                                    'SubDesc' => $SubDesc, // 중분류 순서
+                                    'origin' => $origin,
+                                    'pscore' => $pscore,
+                                    'sscore' => $sscore,
+                                    'grade' => $grade
+                                ];
+                            }
+                        }
+                        // echo "<hr><br>";
+                        // print_r($data['C60000001']);
+                        // echo "<hr><br>";
+                        $monthArr = sql_query(" SELECT code,codeName
+                                    FROM g5_cmmn_code gcc 
+                                    WHERE upperCode = 'C60000000' ORDER BY code");
+                        foreach($monthArr as $ms => $m){
                             ?>
                             
                                 <tr style="text-align: center;">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><?=$m['codeName']?></td>
+                                    <td><?=$data[$m['code']]['data']['국어']['subject']?></td>
+                                    <td><?=$data[$m['code']]['data']['국어']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['국어']['sscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['국어']['pscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['국어']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['수학']['subject']?></td>
+                                    <td><?=$data[$m['code']]['data']['수학']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['수학']['sscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['수학']['pscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['수학']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['영어']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['영어']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역1']['subject']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역1']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역1']['sscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역1']['pscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역1']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역2']['subject']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역2']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역2']['sscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역2']['pscore']?></td>
+                                    <td><?=$data[$m['code']]['data']['탐구영역2']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['한국사']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['한국사']['grade']?></td>
+                                    <td><?=$data[$m['code']]['data']['제2외국어/한문']['subject']?></td>
+                                    <td><?=$data[$m['code']]['data']['제2외국어/한문']['origin']?></td>
+                                    <td><?=$data[$m['code']]['data']['제2외국어/한문']['grade']?></td>
                                 </tr>
                                 <?}
                     ?>
@@ -351,6 +430,27 @@ if(!$student){
     <button id="memberBtn">수정</button>
     <button id="resetBtn">비밀번호 초기화</button>
 </div>
+<?php
+	// 배열을 쉼표로 구분된 문자열로 변환
+	if (is_array($selectedPartners)) {
+		$selectedPartners = implode(',', array_map(function ($item) {
+			return "'" . trim($item) . "'";
+		}, $selectedPartners));
+	}
+
+	// + 기호를 URL에서 올바르게 전달하기 위해 rawurlencode() 사용
+	$selectedPartnersEncoded = rawurlencode($selectedPartners);
+
+	// 페이징 링크 생성
+	echo get_paging(
+		$config['cf_write_pages'],
+		$page,
+		$total_page,
+		'?' . $qstr .
+			'&amp;student=' . rawurlencode($student) .
+			'&amp;page=' . rawurlencode($page) .
+			'&amp;text=' . rawurlencode($text)
+	);?>
 <script>
 function member_leave()
 {
@@ -547,7 +647,13 @@ function updateMember(no){
             }
         );
     });
-    
+    function fsearch_submit(e) {
+    }
+
+    function viewStudent(id){
+        $("#student").val(id);
+        $("#fsearch").submit();
+    }
 </script>
 <!-- } 마이페이지 끝 -->
 

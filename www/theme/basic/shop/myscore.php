@@ -258,21 +258,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                     }, 1500);
                     return false;
                 }
-            }
-            
-
-            if(i == 6){
-                if(!row.find('td:eq(0)').find('input[name="subjectCode"]').val() ||
-                !row.find('td:eq(1)').find('input[type="text"]').val() || 
-                !row.find('td:eq(4)').find('input[type="text"]').val()){
-                    swal("경고!",'과목, 점수, 등급을 필수로 입력해주세요.','warning');
-                    setTimeout(() => {
-                        swal.close();
-                    }, 1500);
-                    return false;
-                }
-            }
-            
+            }            
 
             subject.push(row.find('td:eq(0)').find('input[name="subjectCode"]').val());
             upperCode.push(row.find('td:eq(0)').find('input[name="upperCode"]').val());
@@ -281,7 +267,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
             sscore.push(row.find('td:eq(3)').find('input[type="text"]').val());
             grade.push(row.find('td:eq(4)').find('input[type="text"]').val());
         }
-        
+
         $.ajax({
             url: "/bbs/myGrade_update.php",
             type: "POST",
