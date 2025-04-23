@@ -8,13 +8,26 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
     goto_url('/index');
 }
 
+$sql_add = " 1=1 ";
+
+if($bid){
+    $sql_add .= " AND gb.idx = {$bid} ";
+}
+
+if($text){
+    $sql_add .= " AND (gm.mb_name like '%{$text}%' OR replace(gm.mb_hp,'-','') like '%{$text}%' OR gm.mb_1 like '%{$text}%')";
+}
+
 $cnt = sql_fetch("select COUNT(*) as 'cnt'
-                        from g5_member
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_profile in ('C40000003','C40000004')
-                        AND mb_id != 'admin'");
-
-
+                        from g5_member gm 
+                        LEFT JOIN g5_branch gb on
+                        gm.mb_signature = gb.idx
+                        where 
+                        {$sql_add}
+                        AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                        AND gm.mb_profile in ('C40000003','C40000004')
+                        AND gm.mb_id != 'admin'");
+                        
 if(!$student){
     $res = "";
 } else {
@@ -35,6 +48,7 @@ if(!$student){
 $query_string = http_build_query(array(
     'student' => $_GET['student'],
     'text' => $_GET['text'],
+    'bid' => $_GET['bid'],
 ));
 ?>
 
@@ -52,6 +66,33 @@ $query_string = http_build_query(array(
 	        </div> -->
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
                 <input type="hidden" name="student" id="student" value="<?=$student?>">
+
+                <div class="tbl_wrap" style="margin-bottom: 15px;">
+                    <table class="tbl_head01">
+                        <colgroup width="10%">
+                        <colgroup width="20%">
+                        <colgroup width="65%">
+                        <colgroup width="5%">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
+                                <td style="padding:10px;">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                        <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
+                                        <?
+                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                            foreach($bsql as $bs => $b){?>
+                                            <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
+                                            <?}
+                                        ?>
+                                    </select>
+                                </td>
+                                <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
+                                <td style="padding:10px;"><input type="submit" class="search-btn" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="tbl_wrap scroll-y">
                     <table class="tbl_head01">
                         <colgroup width="5%">
@@ -77,12 +118,15 @@ $query_string = http_build_query(array(
                         <tbody>
                         <?
                             $msql = " select *
-                            from g5_member m
-                            LEFT JOIN g5_branch b on
-                            b.idx = m.mb_signature
-                            where mb_id NOT IN ( '{$member['mb_id']}')
-                            AND mb_profile in ('C40000003','C40000004')
-                            AND mb_id != 'admin'";
+                            from g5_member gm
+                            LEFT JOIN g5_branch gb on
+                            gb.idx = gm.mb_signature
+                            where 
+                            {$sql_add}
+                            AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                            AND gm.mb_profile in ('C40000003','C40000004')
+                            AND gm.mb_id != 'admin'";
+                            
                             $mres = sql_query($msql);
                             $i=1;
                             foreach($mres as $ms => $m){
@@ -448,6 +492,7 @@ $query_string = http_build_query(array(
 		$total_page,
 		'?' . $qstr .
 			'&amp;student=' . rawurlencode($student) .
+			'&amp;bid=' . rawurlencode($bid) .
 			'&amp;page=' . rawurlencode($page) .
 			'&amp;text=' . rawurlencode($text)
 	);?>
@@ -654,6 +699,12 @@ function updateMember(no){
         $("#student").val(id);
         $("#fsearch").submit();
     }
+
+    $("#bid").on("change",function(){
+        $("#student").val('');
+        $("#text").val('');
+        $("#fsearch").submit();
+    });
 </script>
 <!-- } 마이페이지 끝 -->
 

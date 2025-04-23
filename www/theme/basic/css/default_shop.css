@@ -560,7 +560,7 @@ a.btn_admin,.btn_admin {display:inline-block;color:#d13f4a;text-decoration:none;
 .btn_list input, .btn_list button {background:none repeat scroll 0 0 #617D46;border:0 none;color:#FFFFFF;height:28px;line-height:2.2em;padding:0 15px;vertical-align:middle}
 
 .tbl_wrap table {width:100%;border-collapse:collapse;border-spacing:0;}
-.tbl_wrap.scroll-y {height:400px;overflow-y:scroll;border-top:2px solid black;}
+.tbl_wrap.scroll-y {max-height:400px;overflow-y:scroll;border-top:2px solid black;}
 .tbl_wrap caption {padding:10px 0;font-weight:bold;text-align:left}
 
 .tbl_head01 {margin:0 0 10px}

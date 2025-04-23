@@ -112,7 +112,7 @@ $query_string = http_build_query(array(
                                         ?>
                                     </select>
                                 </td>
-                                <td style="padding:10px;"><input type="text" name="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
+                                <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
                                 <td style="padding:10px;"><input type="submit" class="search-btn" value=""></td>
                             </tr>
                         </tbody>
@@ -673,6 +673,7 @@ $query_string = http_build_query(array(
     }
 
     $("#bid").on("change",function(){
+        $("#text").val('');
         $("#fsearch").submit();
     });
 </script>
