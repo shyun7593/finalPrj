@@ -126,7 +126,7 @@ $query_string = http_build_query(array(
                             AND gm.mb_id NOT IN ( '{$member['mb_id']}')
                             AND gm.mb_profile in ('C40000003','C40000004')
                             AND gm.mb_id != 'admin'";
-                            
+                            if($cnt['cnt']>0){
                             $mres = sql_query($msql);
                             $i=1;
                             foreach($mres as $ms => $m){
@@ -152,6 +152,11 @@ $query_string = http_build_query(array(
                                         <td></td>
                                     </tr>
                                     <?$i++;}
+                            }else{?>
+                                <tr style="text-align: center;">
+                                    <td colspan="8">검색 결과가 없습니다.</td>
+                                </tr>
+                            <?}
                         ?>
                         </tbody>
                     </table>
