@@ -123,7 +123,7 @@ $query_string = http_build_query(array(
                                 }
                                 ?>
                                 
-                                    <tr style="text-align: center;" class="onaction<?if($student == $m['mb_no']) echo ' isactive';?>" onclick="viewStudent('<?=$m['mb_no']?>',event)">
+                                    <tr style="text-align: center;" class="onaction" onclick="viewStudent('<?=$m['mb_no']?>',event)">
                                         <td><?= $i?></td>
                                         <td><?= $m['branchName']?></td>
                                         <td><?= $m['mb_name']?></td>
@@ -669,7 +669,6 @@ function updateMember(no){
 
 
     $("#bid").on("change",function(){
-        $("#student").val('');
         $("#text").val('');
         $("#fsearch").submit();
     });
