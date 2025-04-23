@@ -46,7 +46,7 @@ $query_string = http_build_query(array(
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
-            <div class="tbl_wrap">
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="30%">
                     <colgroup width="30%">
@@ -92,7 +92,7 @@ $query_string = http_build_query(array(
         <section id="smb_my_od">
             <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
-                <div class="tbl_wrap" style="margin-bottom: 15px;">
+                <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
                     <table class="tbl_head01">
                         <colgroup width="10%">
                         <colgroup width="20%">
@@ -119,7 +119,7 @@ $query_string = http_build_query(array(
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap">
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">

@@ -48,7 +48,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
             </div>
 
 
-            <div class="tbl_wrap">
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="20%">
                     <colgroup width="20%">
@@ -109,24 +109,11 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                                         <option value="">선택하세요</option>
                                         <?$jsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
                                         foreach($jsql as $js => $j){
-                                            if(!$memberGrade['subject']){
-                                                if(strstr($s['code'],'C2005')){
-                                                    $i2 = 1;
-                                                    if($i == 1){
-                                                        $sub = $j['code'];
-                                                    }
-                                                } else {
-                                                    $i2 = 0;
-                                                    if($i == 0){
-                                                        $sub = $j['code'];
-                                                    }
-                                                }
-                                            }
                                             ?>
-                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code']) || (!$memberGrade['subject'] && $i==$i2)) echo 'selected';?>><?=$j['codeName']?></option>
-                                        <?$i++;}?>
+                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code'])) echo 'selected';?>><?=$j['codeName']?></option>
+                                        <?}?>
                                     </select>
-                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}else{echo "{$sub}";}?>">
+                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}?>">
                                     <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                 </td>
                                 <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
@@ -170,7 +157,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                     </tbody>
                 </table>
             </div>
-            <div>
+            <div style="margin-top:10px;">
                 <button class="btn-n btn-green btn-bold btn-large" type="buttton" onclick="saveGrade()">저장</button>
             </div>
         </section>
@@ -181,7 +168,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
         <section id="smb_my_od">
             <h2>지원대학</h2>
 
-            <div class="tbl_wrap">
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="*">
                     <colgroup width="*">
@@ -316,9 +303,13 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
         
         const $row = $(this).closest('tr');
         const subjectCode = $row.find('input[name="subjectCode"]').val();
-
+        
         if(!subjectCode){
             swal('','과목을 선택해 주세요.','warning');
+            $row.find('input[name="origin"]').val('');
+            $row.find('input[name="sscore"]').val('');
+            $row.find('input[name="pscore"]').val('');
+            $row.find('input[name="grade"]').val('');
             return;
         }
 

@@ -25,7 +25,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 	        <!-- <div class="smb_my_more">
 	            <a href="./orderinquiry.php">더보기</a>
 	        </div> -->
-            <div class="tbl_wrap" >
+            <div class="tbl_wrap border-tb" >
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">

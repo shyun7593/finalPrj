@@ -49,7 +49,7 @@ $query_string = http_build_query(array(
 	        </div> -->
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
 
-                <div class="tbl_wrap" style="margin-bottom: 15px;">
+                <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
                     <table class="tbl_head01">
                         <colgroup width="10%">
                         <colgroup width="20%">
@@ -75,7 +75,7 @@ $query_string = http_build_query(array(
                         </tbody>
                     </table>
                 </div>
-                <div class="tbl_wrap scroll-y">
+                <div class="tbl_wrap scroll-y border-tb">
                     <table class="tbl_head01">
                         <colgroup width="5%">
                         <colgroup width="12.5%">
@@ -170,7 +170,7 @@ $query_string = http_build_query(array(
         <section id="smb_my_od">
             <h2>지원대학</h2>
 
-            <div class="tbl_wrap">
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="*">
                     <colgroup width="*">
@@ -185,25 +185,7 @@ $query_string = http_build_query(array(
                         <th></th>
                     </thead>
                     <tbody>
-                        <?
-                            $myCampus = sql_query("");
-                            foreach($myCampus as $mcc => $mc){
-                        ?>
-                        <tr style="text-align: center;">
-                            <td style="text-align: left;">
-                                국어<br>
-                                <select id="korean" name="korean" class="frm_input" style="width: 100%;">
-                                    <option value="">선택하세요</option>
-                                    <option value="kor1">화법과 작문</option>
-                                    <option value="kor2">언어와 매체</option>
-                                </select>
-                            </td>
-                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanOrigin" name="koreanOrigin"></td>
-                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanSScore" name="koreanSScore"></td>
-                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanPScore" name="koreanPScore"></td>
-                            <td><br><input type="text" class="frm_input" style="width: 100%;" id="koreanGrade" name="koreanGrade"></td>
-                        </tr>
-                        <?}?>
+                        
                     </tbody>
                 </table>
             </div>
