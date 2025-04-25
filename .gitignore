@@ -1,4 +1,4 @@
-/.vscode/*
+.vscode/sftp.json
 /www/data/cache/*
 /www/data/session/*
 /www/vendor/
