@@ -1,6 +1,11 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
-
+if($_SESSION['mb_level'] == 0){
+    session_unset(); // 모든 세션변수를 언레지스터 시켜줌
+    session_destroy(); // 세션해제함
+    alert("승인이 필요합니다.");
+    goto_url(G5_URL);
+}
 if(G5_COMMUNITY_USE === false) {
     include_once(G5_THEME_MSHOP_PATH.'/index.php');
     return;

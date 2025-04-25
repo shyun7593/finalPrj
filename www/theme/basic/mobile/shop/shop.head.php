@@ -2,6 +2,17 @@
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
+$conte=explode('/',$_SERVER['PHP_SELF']);
+$nowUrl = str_replace('.php', '', $conte[count($conte) - 1]);
+if($nowUrl == 'index'){
+    if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){
+        $nowUrl = 'myscore';
+    } else {
+        $nowUrl = 'student';
+    }
+}
+
+$title = sql_fetch("SELECT me_name FROM g5_menu WHERE me_link = '{$nowUrl}' limit 1");
 
 include_once(G5_THEME_PATH.'/head.sub.php');
 include_once(G5_LIB_PATH.'/outlogin.lib.php');
@@ -21,13 +32,10 @@ include_once(G5_LIB_PATH.'/latest.lib.php');
     } ?>
 
     <div id="hd_wr">
-        <div id="logo"><a href="<?php echo G5_SHOP_URL; ?>/"><img src="<?php echo G5_DATA_URL; ?>/common/mobile_logo_img" alt="<?php echo $config['cf_title']; ?> 메인"></a></div>
+        <div id="logo"><a style="color:white;font-size:18px;font-weight:700;" href=""><?=$title['me_name']?></a></div>
         <div id="hd_btn">
             <button type="button" id="btn_hdcate"><i class="fa fa-bars"></i><span class="sound_only">분류</span></button>
-            <button type="button" id="btn_hdsch"><i class="fa fa-search"></i><span class="sound_only">검색열기</span></button>
-            <a href="<?php echo G5_SHOP_URL; ?>/mypage.php" id="btn_hduser"><i class="fa fa-user"></i><span class="sound_only">마이페이지</span></a>
-            <a href="<?php echo G5_SHOP_URL; ?>/cart.php" id="btn_hdcart"><i class="fa fa-shopping-cart"></i><span class="sound_only">장바구니</span><span class="cart-count"><?php echo get_boxcart_datas_count(); ?></span></a>
-
+            <a href="" id="btn_hduser"><i class="fa fa-user"></i><span class="sound_only">마이페이지</span></a>
         </div>
     </div>
 
@@ -116,4 +124,4 @@ include_once(G5_LIB_PATH.'/latest.lib.php');
     }
 ?>
 <div id="container" class="<?php echo implode(' ', $container_class); ?>">
-    <?php if ((!$bo_table || $w == 's' ) && !defined('_INDEX_')) { ?><h1 id="container_title"><a href="javascript:history.back()" class="btn_back"><i class="fa fa-chevron-left" aria-hidden="true"></i><span class="sound_only">뒤로</span></a> <?php echo $g5['title'] ?></h1><?php }
+    
