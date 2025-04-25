@@ -40,8 +40,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
     <div class="mbskin_box" style="font-size: 1.5em;">
         <div class="mb_log_cate">
-            <h2 class="cursor login-view active" style="border-right: 1px solid white;" id="loginFormView" onclick="viewLogin()"><span>로그인</span></h2>
-            <h2 class="cursor login-view" id="regFormView" onclick="viewLogin()"><span>회원가입</span></h2>
+            <h2 class="cursor login-view active" style="border-right: 1px solid white;" id="loginFormView" onclick="viewLogin(this)"><span>로그인</span></h2>
+            <h2 class="cursor login-view" id="regFormView" onclick="viewLogin(this)"><span>회원가입</span></h2>
         </div>
         <form name="flogin" action="<?php echo $login_action_url ?>" onsubmit="return flogin_submit(this);" method="post">
         <input type="hidden" name="url" value="<?php echo $login_url ?>">
@@ -91,6 +91,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     </div>
 </div>
 <script>
+    let nowId = 'loginFormView';
 jQuery(function($){
     $("#login_auto_login").click(function(){
         if (this.checked) {
@@ -228,16 +229,20 @@ function doAct(type){
 }
 
 
-function viewLogin(){
-    $("#regFormView").toggleClass('active');
-
-    $("#loginFormView").toggleClass('active');
+function viewLogin(e){
+    let clickId= $(e).attr('id');
+    if(nowId != clickId){
+        $("#regFormView").toggleClass('active');
     
-    $("#regForm").toggleClass('active');
-
-    $("#login-btn").toggleClass('active');
-
-    $("#reg-btn").toggleClass('active');
+        $("#loginFormView").toggleClass('active');
+        
+        $("#regForm").toggleClass('active');
+    
+        $("#login-btn").toggleClass('active');
+    
+        $("#reg-btn").toggleClass('active');
+        nowId = clickId;
+    }
 }
 
 
