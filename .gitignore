@@ -1,3 +1,4 @@
+.vscode
 /www/data/cache/*
 /www/data/session/*
 /www/vendor/
