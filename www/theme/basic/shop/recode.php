@@ -23,7 +23,8 @@ switch($_SESSION['mb_profile']){
         break;
     case 'C40000002': // 선생님
         $add_sql .= " AND mb.mb_signature = '{$_SESSION['mb_signature']}' ";
-        $branch_sql .= "b.idx = '{$_SESSION['mb_signature']}' ";
+        $branch_sql .= " AND b.idx = '{$_SESSION['mb_signature']}' ";
+        $branchIdx = $_SESSION['mb_signature'];
         break;
     case 'C40000003': // 학생
         $add_sql .= " AND sp.memberIdx = '{$_SESSION['ss_mb_id']}' ";
@@ -64,10 +65,16 @@ $sql = "SELECT
          {$add_sql}
         ORDER BY `date`,grade
 ";
-
+$scnt = sql_fetch("SELECT 
+            count(*) as 'cnt'
+        FROM g5_student_Practice sp
+        JOIN g5_member mb on
+        sp.memberIdx = mb.mb_id
+        WHERE
+         {$add_sql}
+        ORDER BY `date`,grade");
 $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
 
-echo $sql;
 ?>
 
 <style>
@@ -211,7 +218,9 @@ echo $sql;
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div>캠퍼스 : </div>
                         <div>
+                            <?if($_SESSION['mb_profile'] == 'C40000001'){?>
                             <button type="button" class="btn-n <?if($branchIdx ==  '') echo "active";?>" onclick="viewCampus('')">전체</button>
+                            <?}?>
                             <?
                                 $bres=sql_query($bsql);
                                 foreach($bres as $bs => $b){?>
@@ -220,6 +229,7 @@ echo $sql;
                             ?>
                         </div>
                     </div>
+                    <?if($_SESSION['mb_profile'] != 'C40000003'){?>
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div>성&nbsp;&nbsp;&nbsp;별 : </div>
                         <div>
@@ -228,6 +238,7 @@ echo $sql;
                             <button type="button" class="btn-n <?if($gender == 'F') echo "active";?>" onclick="viewGender('F')">여</button>
                         </div>
                     </div>
+                    <?}?>
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div>종&nbsp;&nbsp;&nbsp;목 : </div>
                         
@@ -246,6 +257,7 @@ echo $sql;
                     </div>
                 </div>
             </form>
+            <?if($scnt['cnt'] > 0){?>
             <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:800px;">
                 <table class="tbl_head01">
                     <tbody>
@@ -326,6 +338,17 @@ echo $sql;
                     </tbody>
                 </table>
             </div>
+            <?} else {?>
+                <div class="tbl_wrap border-tb">
+                <table class="tbl_head01">
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center;">검색 결과가 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <?}?>
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
