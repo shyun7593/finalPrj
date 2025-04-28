@@ -42,11 +42,11 @@ $query_string = http_build_query(array(
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>지점 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 지점수 : <?= $bcnt['cnt'] ?></span></h2>
-            <div class="smb_my_more" style="cursor:pointer;">
+            <h2>상담 내역</h2>
+            <!-- <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
-            </div>
-            <div class="tbl_wrap border-tb">
+            </div> -->
+            <!-- <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
                     <colgroup width="30%">
                     <colgroup width="30%">
@@ -83,7 +83,7 @@ $query_string = http_build_query(array(
                     ?>
                     </tbody>
                 </table>
-            </div>
+            </div> -->
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
@@ -190,55 +190,7 @@ $query_string = http_build_query(array(
     </div>
 </div>
 
-<div id="branchPopup">
-    <div class="mb20" id="branchDiv">
-        <div class="tbl_frm01 tbl_wrap">
-            <table>
-                <colgroup>
-                    <col width="15%">
-                    <col width="35%">
-                    <col width="15%">
-                    <col width="35%">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>지점명</th>
-                        <td>
-                            <input type="text" class="frm_input" id="branchName" name="branchName" value="" autocomplete="off" style="width:100%">
-                            <input type="hidden" id="idx" name="idx">
-                            <input type="hidden" id="btype" name="btype">
-                        </td>
-                        <th>활성여부</th>
-                        <td>
-                            <select class="frm_input" name="branchActive" id="branchActive" style="width: 100%;">
-                                <option value="1">활성</option>
-                                <option value="0">비활성</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>담당자</th>
-                        <td>
-                            <input type="text" class="frm_input" id="branchManager" name="branchManager" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                        <th>연락처</th>
-                        <td>
-                            <input type="text" class="frm_input" id="branchHp" name="branchHp" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>비고</th>
-                        <td colspan="3">
-                            <textarea id="branchMemo" name="branchMemo"></textarea>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <button id="closePopup">닫기</button>
-    <button id="branchBtn">저장</button>
-</div>
+
 
 <div id="memberPopup">
     <div class="mb20" id="memberDiv">
@@ -401,50 +353,6 @@ $query_string = http_build_query(array(
         return true;
     }
 
-    function popupBranch(type,no) {
-       $("#btype").val(type);
-        if(type == 'update'){
-            $("#idx").val(no);
-            $.ajax({
-                url: "/bbs/searchBranch.php",
-                type: "POST",
-                data: {
-                    idx : no,
-                },
-                async: false,
-                error: function(data) {
-                    alert('에러가 발생하였습니다.');
-                    return false;
-                },
-                success: function(data) {
-                    json = eval("(" + data + ");");
-                    $.each(json.list, function(key, state) {
-                        obj = state;
-                        $("#branchName").val(obj.branchName);
-                        $("#branchHp").val(obj.branchHp);
-                        $("#branchManager").val(obj.branchManager);
-                        $("#branchMemo").val(obj.branchMemo);
-                        $("#branchActive").val(obj.branchActive);
-                        // $('#selectJaje').append($('<option>', {
-                        //     value: obj.idx,
-                        //     text: obj.ojName
-                        // }));
-                    });
-                    console.log(json);
-                }
-            });
-        }
-
-        $('#popupBackground').fadeIn(); // 배경 표시
-        $('#branchPopup').fadeIn(); // 팝업 표시
-    }
-
-    function updateBranch(no){
-        
-        $('#popupBackground').fadeIn(); // 배경 표시
-        $('#branchPopup').fadeIn(); // 팝업 표시
-    }
-
     function updateMember(no){
         $("#mb_no").val(no);
         $.ajax({
@@ -489,68 +397,15 @@ $query_string = http_build_query(array(
 
     $('#closePopup, #popupBackground').click(function() {
         $('#popupBackground').fadeOut(); // 배경 숨기기
-        $('#branchPopup').fadeOut(); // 팝업 숨기기
         $('#memberPopup').fadeOut(); // 팝업 숨기기
         popValueNull();
     });
 
     function popValueNull() {
-        $("#branchName").val("");
-        $("#branchManager").val("");
-        $("#branchHp").val("");
-        $("#branchMemo").val("");
-        $("#idx").val("");
-        $("#btype").val("");
         $("#mb_no").val("");
     }
 
-    $("#branchBtn").on('click',function(){
-        swal({
-            title : '수정하시겠습니까?',
-            text : '',
-            type : "info",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/update_branch.php",
-                        type: "POST",
-                        data: {
-                            branchName : $("#branchName").val(),
-                            branchManager : $("#branchManager").val(),
-                            branchHp: $("#branchHp").val(),
-                            branchMemo: $("#branchMemo").val(),
-                            branchActive : $("#branchActive").val(),
-                            type : $("#btype").val(),
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 등록되었습니다.','success');
-                                setTimeout(() => {
-                                    swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
-                            }
-                        }
-                    });
-                }
-            }
-        );
-    });
-
+   
     $("#memberBtn").on('click',function(){
         swal({
             title : '수정하시겠습니까?',

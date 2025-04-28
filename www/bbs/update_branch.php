@@ -20,7 +20,7 @@ if($type == 'insert'){
     ");
     
 } else if($type == 'update'){
-    $idx = $_POST['idx'];
+    $idx = $_POST['branchPopIdx'];
     sql_query("UPDATE g5_branch SET
         branchName = '{$branchName}',
         branchManager = '{$branchManager}',

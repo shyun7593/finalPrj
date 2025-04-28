@@ -118,6 +118,20 @@ box-sizing:border-box;
     background-size: contain;
 }
 
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    appearance: none; /* 기본 스타일 제거 */
+    background-color: #eee; /* 기본 배경색 */
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .checkbox-custom:checked {
+    background-color: black; /* 체크됐을 때 배경색 */
+  }
+
 /* 팝업 배경 (화면을 덮는 반투명 배경) */
 #popupBackground {
     display: none;

@@ -27,6 +27,7 @@ if (sizeof($data_list)  >  0) {
         . "\",\"branchManager\":\"" . $data_list[$i]['branchManager']
         . "\",\"branchHp\":\"" . $data_list[$i]['branchHp']
         . "\",\"branchActive\":\"" . $data_list[$i]['branchActive']
+        . "\",\"branchIdx\":\"" . $data_list[$i]['idx']
         . "\",\"branchMemo\":\"" . $data_list[$i]['branchMemo'] . "\"}";
 	}
 }
