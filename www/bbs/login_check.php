@@ -13,6 +13,7 @@ $mb_name = isset($_POST['mb_name']) ? trim($_POST['mb_name']) : '';
 
 if($type == 'reg'){
     $isexist = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member WHERE mb_id = '{$mb_id}'");
+    $mb_signature = isset($_POST['mb_signature']) ? trim($_POST['mb_signature']) : '';
     if($isexist['cnt']>0){
         echo 'exist';
         exit;
@@ -24,7 +25,8 @@ if($type == 'reg'){
         mb_hp = replace('{$mb_hp}','-',''),
         mb_birth = replace('{$mb_birth}','-',''),
         mb_name = '{$mb_name}',
-        mb_profile = 'C40000004',
+        mb_signature = '{$mb_signature}',
+        mb_profile = 'C40000003',
         mb_level = 0
     ");
     echo 'success';

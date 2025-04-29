@@ -58,6 +58,17 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <div class="mgb-10"></div>
 
             <div id="regForm" class="btn-view">
+                <label for="mb_signature" class="sound_only">캠퍼스<strong class="sound_only"> 필수</strong></label>
+                <select require class="frm_input " name="mb_signature" id="mb_signature">
+                    <option value="" selected>캠퍼스 선택</option>
+                    <?
+                        $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                        foreach($bsql as $bs => $b){
+                    ?>
+                        <option value="<?=$b['idx']?>"><?=$b['branchName']?></option>
+                    <?}?>
+                </select>
+                <div class="mgb-10"></div>
                 <label for="mb_name" class="sound_only">이름<strong class="sound_only"> 필수</strong></label>
                 <input type="text" name="mb_name" id="mb_name" required class="frm_input required" size="20" maxLength="8" placeholder="이름">
                 <div class="mgb-10"></div>
@@ -150,7 +161,8 @@ function doAct(type){
             !$("#mb_sex").val() ||
             !$("#mb_hp").val() ||
             !$("#mb_birth").val() ||
-            !$("#mb_name").val()
+            !$("#mb_name").val() || 
+            !$("#mb_signature").val()
         ){
             swal('','모든 입력값은 필수 입니다.','error');
             setTimeout(() => {
@@ -169,6 +181,7 @@ function doAct(type){
             mb_hp: $("#mb_hp").val(),
             mb_birth: $("#mb_birth").val(),
             mb_name: $("#mb_name").val(),
+            mb_signature: $("#mb_signature").val(),
             type : type,
         },
         async: false,
