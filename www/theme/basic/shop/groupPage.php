@@ -8,10 +8,7 @@ if($_SESSION['mb_profile'] != 'C40000001'){
 $g5['title'] = '등급관리';
 include_once('./_head.php');
 
-$cnt = sql_fetch("select COUNT(*) as 'cnt'
-                        from g5_member
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_id != 'admin'");
+
 $bcnt = sql_fetch("SELECT 
     COUNT(
     CASE
@@ -22,6 +19,25 @@ $bcnt = sql_fetch("SELECT
         WHEN branchActive != 1 THEN 1
     END) as 'cnt2'
 FROM g5_branch");
+
+$sql_add = " 1=1 ";
+
+if($bid){
+    $sql_add .= " AND gb.idx = {$bid} ";
+}
+
+if($text){
+    $sql_add .= " AND (gm.mb_name like '%{$text}%' OR replace(gm.mb_hp,'-','') like '%{$text}%' OR gm.mb_1 like '%{$text}%')";
+}
+
+$cnt = sql_fetch("select COUNT(*) as 'cnt'
+                        from g5_member gm
+                        LEFT JOIN g5_branch gb on
+                        gb.idx = gm.mb_signature
+                        where 
+                        {$sql_add}
+                        AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                        AND gm.mb_id != 'admin'");
 ?>
 
 <!-- 등급관리 시작 { -->
@@ -82,11 +98,34 @@ FROM g5_branch");
 	    <!-- 사용자 리스트 시작 { -->
 	    <section id="smb_my_od">
 	        <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?=$cnt['cnt']?></span></h2>
-	       
-	
-	        <!-- <div class="smb_my_more">
-	            <a href="./orderinquiry.php">더보기</a>
-	        </div> -->
+            <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
+                    <table class="tbl_head01">
+                        <colgroup width="10%">
+                        <colgroup width="20%">
+                        <colgroup width="65%">
+                        <colgroup width="5%">
+                        <tbody>
+                            <tr>
+                                <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
+                                <td style="padding:10px;">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
+                                        <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
+                                        <?
+                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                            foreach($bsql as $bs => $b){?>
+                                            <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
+                                            <?}
+                                        ?>
+                                    </select>
+                                </td>
+                                <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="이름, 학교, 휴대폰 번호 등" class="frm_input" style="width: 100%;" value="<?=$text?>"></td>
+                                <td style="padding:10px;"><input type="submit" class="search-btn" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
             <div class="tbl_wrap border-tb" >
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
@@ -108,13 +147,18 @@ FROM g5_branch");
                     <tbody>
                     <?  
                         $msql = " select *
-                        from g5_member m
-                        LEFT JOIN g5_branch b on
-                        b.idx = m.mb_signature
+                        from g5_member gm
+                        LEFT JOIN g5_branch gb on
+                        gb.idx = gm.mb_signature
                         LEFT JOIN g5_cmmn_code gcc on
-                        gcc.code = m.mb_profile
-                        where mb_id NOT IN ( '{$member['mb_id']}')
-                        AND mb_id != 'admin'";
+                        gcc.code = gm.mb_profile
+                        where 
+                        {$sql_add}
+                        AND gm.mb_id NOT IN ( '{$member['mb_id']}')
+                        AND gm.mb_id != 'admin'
+                        ORDER BY gm.mb_no
+                        ";
+                        
                         $mres = sql_query($msql);
                         foreach($mres as $ms => $m){
                           
@@ -639,6 +683,13 @@ function updateMember(no){
             }
         );
     });
+    function fsearch_submit(e) {
+    }
+    $("#bid").on("change",function(){
+        $("#text").val('');
+        $("#fsearch").submit();
+    });
+
 </script>
 <!-- } 마이페이지 끝 -->
 
