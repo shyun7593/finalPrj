@@ -183,8 +183,8 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
   top: 0;
   right: 0;
   height: 110%;
-  width: 2px;
-  background-color: #000; /* 경계선 색 */
+  width: 3px;
+  background-color: #bdb8b8; /* 경계선 색 */
 }
 
 .sub-header th {

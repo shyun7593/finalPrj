@@ -390,7 +390,6 @@ function updateMember(no){
                     //     text: obj.ojName
                     // }));
                 });
-                console.log(json);
             }
         });
         $('#popupBackground').fadeIn(); // 배경 표시

@@ -10,6 +10,15 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
 
 $sql_add = " 1=1 ";
 
+switch($_SESSION['mb_profile']){
+    case 'C40000001':
+        $bid = "";
+        break;
+    case 'C40000002':
+        $bid = $_SESSION['mb_signature'];
+        break;
+}
+
 if($bid){
     $sql_add .= " AND gb.idx = {$bid} ";
 }
@@ -40,50 +49,16 @@ $query_string = http_build_query(array(
 <!-- 마이페이지 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns:1fr 2.5fr;column-gap:20px;">
     <div id="smb_my_list">
+        <input type="hidden" id="showMemoMem">
+        <input type="hidden" id="showMemoMonth">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
             <h2>상담 내역</h2>
-            <!-- <div class="smb_my_more" style="cursor:pointer;">
-                <a onclick="popupBranch('insert','')">등록</a>
-            </div> -->
-            <!-- <div class="tbl_wrap border-tb">
-                <table class="tbl_head01">
-                    <colgroup width="30%">
-                    <colgroup width="30%">
-                    <colgroup width="30%">
-                    <thead>
-                        <th>지점명</th>
-                        <th>담당자</th>
-                        <th>관리</th>
-                    </thead>
-                            <tbody>
-                                <?
-                                $msql = " select *
-                        from g5_branch";
-                                $mres = sql_query($msql);
-                                foreach ($mres as $ms => $m) {
-                                    $act = "";
-                                    switch($m['branchActive']){
-                                        case '1':
-                                            $act = "<span style='color:blue;'>활성</span>";
-                                            break;
-                                        case '0':
-                                            $act = "<span style='color:red;'>비활성</span>";
-                                            break;
-                                    }
-                                    
-                                ?>
-
-                        <tr style="text-align: center;" class="onaction" onclick="popupBranch('update','<?=$m['idx']?>')">
-                            <td><?= $m['branchName'] ?></td>
-                            <td><?= $m['branchManager'] ?></td>
-                            <td><?=$act?></td>
-                        </tr>
-                    <? }
-                    ?>
-                    </tbody>
-                </table>
-            </div> -->
+            <div id="memoArea">
+                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
+                    학생을 클릭하면 상담내용이 보입니다.
+                </div>
+            </div>
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
@@ -102,7 +77,7 @@ $query_string = http_build_query(array(
                             <tr>
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
-                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
                                         <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
@@ -166,7 +141,7 @@ $query_string = http_build_query(array(
                                     break;
                             }
                         ?>
-                        <tr style="text-align: center;" class="onaction" onclick="updateMember('<?=$m['mb_no']?>')">
+                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>')">
                             
                             <td><?= $m['mb_id'] ?></td>
                             <td><?= $m['branchName'] ?></td>
@@ -189,104 +164,6 @@ $query_string = http_build_query(array(
         <!-- } 최근 주문내역 끝 -->
     </div>
 </div>
-
-
-
-<div id="memberPopup">
-    <div class="mb20" id="memberDiv">
-        <div class="tbl_frm01 tbl_wrap">
-            <table>
-                <colgroup>
-                    <col width="15%">
-                    <col width="35%">
-                    <col width="15%">
-                    <col width="35%">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>아이디</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_id" name="mb_id" value="" autocomplete="off" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
-                        </td>
-                        <th>승인여부</th>
-                        <td>
-                            <select class="frm_input" name="mb_level" id="mb_level" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
-                                <option value="0">미승인</option>
-                                <option value="1">승인</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>이름</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_name" name="mb_name" value="" autocomplete="off" style="width: 100%;">
-                            <input type="hidden" id="mb_no" name="mb_no">
-                        </td>
-                        <th>연락처</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_hp" name="mb_hp" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>학교</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_1" name="mb_1" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                        <th>학년</th>
-                        <td>
-                            <select class="frm_input" style="width: 100%;" id="mb_2" name="mb_2">
-                                <option value="">선택하세요.</option>
-                                <option value="1">1학년</option>
-                                <option value="2">2학년</option>
-                                <option value="3">3학년</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>성별</th>
-                        <td>
-                            <select class="frm_input" name="mb_sex" id="mb_sex" style="width: 100%;">
-                                <option value="M">남자</option>
-                                <option value="F">여자</option>
-                            </select>
-                        </td>
-                        <th>생년월일</th>
-                        <td>
-                            <input type="text" name="mb_birth" id="mb_birth" required class="frm_input" maxlength="8" pattern="\d{8}" size="20" maxLength="8" placeholder="생년월일(ex.19801212)">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>소속</th>
-                        <td>
-                            <select class="frm_input" name="mb_signature" id="mb_signature" style="width: 100%;">
-                                <option value="">선택하세요.</option>
-                            <?
-                                $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
-                                foreach($bsql as $bs => $b){
-                            ?>
-                                <option value="<?=$b['idx']?>"><?=$b['branchName']?></option>
-                            <?}?>
-                            </select>
-                        </td>
-                        <th>권한</th>
-                        <td>
-                            <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
-                                <?
-                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' ORDER BY code");
-                                    foreach($ggsql as $ggs => $g){?>
-                                      <option value="<?=$g['code']?>"><?=$g['codeName']?></option>  
-                                    <?}
-                                ?>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <button id="closePopup">닫기</button>
-    <button id="memberBtn">수정</button>
-    <button id="resetBtn">비밀번호 초기화</button>
     <?php
 	// 배열을 쉼표로 구분된 문자열로 변환
 	if (is_array($selectedPartners)) {
@@ -308,7 +185,7 @@ $query_string = http_build_query(array(
 			'&amp;page=' . rawurlencode($page) .
 			'&amp;text=' . rawurlencode($text)
 	);?>
-</div>
+
 
 <script>
     function member_leave() {
@@ -353,13 +230,28 @@ $query_string = http_build_query(array(
         return true;
     }
 
-    function updateMember(no){
-        $("#mb_no").val(no);
+    function fsearch_submit(e) {
+    }
+
+    $("#bid").on("change",function(){
+        $("#text").val('');
+        $("#fsearch").submit();
+    });
+
+    function viewMemberInfo(e,mbId){
+        $("#showMemoMem").val(mbId);
+        document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('isactive');
+            } else {
+                el.classList.remove('isactive');
+            }
+        });
         $.ajax({
-            url: "/bbs/searchMember.php",
+            url: "/bbs/searchMemberDatas.php",
             type: "POST",
             data: {
-                mbno : no,
+                mbIdx : mbId,
             },
             async: false,
             error: function(data) {
@@ -368,47 +260,128 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
-                $.each(json.list, function(key, state) {
-                    obj = state;
-                    if(obj.mb_level != 0){
-                        obj.mb_level = 1;
-                    }
-                    $("#mb_name").val(obj.mb_name);
-                    $("#mb_hp").val(obj.mb_hp);
-                    $("#mb_birth").val(obj.mb_birth);
-                    $("#mb_sex").val(obj.mb_sex);
-                    $("#mb_profile").val(obj.mb_profile);
-                    $("#mb_1").val(obj.mb_1);
-                    $("#mb_2").val(obj.mb_2);
-                    $("#mb_signature").val(obj.mb_signature);
-                    $("#mb_level").val(obj.mb_level);
-                    $("#mb_id").val(obj.mb_id);
-                    // $('#selectJaje').append($('<option>', {
-                    //     value: obj.idx,
-                    //     text: obj.ojName
-                    // }));
-                });
                 console.log(json);
+                showMemoView(json,$("#showMemoMonth").val());
             }
         });
-        $('#popupBackground').fadeIn(); // 배경 표시
-        $('#memberPopup').fadeIn(); // 팝업 표시
     }
 
-    $('#closePopup, #popupBackground').click(function() {
-        $('#popupBackground').fadeOut(); // 배경 숨기기
-        $('#memberPopup').fadeOut(); // 팝업 숨기기
-        popValueNull();
-    });
+    function showMemoView(data,month){
+        if(!month){
+            month = 'C00000000';
+        }
+        const memoData = json.memoData;
+        let memoMonn = [];
+        let html1 = `
+            <div id="memoMonth" style="margin-bottom:15px;">
+                <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">등록상담</button>
+                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+                foreach($buttons as $bt => $b){?>
+                    <button type="button" class="btn-n" value="<?=$b['code']?>" onclick="showMonthMemo(event)"><?=$b['codeName']?></button>
+                <?}?>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:15px;">`;
+            html1 += `
+                <h2 style="margin:unset !important;padding: 0 5px;">메모 작성</h2>
+                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">
+                    <input type="hidden" value="">
+                    <input type="text" style="font-size:1.4em;font-weight:bold;border:1px solid #e4e4e4;padding:2px 5px;" value="" placeholder="제목">
+                    <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
+                    <textarea placeholder="상담내용 작성" style="border:1px solid #e4e4e4;border-radius:10px;height:200px;resize:none;padding:10px;font-size:1em;"></textarea>
+                    <div>
+                        <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'save')">저장</button>
+                    </div>
+                </div>
+                `;
+                for (const tag in memoData) {
+                    const tagData = memoData[tag].data;
+                    memoMonn.push(tag);
+                    for (const idx in tagData) {
+                        const item = tagData[idx];
+                        if(tag != month){
+                            html1 += `<div class="${tag}" style="display:none;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
+                        } else{
+                            html1 += `<div class="${tag}" style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
+                        }
+                        html1 += `
+                            <input type="hidden" value="${item.gmIdx}">
+                            <input type="text" onclick="updateMemo(event)" style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${item.title}">
+                            <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
+                            <textarea style="pointer-events:none;border:1px solid #e4e4e4;border-radius:10px;height:200px;resize:none;padding:10px;font-size:1em;">${item.memo}</textarea>
+                            <p style="color:#b3b3b3;font-size:0.8em;">작성자 : ${item.regName} ${item.regDate}</p>`;
 
-    function popValueNull() {
-        $("#mb_no").val("");
+                        if(item.updName){
+                            html1+=`
+                            <p style="color:#b3b3b3;font-size:0.8em;">수정자 : ${item.updName} ${item.updDate}</p>
+                            `;
+                        }
+
+                html1+=`
+                    <div style="display:none;">
+                        <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'update')">수정</button>
+                        <button type="button" class="btn-n btn-bold btn-large" onclick="cancleMemo(event)">취소</button>
+                    </div>
+                </div>
+                `;
+                    }
+                }                
+            
+            html1 += `
+            </div>
+            `;
+        $("#memoArea").html(html1);
+        setTimeout(() => {
+            document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
+                if(el.value == month){
+                    el.classList.add('active');
+                }
+                if(memoMonn.includes(el.value)){
+                    el.classList.add('iswrite');
+                }
+            });
+        }, 0);
     }
 
-   
-    $("#memberBtn").on('click',function(){
+    let memoCont = '';
+    let memoTitle = '';
+    let memoIdx = '';
+
+    function updateMemo(e){
+        $(e.currentTarget).parent().find('textarea').css('pointer-events','all');
+        $(e.currentTarget).parent().find('div').eq(1).css('display','');
+        
+        if(memoIdx != $(e.currentTarget).parent().find('input').eq(0).val()){
+            memoIdx = $(e.currentTarget).parent().find('input').eq(0).val();
+            memoCont = $(e.currentTarget).parent().find('textarea').val();
+            memoTitle = $(e.currentTarget).parent().find('input').eq(1).val();
+        }
+    }
+
+    function cancleMemo(e){
+        $(e.currentTarget).parent().css('display','none');
+        $(e.currentTarget).parent().parent().find('textarea').css('pointer-events','none');
+        $(e.currentTarget).parent().parent().find('textarea').val(memoCont);
+        $(e.currentTarget).parent().parent().find('input').eq(1).val(memoTitle);
+        memoCont = '';
+        memoTitle = '';
+        memoIdx = '';
+    }
+
+    function clickMemo(e,type){
+        let memoMonth = $("#memoMonth > button.active").val();
+        let memoIdx = $(e.currentTarget).parent().parent().find('input').eq(0).val();
+        let message = '';
+        let memoContent = $(e.currentTarget).parent().parent().find('textarea').val();
+        let memoTitles = $(e.currentTarget).parent().parent().find('input').eq(1).val();
+
+        if(type == 'update'){
+            message = '수정';
+        } else if(type == 'save'){
+            message = '저장';
+        }
+
         swal({
-            title : '수정하시겠습니까?',
+            title : message + '하시겠습니까?',
             text : '',
             type : "info",
             showCancelButton : true,
@@ -421,116 +394,52 @@ $query_string = http_build_query(array(
             function(isConfirm){
                 if(isConfirm){
                     $.ajax({
-                        url: "/bbs/login_check.php",
-                        type: "POST",
-                        data: {
-                            mb_no : $("#mb_no").val(),
-                            mb_name : $("#mb_name").val(),
-                            mb_hp: $("#mb_hp").val(),
-                            mb_profile: $("#mb_profile").val(),
-                            mb_sex: $("#mb_sex").val(),
-                            mb_1: $("#mb_1").val(),
-                            mb_2: $("#mb_2").val(),
-                            mb_signature: $("#mb_signature").val(),
-                            mb_birth: $("#mb_birth").val(),
-                            mb_level : $("#mb_level").val(),
-                            type : 'update',
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 수정되었습니다.','success');
+                        url: "/bbs/updateMemo.php",
+                            type: "POST",
+                            data: {
+                                type : type,
+                                memoIdx : memoIdx,
+                                memoMonth : memoMonth,
+                                memoTitle : memoTitles,
+                                memoCont : memoContent,
+                                mbIdx : $("#showMemoMem").val(),
+                            },
+                            async: false,
+                            error: function(data) {
+                                alert('에러가 발생하였습니다.');
+                                return false;
+                            },
+                            success: function(data) {
+                                json = eval("(" + data + ");");
+                                
+                                swal('성공',message+'되었습니다.','success');
                                 setTimeout(() => {
                                     swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
+                                }, 1200);
+                                showMemoView(json,$("#showMemoMonth").val());
+                                
                             }
-                        }
                     });
                 }
             }
         );
-    });
+        
+        
+    }
 
-    $("#resetBtn").on('click',function(){
-        swal({
-            title : '비밀번호를 초기화 하시겠습니까?',
-            text : '',
-            type : "warning",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/login_check.php",
-                        type: "POST",
-                        data: {
-                            mb_no : $("#mb_no").val(),
-                            type : 'password',
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 수정되었습니다.','success');
-                                setTimeout(() => {
-                                    swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
-                            }
-                        }
-                    });
-                }
+    function showMonthMemo(e){
+        $("#showMemoMonth").val($(e.currentTarget).val());
+        document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('active');
+                $(`.${el.value}`).css('display','flex');
+            } else {
+                el.classList.remove('active');
+                $(`.${el.value}`).css('display','none');
             }
-        );
-    });
-
-    document.getElementById("mb_birth").addEventListener("blur", function() {
-    const val = this.value;
-    if (!/^\d{8}$/.test(val)) {
-        swal('','생년월일은 8자리 숫자로 입력해주세요. (예: 19981202)','warning');
-        $("#mb_birth").val('');
-        return;
+        });
     }
 
-    const year = parseInt(val.slice(0, 4), 10);
-    const month = parseInt(val.slice(4, 6), 10) - 1;
-    const day = parseInt(val.slice(6, 8), 10);
-    const date = new Date(year, month, day);
-
-    if (
-        date.getFullYear() !== year ||
-        date.getMonth() !== month ||
-        date.getDate() !== day
-    ) {
-        swal("","유효하지 않은 날짜입니다.","warning");
-        $("#mb_birth").val('');
-    }
-    });
-
-    function fsearch_submit(e) {
-    }
-
-    $("#bid").on("change",function(){
-        $("#text").val('');
-        $("#fsearch").submit();
-    });
 </script>
 <!-- } 마이페이지 끝 -->
 
