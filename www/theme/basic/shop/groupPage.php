@@ -12,6 +12,16 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         from g5_member
                         where mb_id NOT IN ( '{$member['mb_id']}')
                         AND mb_id != 'admin'");
+$bcnt = sql_fetch("SELECT 
+    COUNT(
+    CASE
+        WHEN branchActive = 1 THEN 1
+    END) as 'cnt' ,
+    COUNT(
+    CASE
+        WHEN branchActive != 1 THEN 1
+    END) as 'cnt2'
+FROM g5_branch");
 ?>
 
 <!-- 등급관리 시작 { -->
@@ -19,16 +29,18 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
 <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>지점 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 지점수 : <?= $bcnt['cnt'] ?></span></h2>
+            <h2>지점 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 지점수 : <?= $bcnt['cnt'] + $bcnt['cnt2'] ?> / </span><span style="color:red;font-size: small;">비활성 : <?=$bcnt['cnt2']?></span></h2>
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
             <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
-                    <colgroup width="30%">
-                    <colgroup width="30%">
-                    <colgroup width="30%">
+                    <colgroup width="15%">
+                    <colgroup width="25%">
+                    <colgroup width="40%">
+                    <colgroup width="20%">
                     <thead>
+                        <th>순번</th>
                         <th>지점명</th>
                         <th>담당자</th>
                         <th>관리</th>
@@ -38,6 +50,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                 $msql = " select *
                         from g5_branch";
                                 $mres = sql_query($msql);
+                                $ccc = 1;
                                 foreach ($mres as $ms => $m) {
                                     $act = "";
                                     switch($m['branchActive']){
@@ -52,11 +65,12 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                 ?>
 
                         <tr style="text-align: center;" class="onaction" onclick="popupBranch('update','<?=$m['idx']?>')">
+                            <td><?= $ccc ?></td>
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['branchManager'] ?></td>
                             <td><?=$act?></td>
                         </tr>
-                    <? }
+                    <? $ccc++;}
                     ?>
                     </tbody>
                 </table>
