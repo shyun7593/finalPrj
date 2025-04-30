@@ -250,6 +250,8 @@ $sql = sql_fetch("SELECT * FROM g5_member WHERE mb_id = '{$mb_id}'");
 $_SESSION['mb_profile'] = $sql['mb_profile'];
 $_SESSION['mb_level'] = $sql['mb_level'];
 $_SESSION['mb_signature'] = $sql['mb_signature'];
+$_SESSION['mb_no'] = $sql['mb_no'];
+$_SESSION['mb_name'] = $sql['mb_name'];
 if($mb_id == 'admin'){
     $_SESSION['mb_profile'] = 'C40000001';
 }

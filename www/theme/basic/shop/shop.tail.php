@@ -11,8 +11,9 @@ $admin = get_admin("super");
 // 사용자 화면 우측과 하단을 담당하는 페이지입니다.
 // 우측, 하단 화면을 꾸미려면 이 파일을 수정합니다.
 ?>
-        </div>  <!-- } .shop-content 끝 -->
-	</div>      <!-- } #container 끝 -->
+            </div>  <!-- } .shop-content 끝 -->
+        </div>      <!-- } #container 끝 -->
+    </div>
 </div>
 <!-- } 전체 콘텐츠 끝 -->
 

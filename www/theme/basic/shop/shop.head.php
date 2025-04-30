@@ -41,6 +41,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
 ?>
 
 <!-- 상단 시작 { -->
+ <div id="new-hd">
 <div id="hd">
     <h1 id="hd_h1"><?php echo $g5['title'] ?></h1>
     <div id="skip_to_container"><a href="#container">본문 바로가기</a></div>
@@ -49,20 +50,34 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
         include G5_BBS_PATH.'/newwin.inc.php'; // 팝업레이어
 	} ?>
 	
-    <div id="hd_menu" style="width: 1400px;">
+    <div id="hd_menu">
+        <img class="hd_img" src="/img/final_logo.png">
+        <div id="memberBox">
+            <div id="memberInfo">
+                <div style="font-weight:800;display:flex;justify-content:space-between;align-items:center;">
+                    <div style="display: flex;align-items:center;gap:5px;">
+                        <img src="/img/login_img.png" width="20px" height="20px" style="border-radius: 50%;padding:5px;background-color:white;">
+                        <a class="myInfo" href="" style="font-size: 1.3em;"><?=$_SESSION['mb_name'].'님'?></a>
+                    </div>
+                    <div>
+                        <a style="background: white;border-radius: 5px;padding: 2px 5px;color: #8d8de9;" href="/bbs/logout.php">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 		<?php include_once(G5_THEME_SHOP_PATH.'/category.php'); // 분류 ?>
 		<ul class="hd_menu" style="width: 100%;">
             <? 
                 $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_use = 1 ORDER BY me_order");
                 foreach($menus as $mu => $m){
             ?>
-                <li style="width: auto;min-width:200px;padding:0 ;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;" href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
+                <li style="width: 100%;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;" href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
             <?}?>
         </ul>
     </div> 
     <div style="position:absolute; top:0px; right:30px;height:50px;line-height:50px;">
         <a style="font-size: 1.083em;color:white;margin-right:20px;cursor:pointer;" onclick="viewMyInfo()">내 정보</a>
-        <a style="font-size: 1.083em;color:white;" href="/bbs/logout.php">로그아웃</a>
+        
     </div>
 </div>
 

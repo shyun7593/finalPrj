@@ -47,21 +47,7 @@ $query_string = http_build_query(array(
 ?>
 
 <!-- 마이페이지 시작 { -->
-<div id="smb_my" style="display: grid;grid-template-columns:1fr 2.5fr;column-gap:20px;">
-    <div id="smb_my_list">
-        <input type="hidden" id="showMemoMem">
-        <input type="hidden" id="showMemoMonth">
-        <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od">
-            <h2>상담 내역</h2>
-            <div id="memoArea">
-                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
-                    학생을 클릭하면 상담내용이 보입니다.
-                </div>
-            </div>
-        </section>
-        <!-- } 최근 주문내역 끝 -->
-    </div>
+<div id="smb_my" style="display: grid;grid-template-columns:2.5fr 1fr;column-gap:20px;">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
@@ -159,6 +145,20 @@ $query_string = http_build_query(array(
                     <?}?>
                     </tbody>
                 </table>
+            </div>
+        </section>
+        <!-- } 최근 주문내역 끝 -->
+    </div>
+    <div id="smb_my_list">
+        <input type="hidden" id="showMemoMem">
+        <input type="hidden" id="showMemoMonth">
+        <!-- 최근 주문내역 시작 { -->
+        <section id="smb_my_od">
+            <h2>상담 내역</h2>
+            <div id="memoArea">
+                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
+                    학생을 클릭하면 상담내용이 보입니다.
+                </div>
             </div>
         </section>
         <!-- } 최근 주문내역 끝 -->
