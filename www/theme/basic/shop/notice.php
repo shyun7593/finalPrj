@@ -244,7 +244,20 @@ const editor = new toastui.Editor({
                 texts = '수정';
                 break;
         }
-        
+        if(!$("#noticeTitle").val()){
+            swal('','제목은 필수 입력 입니다.','warning');
+            setTimeout(() => {
+                swal.close();
+            }, 1200);
+            return false;
+        }
+        if($("#fixed").is(':checked') && !$("#orderNum").val()){
+            swal('','순번을 입력해주세요.','warning');
+            setTimeout(() => {
+                swal.close();
+            }, 1200);
+            return false;
+        }
         swal({
             title : texts + '하시겠습니까?',
             text : '',
