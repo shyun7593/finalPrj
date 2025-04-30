@@ -298,59 +298,7 @@ const editor = new toastui.Editor({
         $('#noticePopup').fadeIn(); // 팝업 표시
     }
 
-    function updateBranch(no){
-        
-        $('#popupBackground').fadeIn(); // 배경 표시
-        $('#branchPopup').fadeIn(); // 팝업 표시
-    }
-
-    $("#branchBtn").on('click',function(){
-        swal({
-            title : '수정하시겠습니까?',
-            text : '',
-            type : "info",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/update_branch.php",
-                        type: "POST",
-                        data: {
-                            branchName : $("#branchName").val(),
-                            branchManager : $("#branchManager").val(),
-                            branchHp: $("#branchHp").val(),
-                            branchMemo: $("#branchMemo").val(),
-                            branchActive : $("#branchActive").val(),
-                            branchPopIdx : $("#branchPopIdx").val(),
-                            type : $("#btype").val(),
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 등록되었습니다.','success');
-                                setTimeout(() => {
-                                    swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
-                            }
-                        }
-                    });
-                }
-            }
-        );
-    });
+    
     function fsearch_submit(e) {
     }
     $("#stype").on("change",function(){
