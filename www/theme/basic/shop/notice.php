@@ -99,7 +99,7 @@ $nres2 = sql_query($nsql2);
                                 $nsql1 = " select 
                                     gn.*,
                                     (SELECT gm.mb_name FROM g5_member gm WHERE gm.mb_id = gn.regId) as 'regName'
-                                from g5_notice gn WHERE gn.isFixed = 1 order by gn.ordered";
+                                from g5_notice gn WHERE gn.isFixed = 1 order by gn.ordered, gn.regDate";
                                 $nres1 = sql_query($nsql1);
                                 foreach ($nres1 as $ns1 => $n1) {
                                     $myRead = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$_SESSION['mb_no']}' AND noticeIdx = '{$n1['idx']}'");
