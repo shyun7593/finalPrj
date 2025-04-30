@@ -13,10 +13,13 @@ $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
 //     }
 // }
 
-$readCnt = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$_SESSION['mb_no']}'");
-$_SESSION['mb_readNotice'] = $readCnt['cnt'];
-$nsql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice");;
-$_SESSION['mb_noticeCnt'] = $nsql['cnt'];
+if (!isset($_SESSION['mb_noticeCnt']) || time() - ($_SESSION['mb_noticeCnt_time'] ?? 0) > 300) {
+    $readCnt = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$_SESSION['mb_no']}'");
+    $_SESSION['mb_readNotice'] = $readCnt['cnt'];
+    $nsql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice");;
+    $_SESSION['mb_noticeCnt'] = $nsql['cnt'];
+    $_SESSION['mb_noticeCnt_time'] = time();
+}
 
 if($_SESSION['mb_readNotice'] < $_SESSION['mb_noticeCnt']){
     $newNotice = "<div style='border-radius: 50%;background: red;width:8px;height:8px;'></div>&nbsp;";
