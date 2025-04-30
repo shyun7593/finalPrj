@@ -35,6 +35,15 @@ box-sizing:border-box;
 
 .onaction:hover{
     background-color: #e4e4e4;
+    font-weight: bold;
+}
+.fix-onaction{
+    cursor: pointer;
+}
+
+.fix-onaction:hover{
+    background-color: #a2a2d5 !important;
+    font-weight: bold;
 }
 
 .btn-n{
@@ -178,6 +187,50 @@ box-sizing:border-box;
     /* 그림자 */
     z-index: 1001;
 }
+#noticePopup
+ {
+    display: none;
+    /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px;
+    height:1000px;
+    /* 팝업 너비 */
+    background-color: #fff;
+    /* 팝업 배경 */
+    padding: 20px;
+    border-radius: 10px;
+    /* 팝업 모서리 둥글게 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* 그림자 */
+    z-index: 1001;
+    #noticeDiv{
+        height: 95%;
+    }
+    .noticeHead{
+        display: grid;
+        grid-template-columns: 1fr 9fr;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .is-none{
+        pointer-events: none !important;
+        background-color: gray;
+    }
+}
+
+#noticePopup input,#noticePopup textarea{
+    border : 1px solid #e1e1e1 !important;
+    border-radius: 5px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
 /* 테이블 스타일 (팝업 내부만 적용되도록 구체화) */
 #branchPopup .tbl_frm01 table ,
@@ -214,6 +267,7 @@ box-sizing:border-box;
 
 /* 닫기 버튼 스타일 */
 #branchPopup #closePopup ,
+#noticePopup #closePopup ,
 #memberPopup #closePopup 
 {
     background-color: #ff5f5f;
@@ -227,6 +281,7 @@ box-sizing:border-box;
 
 /* 저장 버튼 스타일 */
 #branchPopup #branchBtn ,
+#noticePopup #noticeBtn ,
 #memberPopup #memberBtn 
 {
     background-color: #089bff;
@@ -343,25 +398,25 @@ border:1px solid #558ab7 !important;
 .hd_login .count {display:inline-block;position:absolute;top:-5px;right:-10px;line-height:12px;padding:0 5px;border-radius:10px;background:#ff1a21;color:#fff;min-width:16px;height:14px;font-size:0.85em}
 
 #memberBox{position: absolute;bottom: 40px;display: flex;justify-content: center;align-items: center;width: 100%;}
-#memberInfo{width: 90%;background-color: #b8c8e9;border-radius: 10px;padding:10px;
+#memberInfo{width: 90%;background-color: gray;border-radius: 10px;padding:10px;
     .myInfo:hover{
         text-decoration: underline;
     }
 }
 
-#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;}
+#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #e1e1e1;}
 #hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.083em}
 .hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
-.hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center;border-bottom: 1px solid #e1e1e1;}
+.hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center;border-bottom: 1px solid white;}
 .hd_menu li:last-child {border-right:0}
-.hd_menu li:first-child {border-top: 1px solid #e1e1e1;}
+.hd_menu li:first-child {border-top: 1px solid white;}
 .hd_menu li a {display:block;color:gray;}
-.hd_menu li.active{background-color: #d5dce9  !important;}
-.hd_menu li.active a{color : black;font-size: 1.2em;font-weight: 800;}
-.hd_menu li:hover{background-color: #b8c8e9;
-    a{font-weight: 800;color:#6B77F8}}
+.hd_menu li.active{background-color: gray  !important;}
+.hd_menu li.active a{color : #e1e1e1;font-size: 1.2em;font-weight: 800;}
+.hd_menu li:hover{background-color: gray;
+    a{font-weight: 800;color:#e1e1e1}}
 
 /*사이드 메뉴*/
 #side_menu {height:100%;position:fixed;top:0;right:0;background:#fff;border-left:1px solid #e5e7ea;z-index:120;padding-left:50px;-webkit-box-shadow:0 1px 5px #d6d6d6;
@@ -615,7 +670,7 @@ a.btn_admin,.btn_admin {display:inline-block;color:#d13f4a;text-decoration:none;
 .tbl_head01 thead th input {vertical-align:top} /* middle 로 하면 게시판 읽기에서 목록 사용시 체크박스 라인 깨짐 */
 .tbl_head01 tfoot th, .tbl_head01 tfoot td {padding:10px 0;border-top:1px solid #c1d1d5;border-bottom:1px solid #c1d1d5;background:#d7e0e2;text-align:center}
 .tbl_head01 tbody th {padding:10px 0;border-top:1px solid #e9e9e9;border-bottom:1px solid #e9e9e9}
-.tbl_head01 td {padding:15px 10px;border-top:1px solid #f3f3f3;line-height:1.5em;word-break:break-all}
+.tbl_head01 td {padding:15px 10px;line-height:1.5em;word-break:break-all}
 .tbl_head01 td:first-child {border-left:0}
 .tbl_head01 tbody {background-color: #fff;}
 .tbl_head01 a {}
@@ -781,15 +836,15 @@ box-shadow:0 1px 10px rgba(0,0,0,.1)}
 .pg {text-align:center}
 .pg_page, .pg_current,.qa_page {display:inline-block;vertical-align:middle;background:#eee;border:1px solid #eee}
 .pg a:focus, .pg a:hover {text-decoration:none}
-.pg_page,.qa_page {color:#959595;font-size:1.083em;height:30px;line-height:28px;padding:0 5px;min-width:30px;text-decoration:none;border-radius:3px}
-.pg_page:hover,.qa_page:hover {background-color:#fafafa}
+.pg_page,.qa_page {color:#959595;font-size:1.083em;height:40px;line-height:38px;padding:0 5px;min-width:40px;text-decoration:none;border-radius:50%}
+.pg_page:hover,.qa_page:hover {background-color:gray;color:white;}
 .pg_start {text-indent:-999px;overflow:hidden;background:url('../img/btn_first.gif') no-repeat 50% 50% #eee;padding:0;border:1px solid #eee}
 .pg_prev {text-indent:-999px;overflow:hidden;background:url('../img/btn_prev.gif') no-repeat 50% 50% #eee;padding:0;border:1px solid #eee}
 .pg_end {text-indent:-999px;overflow:hidden;background:url('../img/btn_end.gif') no-repeat 50% 50% #eee;padding:0;border:1px solid #eee}
 .pg_next {text-indent:-999px;overflow:hidden;background:url('../img/btn_next.gif') no-repeat 50% 50% #eee;padding:0;border:1px solid #eee}
-.pg_start:hover,.pg_prev:hover,.pg_end:hover,.pg_next:hover {background-color:#fafafa}
+.pg_start:hover,.pg_prev:hover,.pg_end:hover,.pg_next:hover {background-color:gray;color:white;}
 
-.pg_current {display:inline-block;background:#3a8afd;border:1px solid #3a8afd;color:#fff;font-weight:bold;height:30px;line-height:30px;padding:0 10px;min-width:30px;border-radius:3px}
+.pg_current {display:inline-block;background:gray;border:1px solid gray;color:#fff;font-weight:bold;height:40px;line-height:38px;padding:0 5px;min-width:40px;border-radius:50%}
 
 /* 팁 */
 .tooltip_icon {display:inline-block;vertical-align:middle;color:#b3b5b8;border:0;font-size:1.4em;background:transparent;cursor:pointer}

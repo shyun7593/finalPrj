@@ -246,12 +246,16 @@ if( is_admin($mb['mb_id']) && is_dir(G5_DATA_PATH.'/tmp/') ){
 }
 
 $sql = sql_fetch("SELECT * FROM g5_member WHERE mb_id = '{$mb_id}'");
+$msql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$sql['mb_no']}'");
+$nsql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice");
 
 $_SESSION['mb_profile'] = $sql['mb_profile'];
 $_SESSION['mb_level'] = $sql['mb_level'];
 $_SESSION['mb_signature'] = $sql['mb_signature'];
 $_SESSION['mb_no'] = $sql['mb_no'];
 $_SESSION['mb_name'] = $sql['mb_name'];
+$_SESSION['mb_readNotice'] = $msql['cnt'];
+$_SESSION['mb_noticeCnt'] = $nsql['cnt'];
 if($mb_id == 'admin'){
     $_SESSION['mb_profile'] = 'C40000001';
 }

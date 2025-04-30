@@ -13,6 +13,12 @@ $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
 //     }
 // }
 
+if($_SESSION['mb_readNotice'] < $_SESSION['mb_noticeCnt']){
+    $newNotice = "<div style='border-radius: 50%;background: red;width:8px;height:8px;'></div>&nbsp;";
+} else {
+    $newNotice = "";
+}
+
 $conte=explode('/',$_SERVER['PHP_SELF']);
 $nowUrl = str_replace('.php', '', $conte[count($conte) - 1]);
 if($nowUrl == 'index'){
@@ -21,6 +27,10 @@ if($nowUrl == 'index'){
     } else {
         $nowUrl = 'student';
     }
+}
+
+if($nowUrl == 'noticeView'){
+    $nowUrl = 'notice';
 }
 if(G5_IS_MOBILE) {
     include_once(G5_THEME_MSHOP_PATH.'/shop.head.php');
@@ -57,10 +67,10 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 <div style="font-weight:800;display:flex;justify-content:space-between;align-items:center;">
                     <div style="display: flex;align-items:center;gap:5px;">
                         <img src="/img/login_img.png" width="20px" height="20px" style="border-radius: 50%;padding:5px;background-color:white;">
-                        <a class="myInfo" href="" style="font-size: 1.3em;"><?=$_SESSION['mb_name'].'님'?></a>
+                        <a class="myInfo" href="" style="font-size: 1.3em;color:#e1e1e1"><?=$_SESSION['mb_name'].'님'?></a>
                     </div>
                     <div>
-                        <a style="background: white;border-radius: 5px;padding: 2px 5px;color: #8d8de9;" href="/bbs/logout.php">Logout</a>
+                        <a style="background: white;border-radius: 5px;padding: 2px 5px;color: #000;" href="/bbs/logout.php">Logout</a>
                     </div>
                 </div>
             </div>
@@ -71,7 +81,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_use = 1 ORDER BY me_order");
                 foreach($menus as $mu => $m){
             ?>
-                <li style="width: 100%;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;" href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>
+                <li style="width: 100%;cursor:pointer;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="<?= $m['me_link'] ?>"><?if($m['me_link'] == 'notice') echo $newNotice;?><?= $m['me_name']?></a></li>
             <?}?>
         </ul>
     </div> 
@@ -80,13 +90,6 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
         
     </div>
 </div>
-
-<script>
-    function viewMyInfo(){
-        
-    }
-    
-</script>
 <?php
     $wrapper_class = array();
     if( defined('G5_IS_COMMUNITY_PAGE') && G5_IS_COMMUNITY_PAGE ){
