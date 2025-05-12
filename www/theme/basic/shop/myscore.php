@@ -98,10 +98,10 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                                     <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}else{echo "{$sub}";}?>">
                                     <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                 </td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="pscore" value="<?=$memberGrade['pscore']?>"></td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
+                                <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(<?if($s['codeName'] == '탐구영역1' || $s['codeName'] == '탐구영역2'){echo 50;}else{ echo 100;}?>, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
+                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="pscore" value="<?=$memberGrade['pscore']?>"></td>
+                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
+                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
                                 <?} else if($s['codeName'] == '제2외국어/한문'){?>
                                     <td style="text-align: left;">
                                     <?=$s['codeName']?><br>
@@ -116,10 +116,10 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                                     <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}?>">
                                     <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                 </td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
+                                <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(50, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
                                 <td><br>-</td>
                                 <td><br>-</td>
-                                <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
+                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
                                 <?} else{
                                     $subJectCd = sql_fetch("SELECT code FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
                                     ?>
@@ -128,10 +128,10 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                                         <input type="hidden" name="subjectCode" value="<?=$subJectCd['code']?>">
                                         <input type="hidden" name="upperCode" value="<?=$s['code']?>">
                                     </td>
-                                    <td><br><input type="text" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
+                                    <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(<?if($s['codeName'] == '한국사'){echo 50;}else{ echo 100;}?>, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
                                     <td><br>-</td>
                                     <td><br>-</td>
-                                    <td><br><input type="text" class="frm_input" style="text-align:center;width: 100%;" name="grade" value="<?=$memberGrade['grade']?>"></td>    
+                                    <td><br><input type="number" class="frm_input" style="text-align:center;width: 100%;" name="grade" value="<?=$memberGrade['grade']?>"></td>    
                                 <?}?>
                             </tr>
                         <?}?>
@@ -223,10 +223,10 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
 
             if(i != 5 && i != 2 && i != 7 && i != 6){
                 if(!row.find('td:eq(0)').find('input[name="subjectCode"]').val() ||
-                !row.find('td:eq(1)').find('input[type="text"]').val() ||
-                !row.find('td:eq(2)').find('input[type="text"]').val() ||
-                !row.find('td:eq(3)').find('input[type="text"]').val() ||
-                !row.find('td:eq(4)').find('input[type="text"]').val()
+                !row.find('td:eq(1)').find('input[type="number"]').val() ||
+                !row.find('td:eq(2)').find('input[type="number"]').val() ||
+                !row.find('td:eq(3)').find('input[type="number"]').val() ||
+                !row.find('td:eq(4)').find('input[type="number"]').val()
             ){
                 swal("경고!",'제2외국어를 제외한 과목은 필수로 입력해주세요.','warning');
                 setTimeout(() => {
@@ -237,8 +237,8 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
             }
 
             if(i == 2 || i == 5){
-                if(!row.find('td:eq(1)').find('input[type="text"]').val() || 
-                !row.find('td:eq(4)').find('input[type="text"]').val()){
+                if(!row.find('td:eq(1)').find('input[type="number"]').val() || 
+                !row.find('td:eq(4)').find('input[type="number"]').val()){
                     swal("경고!",'점수, 등급을 필수로 입력해주세요.','warning');
                     setTimeout(() => {
                         swal.close();
@@ -249,10 +249,10 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
 
             subject.push(row.find('td:eq(0)').find('input[name="subjectCode"]').val());
             upperCode.push(row.find('td:eq(0)').find('input[name="upperCode"]').val());
-            origin.push(row.find('td:eq(1)').find('input[type="text"]').val());
-            pscore.push(row.find('td:eq(2)').find('input[type="text"]').val());
-            sscore.push(row.find('td:eq(3)').find('input[type="text"]').val());
-            grade.push(row.find('td:eq(4)').find('input[type="text"]').val());
+            origin.push(row.find('td:eq(1)').find('input[type="number"]').val());
+            pscore.push(row.find('td:eq(2)').find('input[type="number"]').val());
+            sscore.push(row.find('td:eq(3)').find('input[type="number"]').val());
+            grade.push(row.find('td:eq(4)').find('input[type="number"]').val());
         }
 
         $.ajax({
