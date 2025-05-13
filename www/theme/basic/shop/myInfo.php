@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$g5['title'] = '내 정보';
+$g5['title'] = '';
 include_once('./_head.php');
 
 $sql = " select *
@@ -16,12 +16,12 @@ $sql = " select *
 $res = sql_fetch($sql);
 
 ?>
-
 <!-- 등급관리 시작 { -->
 <div id="smb_my">
-<div id="smb_my_list" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
+    <div id="smb_my_list" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
+            <div id="wrapper_title">내 정보</div>
             <div class="tbl_wrap border-tb">
                 <input type="hidden" name="o_mb_name" id="o_mb_name" value="<?=$res['mb_name']?>">
                 <input type="hidden" name="o_mb_birth" id="o_mb_birth" value="<?=$res['mb_birth']?>">
@@ -105,13 +105,50 @@ $res = sql_fetch($sql);
                 </div>
             <?}?>
         </section>
-        <section id="smb_my_od">
-        </section>
-        <!-- } 최근 주문내역 끝 -->
+        <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
+        <div id="smb_my_list" style="overflow: hidden;">
+            <input type="hidden" id="showMemoMem">
+            <input type="hidden" id="showMemoMonth">
+            <!-- 최근 주문내역 시작 { -->
+            <section id="smb_my_od" style="height: 100%;">
+                <div id="wrapper_title">상담이력</div>
+                <div id="memoArea" style="height: 520px;">
+                    
+                </div>
+            </section>
+            <!-- } 최근 주문내역 끝 -->
+        </div>
+        <?}?>
     </div>
+    <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
+    <div id="smb_my_list" class="studentScore">
+            <!-- 성적 정보 시작 { -->
+        <section id="smb_my_od">
+            
+            <div class="tbl_wrap" >
+                <table class="tbl_head01">
+                    <tr style="text-align: center;">
+                        <td>검색할 학생을 눌러주세요.</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tbl_wrap" >
+                
+            </div>
+        </section>
+        <!-- } 성적 정보 끝 -->
+    </div>
+    <?}?>
 </div>
 
 <script>
+    $(document).ready(function(){
+        document.querySelectorAll("#wrapper_title")[0].setAttribute('style','display:none');
+        if('<?=$_SESSION['mb_profile']?>' == 'C40000004' || '<?=$_SESSION['mb_profile']?>' == 'C40000003'){
+            viewStudent();
+            viewMemberInfo();
+        }
+    })
 const pattern = /[a-zA-Z0-9]/; // 영문자 또는 숫자
 document.getElementById("mb_birth").addEventListener("blur", function() {
   const val = this.value;
@@ -305,6 +342,248 @@ $("#updateGradeCut").on('click',function(){
         }
     );
 });
+
+function viewStudent(){
+        // let html = "<div>hi</div>";
+        // $(".studentScore").html(html);
+        
+        $.ajax({
+            url: "/bbs/searchScore.php",
+            type: "POST",
+            data: {
+                mb_no : '<?=$member['mb_no']?>',
+            },
+            dataType: 'json',
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                console.log(data);
+                const count = Object.keys(data['monthList']).length;
+
+                const getValue = (monthCode, subject, field) => {
+                    return data['scoreData'][monthCode]?.data?.[subject]?.[field] ?? '-';
+                };
+
+                let html = `
+                    <section id="smb_my_od">
+	        <div id="wrapper_title" style="padding-top:0px;">성적 정보</div>
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_one_color">
+                    <tr style="text-align: center;">
+                        <th>소속</th>
+                        <td>${data['info']['branch']}</td>
+                        <th>이름</th>
+                        <td>${data['info']['memberName']}</td>
+                        <th>학교</th>
+                        <td>${data['info']['school']}</td>
+                        <th>학년</th>
+                        <td>${data['info']['layer']}</td>
+                        <th>성별</th>
+                        <td>${data['info']['gender']}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_2n_color">
+                    <thead>
+                        <th>구분</th>
+                        <th colspan="5">국어</th>
+                        <th colspan="5">수학</th>
+                        <th colspan="2">영어</th>
+                        <th colspan="5">탐구Ⅰ</th>
+                        <th colspan="5">탐구Ⅱ</th>
+                        <th colspan="2">한국사</th>
+                        <th colspan="3">제2외국어</th>
+                    </thead>
+                    <tbody>
+                        <tr style="text-align: center; background-color:#eee">
+                            <td>구분</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>등</td>
+                        </tr>`;
+                    for(let i = 0; i < count; i++){
+                        let monthArr = Object.values(data['monthList'])[i];
+                        const code = monthArr['code'];
+                        
+                            html +=`
+                            <tr style="text-align: center;">
+                                <td>${monthArr['codeName']}</td>
+                                <td>${getValue(code, '국어', 'subject')}</td>
+                                <td>${getValue(code, '국어', 'origin')}</td>
+                                <td>${getValue(code, '국어', 'sscore')}</td>
+                                <td>${getValue(code, '국어', 'pscore')}</td>
+                                <td>${getValue(code, '국어', 'grade')}</td>
+                                <td>${getValue(code, '수학', 'subject')}</td>
+                                <td>${getValue(code, '수학', 'origin')}</td>
+                                <td>${getValue(code, '수학', 'sscore')}</td>
+                                <td>${getValue(code, '수학', 'pscore')}</td>
+                                <td>${getValue(code, '수학', 'grade')}</td>
+                                <td>${getValue(code, '영어', 'origin')}</td>
+                                <td>${getValue(code, '영어', 'grade')}</td>
+                                <td>${getValue(code, '탐구영역1', 'subject')}</td>
+                                <td>${getValue(code, '탐구영역1', 'origin')}</td>
+                                <td>${getValue(code, '탐구영역1', 'sscore')}</td>
+                                <td>${getValue(code, '탐구영역1', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역1', 'grade')}</td>
+                                <td>${getValue(code, '탐구영역2', 'subject')}</td>
+                                <td>${getValue(code, '탐구영역2', 'origin')}</td>
+                                <td>${getValue(code, '탐구영역2', 'sscore')}</td>
+                                <td>${getValue(code, '탐구영역2', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역2', 'grade')}</td>
+                                <td>${getValue(code, '한국사', 'origin')}</td>
+                                <td>${getValue(code, '한국사', 'grade')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'subject')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'origin')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'grade')}</td>
+                            </tr>`;
+                        
+                    }
+                    
+                    html += `</tbody>
+                </table>
+            </div>
+	    </section>
+                `;
+            $(".studentScore").html(html);
+            }
+        });
+        // $("#student").val(id);
+        // $("#fsearch").submit();
+    }
+
+    function viewMemberInfo(){
+        let mbId = '<?=$member['mb_no']?>';
+        $("#showMemoMem").val();
+        $.ajax({
+            url: "/bbs/searchMemberDatas.php",
+            type: "POST",
+            data: {
+                mbIdx : mbId,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                console.log(json);
+                showMemoView(json,$("#showMemoMonth").val());
+            }
+        });
+    }
+
+    function showMemoView(data,month){
+        if(!month){
+            month = 'C00000000';
+        }
+        const memoData = json.memoData;
+        console.log(memoData);
+        let memoMonn = [];
+        let html1 = `
+            <div id="memoMonth" style="margin-bottom:15px;">
+                <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">등록상담</button>
+                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+                foreach($buttons as $bt => $b){?>
+                    <button type="button" class="btn-n" value="<?=$b['code']?>" onclick="showMonthMemo(event)"><?=$b['codeName']?></button>
+                <?}?>
+            </div>
+            <div style="display:flex;flex-direction:row;gap:15px;overflow-x:scroll;height:100%;padding-bottom:10px;">
+                    <div class="noview">
+                        상담이력이 없습니다.
+                    </div>
+            `;
+            
+                for (const tag in memoData) {
+                    const tagData = memoData[tag].data;
+                    memoMonn.push(tag);
+                    for (const idx in tagData) {
+                        const item = tagData[idx];
+                        if(tag != month){
+                            html1 += `<div class="${tag}" style="display:none;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
+                        } else{
+                            html1 += `<div class="${tag}" style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
+                        }
+                        html1 += `
+                            <input type="hidden" value="${item.gmIdx}">
+                            <input type="text" readonly style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${item.title}">
+                            <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
+                            <textarea readonly style="border:1px solid #e4e4e4;border-radius:10px;height:370px;resize:none;padding:10px;font-size:1em;width:400px;">${item.memo}</textarea>
+                            <p style="color:#b3b3b3;font-size:0.8em;">작성자 : ${item.regName} ${item.regDate}</p>`;
+
+                        if(item.updName){
+                            html1+=`
+                            <p style="color:#b3b3b3;font-size:0.8em;">수정자 : ${item.updName} ${item.updDate}</p>
+                            `;
+                        }
+
+                html1+=`
+                </div>
+                `;
+                    }
+                }                
+            
+            html1 += `
+            </div>
+            `;
+        $("#memoArea").html(html1);
+        setTimeout(() => {
+            document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
+                if(el.value == month){
+                    el.classList.add('active');
+                    el.click();
+                }
+                if(memoMonn.includes(el.value)){
+                    el.classList.add('iswrite');
+                }
+            });
+        }, 0);
+    }
+    function showMonthMemo(e){
+        $("#showMemoMonth").val($(e.currentTarget).val());
+        document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('active');
+                $(`.${el.value}`).css('display','flex');
+                if($(`.${el.value}`).children().length == 0){
+                    $('.noview').css('display','flex');
+                } else {
+                    $('.noview').css('display','none');
+                }
+            } else {
+                el.classList.remove('active');
+                $(`.${el.value}`).css('display','none');
+            }
+        });
+    }
 </script>
 <!-- } 마이페이지 끝 -->
 

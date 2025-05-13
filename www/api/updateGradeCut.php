@@ -73,7 +73,6 @@ try {
 if (empty($values3)) {
     
 } else {
-    $prevSub = '';
     delPrevDate('C60000001');
     foreach ($values3 as $row) {
         $subCode = subjectCode($row[0]);
