@@ -210,7 +210,6 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>실기 기록</h2>
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
                 <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
                     <input type="hidden" id="branchIdx" name="branchIdx" value="<?=$branchIdx?>">
