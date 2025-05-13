@@ -98,6 +98,12 @@ $res = sql_fetch($sql);
                 <input type="button" id="resetInfo" value="취소" style="cursor:pointer;height:40px;width:100px;" class="btn-n btn-green">
                 <input type="button" id="updateInfo" value="수정" style="cursor:pointer;height:40px;width:100px;" class="btn-n active">
             </div>
+            <?if($_SESSION['mb_profile'] == 'C40000001'){?>
+                <div id="wrapper_title">데이터 업데이트</div>
+                <div style="margin-top: 20px;">
+                    <input type="button" id="updateGradeCut" value="등급컷" style="cursor:pointer;height:40px;width: 100px;" class="btn-n active">
+                </div>
+            <?}?>
         </section>
         <section id="smb_my_od">
         </section>
@@ -254,6 +260,51 @@ function changePass(){
         });
 }
 
+
+$("#updateGradeCut").on('click',function(){
+    swal({
+        title : '<?=date('Y')?> 등급컷',
+        text : '수정하시겠습니까?',
+        type : "info",
+        showCancelButton : true,
+        confirmButtonClass : "btn-danger",
+        cancelButtonText : "아니오",
+        confirmButtonText : "예",
+        closeOnConfirm : false,
+        closeOnCancel : true
+        },
+        function(isConfirm){
+            if(isConfirm){
+                swal('업데이트 중입니다.','시간이 오래걸리니 잠시만 기다려주세요.','info');
+                $('.sa-button-container').css('display','none');
+                $.ajax({
+                    url: "/api/updateGradeCut.php",
+                    type: "POST",
+                    data: {
+                        gradeYear: <?=date('Y')?>,
+                    },
+                    contentType: "application/x-www-form-urlencoded",
+                    async: true,
+                    error: function(xhr, status, error) {
+                        console.log("에러 상태:", status, "에러 메시지:", error);
+                        $('.sa-button-container').css('display','flex');
+                        swal('관리자에게 문의하세요.','에러가 발생하였습니다.','error');
+                        return false;
+                    },
+                    success: function(data) {
+                        $('.sa-button-container').css('display','flex');
+                        if(data == 'success'){
+                            swal('성공!','성공적으로 수정되었습니다.','success');
+                        } else {
+                            swal('관리자에게 문의하세요.','에러가 발생하였습니다.','error');
+                            console.log(data);
+                        }
+                    }
+                });
+            }
+        }
+    );
+});
 </script>
 <!-- } 마이페이지 끝 -->
 

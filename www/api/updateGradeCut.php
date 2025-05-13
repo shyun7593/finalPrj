@@ -1,9 +1,12 @@
 <?php
 
 // require '../vendor/autoload.php';
-include('./vendor/autoload.php');
-include_once('./_common.php');
+ini_set('max_execution_time', 300); // 5분까지 허용 (원하는 시간으로 조정 가능)
+ini_set('memory_limit', '512M');    // 메모리 제한도 충분히 늘리기
+include('../vendor/autoload.php');
+include_once('../common.php');
 
+$regId = "master";
 
 $client = new Google_Client();
 $client->setApplicationName('Google Sheets API with PHP');
@@ -11,7 +14,7 @@ $client->setScopes([
     Google_Service_Sheets::SPREADSHEETS_READONLY  // 읽기 전용 권한
 ]);
 // $client->setAuthConfig('/api/spreadsheet-457500-2c59f048e424.json');
-$client->setAuthConfig('./api/spreadsheet-457500-cb4d1dabeba0.json');
+$client->setAuthConfig('spreadsheet-457500-cb4d1dabeba0.json');
 $client->setAccessType('offline');
 
 $service = new Google_Service_Sheets($client);
@@ -43,29 +46,35 @@ function subjectCode($subject) {
     return isset($map[$subject]) ? $map[$subject] : $subject;
 }
 
+function delPrevDate($gType){
+    sql_query("DELETE FROM g5_gradeCut WHERE gradeYear = '". date('Y') ."' AND gradeType = '{$gType}'");
+}
 
-// 3월
-echo '3월<br>';
-// try {
-//     $response3 = $service->spreadsheets_values->get($spreadsheetId, $range3);
-//     $values3 = $response3->getValues();
-
-//     echo "<pre>";
-//     print_r($values3);
-//     echo "</pre>";
-// } catch (Exception $e) {
-//     echo '오류 발생: ' . $e->getMessage();
-// }
-
-$response3 = $service->spreadsheets_values->get($spreadsheetId, $range3);
-$values3 = $response3->getValues();
-
-
-
+try {
+    // 3월
+    $response3 = $service->spreadsheets_values->get($spreadsheetId, $range3);
+    $values3 = $response3->getValues();
+    // 6월
+    $response6 = $service->spreadsheets_values->get($spreadsheetId, $range6);
+    $values6 = $response6->getValues();
+    // 9월
+    $response9 = $service->spreadsheets_values->get($spreadsheetId, $range9);
+    $values9 = $response9->getValues();
+    // 가채점
+    $response0 = $service->spreadsheets_values->get($spreadsheetId, $range0);
+    $values0 = $response0->getValues();
+    // 수능
+    $response1 = $service->spreadsheets_values->get($spreadsheetId, $range1);
+    $values1 = $response1->getValues();
+} catch (Exception $e) {
+    echo '오류 발생';
+    exit;
+}
 if (empty($values3)) {
-    echo "데이터가 없습니다.\n";
+    
 } else {
-    // $prevSub = '';
+    $prevSub = '';
+    delPrevDate('C60000001');
     foreach ($values3 as $row) {
         $subCode = subjectCode($row[0]);
         sql_query("INSERT INTO g5_gradeCut set
@@ -94,14 +103,10 @@ if (empty($values3)) {
     }
 }
 
-// 6월
-echo '<br>6월<br>';
-$response6 = $service->spreadsheets_values->get($spreadsheetId, $range6);
-$values6 = $response6->getValues();
-
 if (empty($values6)) {
-    echo "데이터가 없습니다.\n";
+    
 } else {
+    delPrevDate('C60000002');
     foreach ($values6 as $row) {
         $subCode = subjectCode($row[0]);
         
@@ -132,14 +137,12 @@ if (empty($values6)) {
     }
 }
 
-// 9월
-echo '<br>9월<br>';
-$response9 = $service->spreadsheets_values->get($spreadsheetId, $range9);
-$values9 = $response9->getValues();
+
 
 if (empty($values9)) {
-    echo "데이터가 없습니다.\n";
+    
 } else {
+    delPrevDate('C60000003');
     foreach ($values9 as $row) {
         $subCode = subjectCode($row[0]);
         sql_query("INSERT INTO g5_gradeCut set
@@ -168,14 +171,9 @@ if (empty($values9)) {
     }
 }
 
-// 가채점
-echo '<br>가채점<br>';
-$response0 = $service->spreadsheets_values->get($spreadsheetId, $range0);
-$values0 = $response0->getValues();
-
 if (empty($values0)) {
-    echo "데이터가 없습니다.\n";
 } else {
+    delPrevDate('C60000004');
     foreach ($values0 as $row) {
         $subCode = subjectCode($row[0]);
         sql_query("INSERT INTO g5_gradeCut set
@@ -204,14 +202,9 @@ if (empty($values0)) {
     }
 }
 
-// 수능
-echo '<br>수능<br>';
-$response1 = $service->spreadsheets_values->get($spreadsheetId, $range1);
-$values1 = $response1->getValues();
-
 if (empty($values1)) {
-    echo "데이터가 없습니다.\n";
 } else {
+    delPrevDate('C60000005');
     foreach ($values1 as $row) {
         $subCode = subjectCode($row[0]);
         sql_query("INSERT INTO g5_gradeCut set
@@ -239,5 +232,5 @@ if (empty($values1)) {
         }
     }
 }
-echo '성공';
+echo 'success';
 ?>

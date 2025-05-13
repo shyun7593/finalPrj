@@ -12,7 +12,7 @@ if(!$year){
     $year = date('Y');
 }
 
-$scores = sql_query("SELECT * FROM g5_gradeCut FROM gradeType = '{$month}' AND gradeYear = '{$year}'");
+$recD = sql_fetch("SELECT regDate FROM g5_gradeCut WHERE gradeType = '{$month}' AND gradeYear = '{$year}' limit 1");
 
 if($_SESSION['mb_student']){
     $membId = $_SESSION['mb_student'];
@@ -44,6 +44,9 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                             ?>
                         <button class="btn-n <?if($month == $m['code']) echo "active";?> <?if($cnt['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="<?=$m['code']?>" onclick="viewMonth(event)" type="buttton"><?=$m['codeName']?></button>
                     <?}?>
+                </div>
+                <div style="position:absolute;right:0;">
+                    점수 업데이트 : <?=$recD['regDate']?>
                 </div>
             </div>
 
