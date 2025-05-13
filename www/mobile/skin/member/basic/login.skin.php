@@ -154,11 +154,12 @@ function doAct(type){
         ){
             swal('','모든 입력값은 필수 입니다.','error');
             setTimeout(() => {
-                   swal.close();
+                swal.close();
             }, 1200);
             return false;
         }
     }
+    return false;
     $.ajax({
         url: "<?php echo $login_action_url ?>",
         type: "POST",

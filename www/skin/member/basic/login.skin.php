@@ -103,6 +103,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 </div>
 <script>
     let nowId = 'loginFormView';
+    const pattern = /[a-zA-Z0-9]/; // 영문자 또는 숫자
 jQuery(function($){
     $("#login_auto_login").click(function(){
         if (this.checked) {
@@ -135,9 +136,10 @@ document.getElementById("mb_birth").addEventListener("blur", function() {
 });
 
 
-$("#login_id, #login_pw").on('keydown',function(e){
+$("#login_id,#login_pw").on('keydown',function(e){
     if(document.querySelector('.btn_submit.active').id == 'login-btn'){
         if(e.keyCode == 13){
+            e.preventDefault();  // 기본 엔터 동작 방지
             doAct('login');
         }
     }
@@ -145,10 +147,10 @@ $("#login_id, #login_pw").on('keydown',function(e){
 
 function flogin_submit(f)
 {
-    if( $( document.body ).triggerHandler( 'login_sumit', [f, 'flogin'] ) !== false ){
-        return true;
-    }
-    return false;
+    // if( $( document.body ).triggerHandler( 'login_sumit', [f, 'flogin'] ) !== false ){
+    //     return true;
+    // }
+    // return false;
 }
 
 
@@ -167,6 +169,15 @@ function doAct(type){
             swal('','모든 입력값은 필수 입니다.','error');
             setTimeout(() => {
                    swal.close();
+            }, 1200);
+            return false;
+        }
+
+        if(!pattern.test($("#login_pw").val())){
+            
+            swal('','비밀번호는 문자/숫자가 포함되어야 합니다.','error');
+            setTimeout(() => {
+                swal.close();
             }, 1200);
             return false;
         }

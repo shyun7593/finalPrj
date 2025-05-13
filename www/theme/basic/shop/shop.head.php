@@ -91,11 +91,8 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
             ?>
                 <li style="width: 100%;cursor:pointer;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="<?= $m['me_link'] ?>"><?if($m['me_link'] == 'notice') echo $newNotice;?><?= $m['me_name']?></a></li>
             <?}?>
+            <li style="width: 100%;cursor:pointer;" class="<?if('myInfo' == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="myInfo">내 정보</a></li>
         </ul>
-    </div> 
-    <div style="position:absolute; top:0px; right:30px;height:50px;line-height:50px;">
-        <a style="font-size: 1.083em;color:white;margin-right:20px;cursor:pointer;" onclick="viewMyInfo()">내 정보</a>
-        
     </div>
 </div>
 <?php
@@ -109,7 +106,6 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
     <!-- #container 시작 { -->
     <div id="container">
     <div id="popupBackground"></div>
-    
         <!-- .shop-content 시작 { -->
         <div class="<?php echo implode(' ', $content_class); ?>">
             <?php if ((!$bo_table || $w == 's' ) && !defined('_INDEX_')) { ?><div id="wrapper_title"><?php echo $g5['title'] ?></div><?php } ?>
