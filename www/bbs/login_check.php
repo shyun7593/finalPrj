@@ -51,7 +51,8 @@ if($type == 'reg'){
             mb_signature = '{$mb_signature}',
             mb_hp = replace('{$mb_hp}','-',''),
             mb_birth = replace('{$mb_birth}','-',''),
-            mb_name = '{$mb_name}'
+            mb_name = '{$mb_name}',
+            mb_last_update = '".G5_TIME_YMDHIS."'
         WHERE mb_no = '{$mb_no}'
     ");
     echo 'success';
@@ -262,6 +263,7 @@ $_SESSION['mb_level'] = $sql['mb_level'];
 $_SESSION['mb_signature'] = $sql['mb_signature'];
 $_SESSION['mb_no'] = $sql['mb_no'];
 $_SESSION['mb_name'] = $sql['mb_name'];
+$_SESSION['mb_last_update'] = $sql['mb_last_update'];
 $_SESSION['mb_readNotice'] = $msql['cnt'];
 $_SESSION['mb_noticeCnt'] = $nsql['cnt'];
 if($mb_id == 'admin'){

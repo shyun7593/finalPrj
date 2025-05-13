@@ -13,6 +13,18 @@ $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
 //     }
 // }
 
+
+
+if ($_SESSION['mb_last_update'] !== sql_fetch("SELECT mb_last_update FROM g5_member WHERE mb_no = '{$_SESSION['mb_no']}'")['mb_last_update']) {
+    $userIn = sql_fetch("SELECT * FROM g5_member WHERE mb_no = '{$_SESSION['mb_no']}'");
+    $_SESSION['mb_profile'] = $userIn['mb_profile'];
+    $_SESSION['mb_level'] = $userIn['mb_level'];
+    $_SESSION['mb_signature'] = $userIn['mb_signature'];
+    $_SESSION['mb_no'] = $userIn['mb_no'];
+    $_SESSION['mb_name'] = $userIn['mb_name'];
+    $_SESSION['mb_last_update'] = $userIn['mb_last_update'];
+}
+
 if (!isset($_SESSION['mb_noticeCnt']) || time() - ($_SESSION['mb_noticeCnt_time'] ?? 0) > 300) {
     $readCnt = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$_SESSION['mb_no']}'");
     $_SESSION['mb_readNotice'] = $readCnt['cnt'];
