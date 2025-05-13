@@ -139,10 +139,11 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <th>소속</th>
                         <th>아이디</th>
                         <th>이름</th>
+                        <th>성별</th>
                         <th>생년월일</th>
                         <th>연락처</th>
                         <th>권한</th>
-                        <th>승인여부</th>
+                        <!-- <th>승인여부</th> -->
                     </thead>
                     <tbody>
                     <?  
@@ -167,31 +168,32 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                           
                             switch($m['mb_sex']){
                                 case 'M':
-                                    $gender = '(남)';
+                                    $gender = '남';
                                     break;
                                 case 'F':
-                                    $gender = '(여)';
+                                    $gender = '여';
                                     break;
                             }
-                            switch($m['mb_level']){
-                                case '0':
-                                    $level = '<span style="color:red;">N</span>';
-                                    break;
-                                default :
-                                    $level = '<span style="color:blue;">Y</span>';
-                                    break;
+                            // switch($m['mb_level']){
+                            //     case '0':
+                            //         $level = '<span style="color:red;">N</span>';
+                            //         break;
+                            //     default :
+                            //         $level = '<span style="color:blue;">Y</span>';
+                            //         break;
                                     
-                            }
+                            // }
                             ?>
                             
                                 <tr style="text-align: center;" class="onaction" onclick="updateMember('<?=$m['mb_no']?>')">
                                     <td><?= $m['branchName']?></td>
                                     <td><?= $m['mb_id']?></td>
-                                    <td><?= $m['mb_name'] . $gender?></td>
+                                    <td><?= $m['mb_name']?></td>
+                                    <td><?= $gender?></td>
                                     <td><?= hyphen_birth_number($m['mb_birth'])?></td>
                                     <td><?= hyphen_hp_number($m['mb_hp'])?></td>
                                     <td><?= $m['codeName']?></td>
-                                    <td><?= $level?></td>
+                                    <!-- <td><?= $level?></td> -->
                                 </tr>
                                 <?}
                     ?>

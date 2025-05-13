@@ -9,14 +9,16 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
 }
 
 $sql_add = " 1=1 ";
+if(!$bid){
 
-switch($_SESSION['mb_profile']){
-    case 'C40000001':
-        $bid = "";
-        break;
-    case 'C40000002':
-        $bid = $_SESSION['mb_signature'];
-        break;
+    switch($_SESSION['mb_profile']){
+        case 'C40000001':
+            $bid = "";
+            break;
+        case 'C40000002':
+            $bid = $_SESSION['mb_signature'];
+            break;
+    }
 }
 
 if($bid){
@@ -51,7 +53,13 @@ $query_string = http_build_query(array(
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
+            <div style="display: flex;">
+                <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
+                <div style="position: absolute;right: 0;top: -5px;">
+                    <input type="hidden" name="down" value="">
+                    <input type="button" name="act_button" value="명단 다운로드" onclick="excelDown();" style="cursor:pointer;" class="btn-n active">
+                </div>
+            </div>
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
                 <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
                     <table class="tbl_head01">
@@ -164,6 +172,7 @@ $query_string = http_build_query(array(
         <!-- } 최근 주문내역 끝 -->
     </div>
 </div>
+
     <?php
 	// 배열을 쉼표로 구분된 문자열로 변환
 	if (is_array($selectedPartners)) {
@@ -185,51 +194,19 @@ $query_string = http_build_query(array(
 			'&amp;page=' . rawurlencode($page) .
 			'&amp;text=' . rawurlencode($text)
 	);?>
+<iframe id="excel" name="excel" style="display:none"></iframe>
+<script>
+	function excelDown() {
+		var search = '<?= $_SERVER["QUERY_STRING"] ?>';
+		if (!confirm("목록을 XLS파일로 다운로드 받으시겠습니까?")) {
+			return false;
+		}
 
+		$("#excel").attr("src", "/bbs/student_xls.php?" + search);
+	}
+</script>
 
 <script>
-    function member_leave() {
-        return confirm('정말 회원에서 탈퇴 하시겠습니까?')
-    }
-
-    function out_cd_check(fld, out_cd) {
-        if (out_cd == 'no') {
-            alert("옵션이 있는 상품입니다.\n\n상품을 클릭하여 상품페이지에서 옵션을 선택한 후 주문하십시오.");
-            fld.checked = false;
-            return;
-        }
-
-        if (out_cd == 'tel_inq') {
-            alert("이 상품은 전화로 문의해 주십시오.\n\n장바구니에 담아 구입하실 수 없습니다.");
-            fld.checked = false;
-            return;
-        }
-    }
-
-    function fwishlist_check(f, act) {
-        var k = 0;
-        var length = f.elements.length;
-
-        for (i = 0; i < length; i++) {
-            if (f.elements[i].checked) {
-                k++;
-            }
-        }
-
-        if (k == 0) {
-            alert("상품을 하나 이상 체크 하십시오");
-            return false;
-        }
-
-        if (act == "direct_buy") {
-            f.sw_direct.value = 1;
-        } else {
-            f.sw_direct.value = 0;
-        }
-
-        return true;
-    }
-
     function fsearch_submit(e) {
     }
 

@@ -9,6 +9,17 @@ if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C400000
 }
 
 $sql_add = " 1=1 ";
+if(!$bid){
+
+    switch($_SESSION['mb_profile']){
+        case 'C40000001':
+            $bid = "";
+            break;
+        case 'C40000002':
+            $bid = $_SESSION['mb_signature'];
+            break;
+    }
+}
 
 if($bid){
     $sql_add .= " AND gb.idx = {$bid} ";
@@ -59,7 +70,7 @@ $query_string = http_build_query(array(
                             <tr>
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
-                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
                                         <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
