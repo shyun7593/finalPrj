@@ -28,6 +28,8 @@ switch($_SESSION['mb_profile']){
         break;
     case 'C40000003': // 학생
         $add_sql .= " AND sp.memberIdx = '{$_SESSION['ss_mb_id']}' ";
+        $branch_sql .= " AND b.idx = '{$_SESSION['mb_signature']}' ";
+        $branchIdx = $_SESSION['mb_signature'];
         break;
 }
 
@@ -190,11 +192,11 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
 .sub-header th {
   z-index: 0 !important;
   background-color: #fff;
-  box-sizing: border-box;
+  border-bottom: none !important;
 }
 
-.headd{
-    border-bottom: 2px solid white;
+.headd th{
+    border-bottom: none !important;
 }
 
 .headd th:nth-child(15){
@@ -257,8 +259,8 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
                 </div>
             </form>
             <?if($scnt['cnt'] > 0){?>
-            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:800px;">
-                <table class="tbl_head01">
+            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:450px;">
+                <table class="tbl_head01" style="width: auto;">
                     <tbody>
                     <tr class="headd">
                         <th style="top:0;z-index:15;min-width:100px;width:100px;background:#e4e4e4;" rowspan="2">날짜</th>
@@ -280,22 +282,22 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
                         <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#e4e4e4;" rowspan="2">평균</th>
                     </tr>
                     <tr class="sub-header">
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='core'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='core'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m10m'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m10m'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='medicine'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='medicine'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='leftGul'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='leftGul'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='stand'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='stand'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m20mBu'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m20mBu'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='situp'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='situp'>점수</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='sergent'>기록</th>
-                        <th style="position:sticky;top:40px;min-width:100px;background:#e4e4e4;border-right:2px solid white" class='sergent'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='core'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='core'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m10m'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m10m'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='medicine'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='medicine'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='leftGul'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='leftGul'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='stand'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='stand'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m20mBu'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='m20mBu'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='situp'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='situp'>점수</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:1px solid white" class='sergent'>기록</th>
+                        <th style="position:sticky;top:38.5px;min-width:100px;background:#e4e4e4;border-right:2px solid white" class='sergent'>점수</th>
                     </tr>
                         <?
                         $res = sql_query($sql);
@@ -307,31 +309,31 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
                             }
                             ?>
                             <tr class="connt">
-                                <td style="text-align:center;"><?=$s['date']?></td>
-                                <td style="text-align:center;"><?=$s['sRank']?></td>
-                                <td style="text-align:center;"><?=$s['mb_name']?></td>
-                                <td style="text-align:center;"><?=$g?></td>
-                                <td style="text-align:center;"><?=$s['mb_1']?></td>
-                                <td style="text-align:center;"><?=$s['grade']?></td>
-                                <td style="text-align:center;"><?=$s['branchName']?></td>
-                                <td style="text-align:center;" class="core core_Rank"><?=$s['core_Rank']?></td>
-                                <td style="text-align:center;" class="core core_score"><?=$s['core_score']?></td>
-                                <td style="text-align:center;" class="m10m m10m_Rank"><?=$s['10m_Rank']?></td>
-                                <td style="text-align:center;" class="m10m m10m_score"><?=$s['10m_score']?></td>
-                                <td style="text-align:center;" class="medicine medicine_Rank"><?=$s['medicine_Rank']?></td>
-                                <td style="text-align:center;" class="medicine medicine_score"><?=$s['medicine_score']?></td>
-                                <td style="text-align:center;" class="leftGul leftGul_Rank"><?=$s['left_Rank']?></td>
-                                <td style="text-align:center;" class="leftGul leftGul_score"><?=$s['left_score']?></td>
-                                <td style="text-align:center;" class="stand stand_Rank"><?=$s['stand_Rank']?></td>
-                                <td style="text-align:center;" class="stand stand_score"><?=$s['stand_score']?></td>
-                                <td style="text-align:center;" class="m20mBu m20mBu_Rank"><?=$s['20mBu_Rank']?></td>
-                                <td style="text-align:center;" class="m20mBu m20mBu_score"><?=$s['20mBu_score']?></td>
-                                <td style="text-align:center;" class="situp situp_Rank"><?=$s['situp_Rank']?></td>
-                                <td style="text-align:center;" class="situp situp_score"><?=$s['situp_score']?></td>
-                                <td style="text-align:center;" class="sergent sergent_Rank"><?=$s['surgent_Rank']?></td>
-                                <td style="text-align:center;" class="sergent sergent_score"><?=$s['surgent_score']?></td>
-                                <td style="text-align:center;" class="totals"><?=$s['total_Rank']?></td>
-                                <td style="text-align:center;" class="avg"><?=$s['total_Rev']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['date']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['sRank']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['mb_name']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$g?></td>
+                                <td style="max-width:180px;text-align:center;"><?=$s['mb_1']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['grade']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['branchName']?></td>
+                                <td style="width:150px;text-align:center;" class="core core_Rank"><?=$s['core_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="core core_score"><?=$s['core_score']?></td>
+                                <td style="width:150px;text-align:center;" class="m10m m10m_Rank"><?=$s['10m_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="m10m m10m_score"><?=$s['10m_score']?></td>
+                                <td style="width:150px;text-align:center;" class="medicine medicine_Rank"><?=$s['medicine_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="medicine medicine_score"><?=$s['medicine_score']?></td>
+                                <td style="width:150px;text-align:center;" class="leftGul leftGul_Rank"><?=$s['left_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="leftGul leftGul_score"><?=$s['left_score']?></td>
+                                <td style="width:150px;text-align:center;" class="stand stand_Rank"><?=$s['stand_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="stand stand_score"><?=$s['stand_score']?></td>
+                                <td style="width:150px;text-align:center;" class="m20mBu m20mBu_Rank"><?=$s['20mBu_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="m20mBu m20mBu_score"><?=$s['20mBu_score']?></td>
+                                <td style="width:150px;text-align:center;" class="situp situp_Rank"><?=$s['situp_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="situp situp_score"><?=$s['situp_score']?></td>
+                                <td style="width:150px;text-align:center;" class="sergent sergent_Rank"><?=$s['surgent_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="sergent sergent_score"><?=$s['surgent_score']?></td>
+                                <td style="width:150px;text-align:center;" class="totals"><?=$s['total_Rank']?></td>
+                                <td style="width:150px;text-align:center;" class="avg"><?=$s['total_Rev']?></td>
                             </tr>
                         <?}?>
                     </tbody>
