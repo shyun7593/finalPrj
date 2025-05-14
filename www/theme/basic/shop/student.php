@@ -617,25 +617,25 @@ function updateMember(no){
                                 <td>${monthArr['codeName']}</td>
                                 <td>${getValue(code, '국어', 'subject')}</td>
                                 <td>${getValue(code, '국어', 'origin')}</td>
-                                <td>${getValue(code, '국어', 'sscore')}</td>
                                 <td>${getValue(code, '국어', 'pscore')}</td>
+                                <td>${getValue(code, '국어', 'sscore')}</td>
                                 <td>${getValue(code, '국어', 'grade')}</td>
                                 <td>${getValue(code, '수학', 'subject')}</td>
                                 <td>${getValue(code, '수학', 'origin')}</td>
-                                <td>${getValue(code, '수학', 'sscore')}</td>
                                 <td>${getValue(code, '수학', 'pscore')}</td>
+                                <td>${getValue(code, '수학', 'sscore')}</td>
                                 <td>${getValue(code, '수학', 'grade')}</td>
                                 <td>${getValue(code, '영어', 'origin')}</td>
                                 <td>${getValue(code, '영어', 'grade')}</td>
                                 <td>${getValue(code, '탐구영역1', 'subject')}</td>
                                 <td>${getValue(code, '탐구영역1', 'origin')}</td>
-                                <td>${getValue(code, '탐구영역1', 'sscore')}</td>
                                 <td>${getValue(code, '탐구영역1', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역1', 'sscore')}</td>
                                 <td>${getValue(code, '탐구영역1', 'grade')}</td>
                                 <td>${getValue(code, '탐구영역2', 'subject')}</td>
                                 <td>${getValue(code, '탐구영역2', 'origin')}</td>
-                                <td>${getValue(code, '탐구영역2', 'sscore')}</td>
                                 <td>${getValue(code, '탐구영역2', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역2', 'sscore')}</td>
                                 <td>${getValue(code, '탐구영역2', 'grade')}</td>
                                 <td>${getValue(code, '한국사', 'origin')}</td>
                                 <td>${getValue(code, '한국사', 'grade')}</td>
