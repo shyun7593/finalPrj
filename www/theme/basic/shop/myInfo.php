@@ -399,7 +399,7 @@ function viewStudent(){
                         <th colspan="3">제2외국어</th>
                     </thead>
                     <tbody>
-                        <tr style="text-align: center; background-color:#eee">
+                        <tr style="text-align: center; background-color:#eeeeee69">
                             <td>구분</td>
                             <td>과목</td>
                             <td>원</td>
