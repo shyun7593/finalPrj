@@ -105,7 +105,7 @@ $query_string = http_build_query(array(
                                     <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
                                         <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
                                         <?
-                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                             foreach($bsql as $bs => $b){?>
                                             <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
                                             <?}

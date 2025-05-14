@@ -64,7 +64,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             <tbody>
                                 <?
                                 $msql = " select *
-                        from g5_branch";
+                        from g5_branch ORDER BY branchName";
                                 $mres = sql_query($msql);
                                 $ccc = 1;
                                 foreach ($mres as $ms => $m) {
@@ -112,7 +112,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                     <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
                                         <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
                                         <?
-                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                            $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                             foreach($bsql as $bs => $b){?>
                                             <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
                                             <?}
@@ -274,7 +274,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             <select class="frm_input" name="mb_signature" id="mb_signature" style="width: 100%;">
                                 <option value="">선택하세요.</option>
                             <?
-                                $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                 foreach($bsql as $bs => $b){
                             ?>
                                 <option value="<?=$b['idx']?>"><?=$b['branchName']?></option>

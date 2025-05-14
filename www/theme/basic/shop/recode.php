@@ -75,7 +75,7 @@ $scnt = sql_fetch("SELECT
         WHERE
          {$add_sql}
         ORDER BY `date`,grade");
-$bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql}";
+$bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
 
 ?>
 

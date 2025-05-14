@@ -62,7 +62,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 <select require class="frm_input " name="mb_signature" id="mb_signature">
                     <option value="" selected>캠퍼스 선택</option>
                     <?
-                        $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                        $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                         foreach($bsql as $bs => $b){
                     ?>
                         <option value="<?=$b['idx']?>"><?=$b['branchName']?></option>
