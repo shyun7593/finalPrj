@@ -110,7 +110,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
                                     <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
-                                        <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
+                                        <option value="" <?if(!$bid) echo "selected";?>>전체</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                             foreach($bsql as $bs => $b){?>
