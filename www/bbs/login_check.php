@@ -14,6 +14,7 @@ $mb_name = isset($_POST['mb_name']) ? trim($_POST['mb_name']) : '';
 if($type == 'reg'){
     $isexist = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_member WHERE mb_id = '{$mb_id}'");
     $mb_signature = isset($_POST['mb_signature']) ? trim($_POST['mb_signature']) : '';
+    $mb_level = 1;
     if($isexist['cnt']>0){
         echo 'exist';
         exit;
@@ -27,7 +28,7 @@ if($type == 'reg'){
         mb_name = '{$mb_name}',
         mb_signature = '{$mb_signature}',
         mb_profile = 'C40000003',
-        mb_level = 0
+        mb_level = 1
     ");
     echo 'success';
     exit;
@@ -37,10 +38,7 @@ if($type == 'reg'){
     $mb_no = isset($_POST['mb_no']) ? trim($_POST['mb_no']) : '';
     $mb_profile = isset($_POST['mb_profile']) ? trim($_POST['mb_profile']) : '';
     $mb_signature = isset($_POST['mb_signature']) ? trim($_POST['mb_signature']) : '';
-    $mb_level = isset($_POST['mb_level']) ? trim($_POST['mb_level']) : '0';
-    if($mb_level == 0){
-        $mb_profile = 'C40000004';
-    }
+    $mb_level = isset($_POST['mb_level']) ? trim($_POST['mb_level']) : '1';
     
     sql_query("UPDATE g5_member SET
             mb_1 = '{$mb_1}',
@@ -253,6 +251,7 @@ if( is_admin($mb['mb_id']) && is_dir(G5_DATA_PATH.'/tmp/') ){
         alert("data 폴더에 쓰기권한이 없거나 또는 웹하드 용량이 없는 경우\\n로그인을 못할수도 있으니, 용량 체크 및 쓰기 권한을 확인해 주세요.", $link);
     }
 }
+
 
 $sql = sql_fetch("SELECT * FROM g5_member WHERE mb_id = '{$mb_id}'");
 $msql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '{$sql['mb_no']}'");

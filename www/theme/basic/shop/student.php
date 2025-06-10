@@ -86,7 +86,7 @@ $query_string = http_build_query(array(
                         </tbody>
                     </table>
                 </div>
-                <div class="tbl_wrap scroll-y border-tb">
+                <div class="tbl_wrap border-tb" style="height: 250px;overflow-y:scroll;">
                     <table class="tbl_head01">
                         <colgroup width="5%">
                         <colgroup width="12.5%">
@@ -96,16 +96,16 @@ $query_string = http_build_query(array(
                         <colgroup width="12.5%">
                         <colgroup width="12.5%">
                         <colgroup width="12.5%">
-                        <thead>
+                        <thead class="top-Fix">
                             <tr>
-                                <th class="scroll-sticky">순번</th>
-                                <th class="scroll-sticky">소속</th>
-                                <th class="scroll-sticky">이름</th>
-                                <th class="scroll-sticky">학교</th>
-                                <th class="scroll-sticky">학년</th>
-                                <th class="scroll-sticky">성별</th>
-                                <th class="scroll-sticky">연락처</th>
-                                <th class="scroll-sticky">내신</th>
+                                <th>순번</th>
+                                <th>소속</th>
+                                <th>이름</th>
+                                <th>학교</th>
+                                <th>학년</th>
+                                <th>성별</th>
+                                <th>연락처</th>
+                                <th>내신</th>
                             </tr>
                         </thead>
                         <tbody id="searchStudent">

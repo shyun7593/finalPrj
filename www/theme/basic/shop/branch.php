@@ -47,9 +47,8 @@ $query_string = http_build_query(array(
     'text' => $_GET['text'],
 ));
 ?>
-
 <!-- 마이페이지 시작 { -->
-<div id="smb_my" style="display: grid;grid-template-columns:2.5fr 1fr;column-gap:20px;">
+<div id="smb_my" style="margin-bottom:0px;">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
@@ -72,7 +71,7 @@ $query_string = http_build_query(array(
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
                                     <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
-                                        <option value="" <?if(!$bid) echo "selected";?>>지점선택</option>
+                                        <option value="" <?if(!$bid) echo "selected";?>>전체</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                             foreach($bsql as $bs => $b){?>
@@ -88,18 +87,10 @@ $query_string = http_build_query(array(
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb">
+            <div class="tbl_wrap border-tb" style="height: 300px;overflow-y:scroll;">
                 <table class="tbl_head01">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <colgroup width="12.5%">
-                    <thead>
-                        <th>아이디</th>
+                    <colgroup width="*">
+                    <thead class="top-Fix">
                         <th>소속</th>
                         <th>이름</th>
                         <th>학교</th>
@@ -107,6 +98,8 @@ $query_string = http_build_query(array(
                         <th>성별</th>
                         <th>휴대폰번호</th>
                         <th>생년월일</th>
+                        <th>상담</th>
+                        <th>성적</th>
                     </thead>
                     <tbody>
                         <?
@@ -135,9 +128,7 @@ $query_string = http_build_query(array(
                                     break;
                             }
                         ?>
-                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>')">
-                            
-                            <td><?= $m['mb_id'] ?></td>
+                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>'),viewStudent('<?=$m['mb_no']?>')">
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['mb_name'] ?></td>
                             <td><?= $m['mb_1'] ?></td>
@@ -145,6 +136,47 @@ $query_string = http_build_query(array(
                             <td><?= $gender ?></td>
                             <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
                             <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
+                            <td>
+                                <?
+                                    $meres = sql_query("WITH RECURSIVE dateMonth AS (
+                                                SELECT code,codeName
+                                                FROM g5_cmmn_code gcc 
+                                                WHERE upperCode = 'C60000000' OR code = 'C00000000'
+                                            )
+                                            SELECT 
+                                                *
+                                            FROM dateMonth d
+                                            LEFT JOIN g5_member_note gmn on
+                                                gmn.tag = d.code AND mbIdx = {$m['mb_no']}
+                                            GROUP BY d.code
+                                            ORDER BY d.code");
+                                    foreach($meres as $k => $me){
+                                        if($me['codeName'] == '모의고사'){
+                                            $me['codeName'] = '등록상담';
+                                        }
+                                ?>
+                                    <button type="button" class="btn-n <?if($me['idx']) echo 'iswrite';?>" value="<?=$me['code']?>"><?=$me['codeName']?></button>
+                                <?}?>
+                            </td>
+                            <td>
+                            <?
+                                    $scres = sql_query("WITH RECURSIVE dateMonth AS (
+                                                            SELECT code,codeName
+                                                            FROM g5_cmmn_code gcc 
+                                                            WHERE upperCode = 'C60000000'
+                                                        )
+                                                        SELECT 
+                                                            d.code,
+                                                            d.codeName,
+                                                            (SELECT COUNT(*) FROM g5_member_score gms WHERE gms.scoreMonth = d.code AND gms.memId = '{$m['mb_id']}') as 'cnt'
+                                                        FROM dateMonth d
+                                                        GROUP BY d.code
+                                                        ORDER BY d.code;");
+                                    foreach($scres as $k => $s){
+                                ?>
+                                    <button type="button" class="btn-n <?if($s['cnt'] > 0) echo 'iswrite';?>" value="<?=$s['code']?>"><?=$s['codeName']?></button>
+                                <?}?>
+                            </td>
                         </tr>
                     <?}}else{?>
                         <tr style="text-align: center;">
@@ -157,6 +189,8 @@ $query_string = http_build_query(array(
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
+</div>
+<div style="display: grid;grid-template-columns:1fr 2.5fr;gap:20px;">
     <div id="smb_my_list">
         <input type="hidden" id="showMemoMem">
         <input type="hidden" id="showMemoMonth">
@@ -171,8 +205,21 @@ $query_string = http_build_query(array(
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
+    <div id="smb_my_list">
+        <input type="hidden" id="showMemoMem">
+        <input type="hidden" id="showMemoMonth">
+        <!-- 최근 주문내역 시작 { -->
+        <section id="smb_my_od" style="position:sticky;top:20px;">
+            <h2>성적 정보</h2>
+            <div id="studentScore">
+                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
+                    학생을 클릭하면 성적이 보입니다.
+                </div>
+            </div>
+        </section>
+        <!-- } 최근 주문내역 끝 -->
+    </div>
 </div>
-
     <?php
 	// 배열을 쉼표로 구분된 문자열로 변환
 	if (is_array($selectedPartners)) {
@@ -216,6 +263,7 @@ $query_string = http_build_query(array(
     });
 
     function viewMemberInfo(e,mbId){
+       
         $("#showMemoMem").val(mbId);
         document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
             if(el == e.currentTarget){
@@ -239,6 +287,10 @@ $query_string = http_build_query(array(
                 json = eval("(" + data + ");");
                 console.log(json);
                 showMemoView(json,$("#showMemoMonth").val());
+                const target = document.getElementById('fsearch');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             }
         });
     }
@@ -415,6 +467,138 @@ $query_string = http_build_query(array(
                 $(`.${el.value}`).css('display','none');
             }
         });
+    }
+
+    function viewStudent(id){        
+        $.ajax({
+            url: "/bbs/searchScore.php",
+            type: "POST",
+            data: {
+                mb_no : id,
+            },
+            dataType: 'json',
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                console.log(data);
+                const count = Object.keys(data['monthList']).length;
+
+                const getValue = (monthCode, subject, field) => {
+                    return data['scoreData'][monthCode]?.data?.[subject]?.[field] ?? '-';
+                };
+
+                let html = `
+            
+	        
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_one_color">
+                    <tr style="text-align: center;">
+                        <th>소속</th>
+                        <td>${data['info']['branch']}</td>
+                        <th>이름</th>
+                        <td>${data['info']['memberName']}</td>
+                        <th>학교</th>
+                        <td>${data['info']['school']}</td>
+                        <th>학년</th>
+                        <td>${data['info']['layer']}</td>
+                        <th>성별</th>
+                        <td>${data['info']['gender']}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tbl_wrap" >
+                <table class="tbl_head01 tbl_2n_color">
+                    <thead>
+                        <th>구분</th>
+                        <th colspan="5">국어</th>
+                        <th colspan="5">수학</th>
+                        <th colspan="2">영어</th>
+                        <th colspan="5">탐구Ⅰ</th>
+                        <th colspan="5">탐구Ⅱ</th>
+                        <th colspan="2">한국사</th>
+                        <th colspan="3">제2외국어</th>
+                    </thead>
+                    <tbody>
+                        <tr style="text-align: center; background-color:#eeeeee69">
+                            <td>구분</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>표</td>
+                            <td>백</td>
+                            <td>등</td>
+                            <td>원</td>
+                            <td>등</td>
+                            <td>과목</td>
+                            <td>원</td>
+                            <td>등</td>
+                        </tr>`;
+                    for(let i = 0; i < count; i++){
+                        let monthArr = Object.values(data['monthList'])[i];
+                        const code = monthArr['code'];
+                        
+                            html +=`
+                            <tr style="text-align: center;">
+                                <td>${monthArr['codeName']}</td>
+                                <td>${getValue(code, '국어', 'subject')}</td>
+                                <td>${getValue(code, '국어', 'origin')}</td>
+                                <td>${getValue(code, '국어', 'pscore')}</td>
+                                <td>${getValue(code, '국어', 'sscore')}</td>
+                                <td>${getValue(code, '국어', 'grade')}</td>
+                                <td>${getValue(code, '수학', 'subject')}</td>
+                                <td>${getValue(code, '수학', 'origin')}</td>
+                                <td>${getValue(code, '수학', 'pscore')}</td>
+                                <td>${getValue(code, '수학', 'sscore')}</td>
+                                <td>${getValue(code, '수학', 'grade')}</td>
+                                <td>${getValue(code, '영어', 'origin')}</td>
+                                <td>${getValue(code, '영어', 'grade')}</td>
+                                <td>${getValue(code, '탐구영역1', 'subject')}</td>
+                                <td>${getValue(code, '탐구영역1', 'origin')}</td>
+                                <td>${getValue(code, '탐구영역1', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역1', 'sscore')}</td>
+                                <td>${getValue(code, '탐구영역1', 'grade')}</td>
+                                <td>${getValue(code, '탐구영역2', 'subject')}</td>
+                                <td>${getValue(code, '탐구영역2', 'origin')}</td>
+                                <td>${getValue(code, '탐구영역2', 'pscore')}</td>
+                                <td>${getValue(code, '탐구영역2', 'sscore')}</td>
+                                <td>${getValue(code, '탐구영역2', 'grade')}</td>
+                                <td>${getValue(code, '한국사', 'origin')}</td>
+                                <td>${getValue(code, '한국사', 'grade')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'subject')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'origin')}</td>
+                                <td>${getValue(code, '제2외국어/한문', 'grade')}</td>
+                            </tr>`;
+                        
+                    }
+                    
+                    html += `</tbody>
+                </table>
+            </div>
+                `;
+            $("#studentScore").html(html);
+            }
+        });
+        // $("#student").val(id);
+        // $("#fsearch").submit();
     }
 
 </script>

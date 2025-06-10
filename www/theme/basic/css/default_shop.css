@@ -50,6 +50,7 @@ box-sizing:border-box;
     font-weight: bold;
 }
 
+
 .btn-n{
     border-radius: 5px;
     padding:5px 10px;
@@ -665,6 +666,20 @@ a.btn_admin,.btn_admin {display:inline-block;color:#d13f4a;text-decoration:none;
 .tbl_wrap table {width:100%;border-collapse:collapse;border-spacing:0;}
 .tbl_wrap.scroll-y {max-height:400px;overflow-y:scroll;}
 .tbl_wrap caption {padding:10px 0;font-weight:bold;text-align:left}
+
+.top-Fix::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 2px;
+    width: 100%;
+    background-color: #bdb8b8;
+}
+.top-Fix{
+    position: sticky;
+    top: 0;
+}
 
 .tbl_head01 {margin:0 0 10px}
 .tbl_head01 table {}

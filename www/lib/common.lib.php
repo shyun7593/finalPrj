@@ -4311,3 +4311,57 @@ function option_array_checked($option, $arr=array()){
 
     return $checked;
 }
+
+function raon_attach_upload($srcfile, $filename, $dir,$makedir="tmp_attach")
+{
+    if($filename == '')
+        return '';
+
+    // $size = @getimagesize($srcfile);
+    // if($size[2] < 1 || $size[2] > 3)
+    //     return '';
+
+    //php파일도 getimagesize 에서 Image Type Flag 를 속일수 있다
+    // if (!preg_match('/\.(gif|jpe?g|png)$/i', $filename))
+    //     return '';
+
+    if(!is_dir($dir)) {
+        @mkdir($dir, G5_DIR_PERMISSION);
+        @chmod($dir, G5_DIR_PERMISSION);
+    }
+
+    $pattern = "/[#\&\+\-%@=\/\\:;,'\"\^`~\|\!\?\*\$#<>\(\)\[\]\{\}]/";
+
+    $filename = preg_replace("/\s+/", "", $filename);
+    $filename = preg_replace( $pattern, "", $filename);
+
+    $filename = preg_replace_callback(
+                          "/[가-힣]+/",
+                          create_function('$matches', 'return base64_encode($matches[0]);'),
+                          $filename);
+
+    $filename = preg_replace( $pattern, "", $filename);
+    $prepend = '';
+
+    // 동일한 이름의 파일이 있으면 파일명 변경
+    if(is_file($dir.'/'.$filename)) {
+        for($i=0; $i<20; $i++) {
+            $prepend = str_replace('.', '_', microtime(true)).'_';
+
+            if(is_file($dir.'/'.$prepend.$filename)) {
+                usleep(mt_rand(100, 10000));
+                continue;
+            } else {
+                break;
+            }
+        }
+    }
+    $filename = time()."_".rand("1000","9999").".".end(explode('.', $filename));
+    $filename = $prepend.$filename;
+
+    upload_file($srcfile, $filename, $dir);
+
+    $file = str_replace(G5_DATA_PATH.'/'.$makedir.'/', '', $dir.'/'.$filename);
+
+    return $file;
+}

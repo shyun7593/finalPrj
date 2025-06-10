@@ -165,7 +165,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                           
                             $gender = '';
                             $level = '';
-                          
+                            $memNote = sql_query("SELECT idx FROM g5_member_note WHERE mbIdx = {$m['mb_no']}");
                             switch($m['mb_sex']){
                                 case 'M':
                                     $gender = '남';
@@ -221,12 +221,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <td>
                             <input type="text" class="frm_input" id="mb_id" name="mb_id" value="" autocomplete="off" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
                         </td>
-                        <th>승인여부</th>
+                        <th>비밀번호</th>
                         <td>
-                            <select class="frm_input" name="mb_level" id="mb_level" style="width: 100%;">
-                                <option value="0">미승인</option>
-                                <option value="1">승인</option>
-                            </select>
+                            <button id="resetBtn">비밀번호 초기화</button>
                         </td>
                     </tr>
                     <tr>
@@ -285,7 +282,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <td>
                             <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;">
                                 <?
-                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' ORDER BY code");
+                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' AND useYn = 1 ORDER BY code");
                                     foreach($ggsql as $ggs => $g){?>
                                       <option value="<?=$g['code']?>"><?=$g['codeName']?></option>  
                                     <?}
@@ -299,7 +296,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
     </div>
     <button id="closePopup">닫기</button>
     <button id="memberBtn">수정</button>
-    <button id="resetBtn">비밀번호 초기화</button>
+    <button id="memberDel">삭제</button>
 </div>
 
 <div id="branchPopup">
@@ -637,6 +634,56 @@ function updateMember(no){
             }
         );
     });
+
+    $("#memberDel").on('click',function(){
+        swal({
+            title : '삭제하시겠습니까?',
+            text : '연관된 모든 데이터는 삭제됩니다.',
+            type : "warning",
+            showCancelButton : true,
+            confirmButtonClass : "btn-danger",
+            cancelButtonText : "아니오",
+            confirmButtonText : "예",
+            closeOnConfirm : false,
+            closeOnCancel : true
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    $.ajax({
+                        url: "/bbs/update_branch.php",
+                        type: "POST",
+                        data: {
+                            branchName : $("#branchName").val(),
+                            branchManager : $("#branchManager").val(),
+                            branchHp: $("#branchHp").val(),
+                            branchMemo: $("#branchMemo").val(),
+                            branchActive : $("#branchActive").val(),
+                            branchPopIdx : $("#branchPopIdx").val(),
+                            type : $("#btype").val(),
+                        },
+                        async: false,
+                        error: function(data) {
+                            alert('에러가 발생하였습니다.');
+                            return false;
+                        },
+                        success: function(data) {
+                            if(data == 'success'){
+                                swal('성공!','성공적으로 등록되었습니다.','success');
+                                setTimeout(() => {
+                                    swal.close();
+                                    location.reload();
+                                }, 1500);
+                            } else {
+                                console.log(data);
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    });
+
+
     function fsearch_submit(e) {
     }
     $("#bid").on("change",function(){

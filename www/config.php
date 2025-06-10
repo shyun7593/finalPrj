@@ -155,6 +155,7 @@ define('G5_SERVER_TIME',    time());
 define('G5_TIME_YMDHIS',    date('Y-m-d H:i:s', G5_SERVER_TIME));
 define('G5_TIME_YMD',       substr(G5_TIME_YMDHIS, 0, 10));
 define('G5_TIME_HIS',       substr(G5_TIME_YMDHIS, 11, 8));
+define('G5_TIME_YM',    date('Ym', G5_SERVER_TIME));
 
 // 입력값 검사 상수 (숫자를 변경하시면 안됩니다.)
 define('G5_ALPHAUPPER',      1); // 영대문자
