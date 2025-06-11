@@ -11,7 +11,7 @@ $filename = explode(".",$_FILES['file']['name']);
 $safe_file_name = preg_replace("/[^a-zA-Z0-9_\-가-힣]/u", "", $filename[0]).".".$extension;
 
 
-$files = raon_attach_upload($_FILES['file']['tmp_name'], $_FILES['file']['name'], $it_img_dir,'oh24_attach');
+$files = raon_attach_upload($_FILES['file']['tmp_name'], $_FILES['file']['name'], $it_img_dir,'final_attach');
 
 $response = array();
 

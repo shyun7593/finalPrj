@@ -89,7 +89,6 @@ $res = sql_fetch($sql);
                             </td>
                         </tr>
                         <tr style="text-align: center;">
-                            
                         </tr>
                     </tbody>
                 </table>
