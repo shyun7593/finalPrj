@@ -46,7 +46,7 @@ $query_string = http_build_query(array(
                 <?
                     foreach($res as $k => $v){
                 ?>
-                    <div style="height:200px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;">
+                    <div style="height:200px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;" class="college_hov">
                         <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:30px 10px;gap:10px;">
                             <div>
                                 <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
