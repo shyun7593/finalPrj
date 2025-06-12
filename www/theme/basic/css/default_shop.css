@@ -426,13 +426,13 @@ border:1px solid #558ab7 !important;
 .hd_login .count {display:inline-block;position:absolute;top:-5px;right:-10px;line-height:12px;padding:0 5px;border-radius:10px;background:#ff1a21;color:#fff;min-width:16px;height:14px;font-size:0.85em}
 
 #memberBox{position: absolute;bottom: 40px;display: flex;justify-content: center;align-items: center;width: 100%;}
-#memberInfo{width: 90%;background-color: gray;border-radius: 10px;padding:10px;
+#memberInfo{width: 90%;background-color: #334d63;border-radius: 10px;padding:10px;
     .myInfo:hover{
         text-decoration: underline;
     }
 }
 
-#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #e1e1e1;}
+#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #0c2233;}
 #hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.3em}
@@ -440,10 +440,10 @@ border:1px solid #558ab7 !important;
 .hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center;border-bottom: 1px solid white;}
 .hd_menu li:last-child {border-right:0}
 .hd_menu li:first-child {border-top: 1px solid white;}
-.hd_menu li a {display:block;color:gray;}
-.hd_menu li.active{background-color: gray  !important;}
+.hd_menu li a {display:block;color:#e1e1e1;}
+.hd_menu li.active{background-color: #334d63  !important;}
 .hd_menu li.active a{color : #e1e1e1;font-size: 1.2em;font-weight: 800;}
-.hd_menu li:hover{background-color: gray;
+.hd_menu li:hover{background-color: #334d63;
     a{font-weight: 800;color:#e1e1e1}}
 
 /*사이드 메뉴*/
