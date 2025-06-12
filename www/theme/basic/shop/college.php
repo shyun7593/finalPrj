@@ -40,7 +40,7 @@ $query_string = http_build_query(array(
         <section id="smb_my_od">
             <h2>대학 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 대학 수 : <?= $cnt['cnt']?></h2>
             <div class="smb_my_more" style="cursor:pointer;">
-                <a onclick="popupBranch('insert','')">등록</a>
+                <!-- <a onclick="popupBranch('insert','')">등록</a> -->
             </div>
             <div style="display: grid;grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));gap: 20px;margin-top:20px;">
                 <?
