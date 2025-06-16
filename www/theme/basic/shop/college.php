@@ -7,7 +7,7 @@ include_once('./_head.php');
 
 $cnt = sql_fetch("SELECT 
     COUNT(*) as 'cnt'
-FROM g5_college");
+FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx");
 
 $sql_add = " 1=1 ";
 
@@ -25,7 +25,7 @@ $res = sql_query("select *
                     gc.cIdx = gcs.collegeIdx
                 where 
                     {$sql_add}
-                ORDER BY gc.cName");
+                ORDER BY gc.cName, gcs.sName");
 
 $query_string = http_build_query(array(
     'bid' => $_GET['bid'],
