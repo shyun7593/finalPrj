@@ -108,7 +108,7 @@ border:1px solid #558ab7 !important;
 .hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 .hd_menu li {float:left;width:20%;padding:12px 0;line-height:26px;text-align:center}
 .hd_menu li:last-child a {border-right:0}
-.hd_menu li a {display:block;color:#fff;border-right:1px solid #333}
+.hd_menu li a {display:block;color:#697a87;border-right:1px solid #333;font-weight: 800;}
 
 
 /*사이드 메뉴*/
