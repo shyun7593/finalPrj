@@ -41,7 +41,7 @@ $query_string = http_build_query(array(
 <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>대학 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 대학 수 : <?= $cnt['cnt']?></h2>
+            <h2>대학 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 학과 수 : <?= $cnt['cnt']?></h2>
             <div class="smb_my_more" style="cursor:pointer;">
                 <!-- <a onclick="popupBranch('insert','')">등록</a> -->
             </div>
