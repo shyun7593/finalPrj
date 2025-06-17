@@ -19,8 +19,11 @@ if($text){
     $sql_add .= " AND (gm.mb_name like '%{$text}%' OR replace(gm.mb_hp,'-','') like '%{$text}%' OR gm.mb_1 like '%{$text}%')";
 }
 
-$res = sql_query("select *
-                    from g5_college gc
+$res = sql_query("select 
+                    *, 
+                    (SELECT COUNT(*) FROM g5_susi gs WHERE gs.sSubIdx = gcs.sIdx) as 'su', 
+                    (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.jSubIdx = gcs.sIdx) as 'ju'
+                from g5_college gc
                     LEFT JOIN g5_college_subject gcs on
                     gc.cIdx = gcs.collegeIdx
                 where 
@@ -46,14 +49,28 @@ $query_string = http_build_query(array(
                 <?
                     foreach($res as $k => $v){
                 ?>
-                    <div style="height:200px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;" class="college_hov">
-                        <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:30px 10px;gap:10px;">
+                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;" class="college_hov">
+                        <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
                             <div>
                                 <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
                             </div>
-                            <div style="height:100%;padding:10px;">
-                                <div style="font-weight: 900;font-size:1.3em;"><?=$v['cName']?></div>
-                                <div><?=$v['sName']?></div>
+                            <div style="height:100%;padding:10px;display: flex;flex-direction: column;justify-content: space-between;">
+                                <div>
+                                    <div style="font-weight: 900;font-size:1.4em;"><?=$v['cName']?></div>
+                                    <div style="color: gray;font-size:1.1em"><?=$v['sName']?></div>
+                                </div>
+                                <div style="display: flex;gap:15px;align-items:center;">
+                                    <?if($v['su']>0){?>
+                                    <div style="width: 45%;background: #87ceeb3b;border-radius: 15px;text-align: center;font-weight: bold;color:#639daf;">
+                                        수시
+                                    </div>
+                                    <?}?>
+                                    <?if($v['ju']>0){?>
+                                    <div style="width: 45%;background: #ffc0cb70;border-radius: 15px;text-align: center;font-weight: bold;color:hotpink;">
+                                        정시
+                                    </div>
+                                    <?}?>
+                                </div>
                             </div>
                         </div>
                     </div>
