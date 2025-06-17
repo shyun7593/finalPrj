@@ -61,12 +61,12 @@ $query_string = http_build_query(array(
                                 </div>
                                 <div style="display: flex;gap:15px;align-items:center;">
                                     <?if($v['su']>0){?>
-                                    <div style="width: 45%;background: #87ceeb3b;border-radius: 15px;text-align: center;font-weight: bold;color:#639daf;">
+                                    <div style="width: 45%;background: #87ceeb3b;border-radius: 15px;text-align: center;font-weight: bold;color:#639daf;padding:3px;">
                                         수시
                                     </div>
                                     <?}?>
                                     <?if($v['ju']>0){?>
-                                    <div style="width: 45%;background: #ffc0cb70;border-radius: 15px;text-align: center;font-weight: bold;color:hotpink;">
+                                    <div style="width: 45%;background: #ffc0cb70;border-radius: 15px;text-align: center;font-weight: bold;color:hotpink;padding:3px;">
                                         정시
                                     </div>
                                     <?}?>
