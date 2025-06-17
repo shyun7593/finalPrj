@@ -195,6 +195,51 @@ box-sizing:border-box;
 }
 
 /* 팝업 전체 레이아웃 */
+#collegePopup
+ {
+    display: none;
+    /* 기본적으로 숨김 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1000px;
+    height: 800px;
+    /* 팝업 너비 */
+    background-color: #fff;
+    /* 팝업 배경 */
+    padding: 20px;
+    border-radius: 10px;
+    /* 팝업 모서리 둥글게 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    /* 그림자 */
+    z-index: 1001;
+    .top_menu{
+        padding: 10px 0;
+        font-size: 1.3em;
+        cursor:pointer;
+    }
+    .top_menu.active{
+        background: #0c2233 !important;
+        color: white !important;
+        font-weight: 800;
+    }
+    .info-Content{
+        display: none;
+        padding:10px;
+    }
+    .info-Content.view{
+        display: block !important;
+    }
+    .hashT{
+        border-radius:15px;
+        font-weight:800;
+        color:#0c2233;
+        text-align:center;
+        padding:2px;
+    }
+}
+
 #branchPopup,
 #memberPopup
  {
