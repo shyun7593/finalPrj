@@ -101,7 +101,7 @@ border:1px solid #558ab7 !important;
 .hd_login .fa-shopping-cart {font-size:1.6em}
 .hd_login .count {display:inline-block;position:absolute;top:-5px;right:-10px;line-height:12px;padding:0 5px;border-radius:10px;background:#ff1a21;color:#fff;min-width:16px;height:14px;font-size:0.85em}
 
-#hd_menu {position:relative;background:#000;width:1200px;margin:0 auto}
+#hd_menu {position:relative;background:#000;width:1200px;margin:0 auto;z-index: 10;}
 #hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.083em}

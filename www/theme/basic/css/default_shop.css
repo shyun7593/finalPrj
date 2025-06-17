@@ -432,7 +432,7 @@ border:1px solid #558ab7 !important;
     }
 }
 
-#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #0c2233;}
+#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #0c2233;z-index: 10;}
 #hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.3em}
