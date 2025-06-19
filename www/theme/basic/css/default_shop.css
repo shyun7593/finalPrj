@@ -1,5 +1,5 @@
 @charset "utf-8";
-
+@import '../icon/xeicon.min.css';
 @font-face {
     font-family: 'AstaSans-Bold';
     src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2505-1@1.0/AstaSans-Bold.woff2') format('woff2');
@@ -228,7 +228,11 @@ box-sizing:border-box;
         display: none;
         padding:10px;
     }
-    .info-Content.view{
+    #jInfo.info-Content.view{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr;
+    }
+    #sInfo.info-Content.view{
         display: block !important;
     }
     .hashT{

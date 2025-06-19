@@ -42,6 +42,55 @@ $query_string = http_build_query(array(
     'text' => $_GET['text'],
 ));
 ?>
+<style>
+    #collegePopup table{
+        border-collapse: collapse;
+        text-align: center;
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    #collegePopup table th,#collegePopup table td{
+        padding:4px 0;
+    }
+    #collegePopup table thead th{
+        background-color: #334d63;
+        color:white;
+    }
+
+    #collegePopup p.p_title{
+        font-size: 1.2em;
+        font-weight: 800;
+        padding : 10px 0 5px 0;
+        display: flex;
+        align-items: center;
+        gap:5px;
+    }
+
+    #collegePopup p:not(.p_title){
+        font-size: 1.1em;
+        margin-bottom: 5px;
+    }
+    #collegePopup p.p_title::before{
+        content:"\ea1c";
+        font-family: "xeicon";
+    }
+
+    #collegePopup .lis::before{
+        content:"\eb0d";
+        font-family: "xeicon";
+        font-size: 10px;
+        margin-right: 5px;
+    }
+
+    #collegePopup .inner_Cont{
+        display:flex;
+        gap:25px;
+        padding: 0 10px;
+        margin:5px;
+    }
+
+</style>
 
 <!-- 등급관리 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns: 1fr;">
@@ -142,6 +191,7 @@ $query_string = http_build_query(array(
                 // <div style="font-size:1.5em;font-weight:800;padding:0 10px;">
                 //         ${json['data']['college']['subjectNm']}
                 //     </div>
+                console.log(json);
                 let html = `
                     <div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
                         <img src="${json['data']['college']['img']}" style="max-width:80px;"/>
@@ -197,11 +247,331 @@ $query_string = http_build_query(array(
                     html+= `</div>`;
 
                 if(!Array.isArray(json['data']['jungsi'])){
+                    let tag = "";
+                    if(parseInt(json['data']['jungsi']['person'])){
+                        tag = " 명";
+                    }
                     html += `
                         <div id="jInfo" class="info-Content view">
-                            정시 정보 : 
+                            <div>
+                            <p class="p_title">모집 인원 : <span style="font-weight:normal;">${json['data']['jungsi']['person']}${tag}</span></p>`;
+                    
+                    // 요소 반영 비율
+                    html += `
+                        <p class="p_title">요소별 반영비율</p>
+                        <div class="inner_Cont">
+                            <table style="text-align:center;" border="1">
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <thead>
+                                    <tr>
+                                        <th>수능</th>
+                                        <th>내신</th>
+                                        <th>실기</th>
+                                        <th>기타</th>
+                                        <th>전형총점</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>${json['data']['jungsi']['Srate'] ? json['data']['jungsi']['Srate'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Nrate'] ? json['data']['jungsi']['Nrate'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Prate'] ? json['data']['jungsi']['Prate'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Orate'] ? json['data']['jungsi']['Orate'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['total'] ? json['data']['jungsi']['total'] + '점' : '-'}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>`;
+
+                    // 과목별 반영 비율
+                    html += `
+                        <p class="p_title">과목별 반영비율 / 선택 과목</p>
+                        <div class="inner_Cont">
+                            <table style="text-align:center;" border="1">
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <thead>
+                                    <tr>
+                                        <th>과목</th>
+                                        <th>비율</th>
+                                        <th>선택여부</th>
+                                        <th>제외 과목</th>
+                                        <th>활용 지표</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>국어</td>
+                                        <td>${json['data']['jungsi']['Korrate'] ? json['data']['jungsi']['Korrate'].replace(/,/g, ', ') : '-'}</td>
+                                        <td>${json['data']['jungsi']['KorSelect'] ? json['data']['jungsi']['KorSelect'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['KorSub'] ? json['data']['jungsi']['KorSub'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>수학</td>
+                                        <td>${json['data']['jungsi']['Mathrate'] ? json['data']['jungsi']['Mathrate'].replace(/,/g, ', ') : '-'}</td>
+                                        <td>${json['data']['jungsi']['MathSelect'] ? json['data']['jungsi']['MathSelect'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['MathSub'] ? json['data']['jungsi']['MathSub'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Mathrate'] ? json['data']['jungsi']['Char'] : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>영어</td>
+                                        <td>${json['data']['jungsi']['Engrate'] ? json['data']['jungsi']['Engrate'].replace(/,/g, ', ') : '-'}</td>
+                                        <td>${json['data']['jungsi']['EngSelect'] ? json['data']['jungsi']['EngSelect'] : '-'}</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td>탐구</td>
+                                        <td>${json['data']['jungsi']['Tamrate'] ? json['data']['jungsi']['Tamrate'].replace(/,/g, ', ') : '-'}</td>
+                                        <td>${json['data']['jungsi']['TamSelect'] ? json['data']['jungsi']['TamSelect'] : '-'}${json['data']['jungsi']['TamCnt'] > 0 ? '(' + json['data']['jungsi']['TamCnt'] + ')': ''}</td>
+                                        <td>${json['data']['jungsi']['TamSub'] ? json['data']['jungsi']['TamSub'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>한국사</td>
+                                        <td>${json['data']['jungsi']['HisAdd'] ? json['data']['jungsi']['HisAdd'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['HisSelect'] ? json['data']['jungsi']['HisSelect'] : '-'}</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     `;
+                    if(json['data']['jungsi']['Psub']){
+                        html+=`
+                        <p class="p_title">실기 과목</p>
+                        <div style="padding: 0 10px;margin:0 5px;font-size:1.1em;">`;
+                        let Psub = json['data']['jungsi']['Psub'].split(',');
+                        for(let j=0;j<Psub.length;j++){
+                            html += `<div class="lis">${Psub[j]}</div>`;
+                        }
+                        html+=`</div>`;
+                    }
+                    html += `
+                    </div>
+                    <div>
+                        <p class="p_title">과목별 점수 반영표</p>
+                        <div style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                    `;
+
+                    // 과목별 변환점수 표
+                    if(Array.isArray(json['data']['jungsi']['eng']) && Array.isArray(json['data']['jungsi']['lang']) && Array.isArray(json['data']['jungsi']['history'])){
+                        html += `<div style="text-align:center;">
+                            <p>-</p>
+                            </div>`;
+                    } else {
+                        if(!Array.isArray(json['data']['jungsi']['eng'])){
+                            // html += `<div style="text-align:center;">
+                            //     <p>영어</p>
+                            //     <table style="text-align:center;" border="1">
+                            //         <colgroup>
+                            //              <col width="*">
+                            //         </colgroup>
+                            //         <thead>
+                            //             <tr>
+                            //                 <th>등급</th>
+                            //                 <th>반영점수</th>
+                            //             </tr>
+                            //         </thead>
+                            //         <tbody>
+                            // `;
+                            // for(let t = 1; t < 10; t++){
+                            //     html += `<tr>
+                            //                 <td>
+                            //                     ${t}
+                            //                 </td>
+                            //                 <td>
+                            //                     ${json['data']['jungsi']['eng'][t]['score']}
+                            //                 </td>
+                            //             </tr>
+                            //                 `;
+                            // }
+                            // html += `
+                            //         </tbody>
+                            //     </table>
+                            // </div>`;
+                            html += `<div style="text-align:center;">
+                                <p>영어</p>
+                                <table style="text-align:center;" border="1">
+                                    <colgroup>
+                                        <col width="50px">
+                                        <col width="*">
+                                    </colgroup>
+                                    <tbody>
+                            `;
+                            html += `<tr>`;
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">등급</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${t}
+                                            </td>
+                                        `;
+                            }
+                            html += '</tr><tr>';
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">점수</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${json['data']['jungsi']['eng'][t]['score']}
+                                            </td>
+                                        `;
+                            }
+                            html += `</tr>
+                                    </tbody>
+                                </table>
+                            </div>`;
+                        }
+                        if(!Array.isArray(json['data']['jungsi']['history'])){
+                            // html += `<div style="text-align:center;">
+                            //     <p>한국사</p>
+                            //     <table style="text-align:center;" border="1">
+                            //         <colgroup>
+                            //              <col width="*">
+                            //         </colgroup>
+                            //         <thead>
+                            //             <tr>
+                            //                 <th>등급</th>
+                            //                 <th>반영점수</th>
+                            //             </tr>
+                            //         </thead>
+                            //         <tbody>
+                            // `;
+                            // for(let t = 1; t < 10; t++){
+                            //     html += `<tr>
+                            //                 <td>
+                            //                     ${t}
+                            //                 </td>
+                            //                 <td>
+                            //                     ${json['data']['jungsi']['history'][t]['score']}
+                            //                 </td>
+                            //             </tr>
+                            //                 `;
+                            // }
+                            // html += `
+                            //         </tbody>
+                            //     </table>`;
+                            html += `<div style="text-align:center;">
+                                <p>한국사</p>
+                                <table style="text-align:center;" border="1">
+                                    <colgroup>
+                                        <col width="50px">
+                                        <col width="*">
+                                    </colgroup>
+                                    <tbody>
+                            `;
+                            html += `<tr>`;
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">등급</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${t}
+                                            </td>
+                                        `;
+                            }
+                            html += '</tr><tr>';
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">점수</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${json['data']['jungsi']['history'][t]['score']}
+                                            </td>
+                                        `;
+                            }
+                            html += `</tr>
+                                    </tbody>
+                                </table>
+                            </div>`;
+                    }
+                    html += `</div>
+                    </div>`;
+                    }
+                    if(!Array.isArray(json['data']['jungsi']['lang'])){
+                        // html += `<div style="text-align:center;">
+                        //     <p>제2외국어</p>
+                        //     <table style="text-align:center;" border="1">
+                        //         <colgroup>
+                        //              <col width="*">
+                        //         </colgroup>
+                        //         <thead>
+                        //             <tr>
+                        //                 <th>등급</th>
+                        //                 <th>반영점수</th>
+                        //             </tr>
+                        //         </thead>
+                        //         <tbody>
+                        // `;
+                        // for(let t = 1; t < 10; t++){
+                        //     html += `<tr>
+                        //                 <td>
+                        //                     ${t}
+                        //                 </td>
+                        //                 <td>
+                        //                     ${json['data']['jungsi']['lang'][t]['score']}
+                        //                 </td>
+                        //             </tr>
+                        //                 `;
+                        // }
+                        // html += `
+                        //         </tbody>
+                        //     </table>
+                        // </div>`;
+                        html += `<div style="text-align:center;">
+                                <p>제2 외국어</p>
+                                <table style="text-align:center;" border="1">
+                                    <colgroup>
+                                        <col width="50px">
+                                        <col width="*">
+                                    </colgroup>
+                                    <tbody>
+                            `;
+                            html += `<tr>`;
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">등급</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${t}
+                                            </td>
+                                        `;
+                            }
+                            html += '</tr><tr>';
+                            for(let t = 1; t < 10; t++){
+                                if(t == 1){
+                                    html += `<td style="background-color: #334d63;color: white;">점수</td>`;
+                                }
+                                html += `
+                                            <td>
+                                                ${json['data']['jungsi']['lang'][t]['score']}
+                                            </td>
+                                        `;
+                            }
+                            html += `</tr>
+                                    </tbody>
+                                </table>
+                            </div>`;
+                    }
+                    html += `</div>
+                    </div>`;
+                    
                 }
                 if(!Array.isArray(json['data']['susi'])){
                     html += `
@@ -209,6 +579,7 @@ $query_string = http_build_query(array(
                             수시 정보 :
                         </div>
                     `;
+                    
                 }
                $("#collegeDiv").html(html);
                setTimeout(() => {
