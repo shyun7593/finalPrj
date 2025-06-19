@@ -90,6 +90,13 @@ $query_string = http_build_query(array(
         margin:5px;
     }
 
+    #collegePopup .subject_trans div:not(:first-child){
+        margin-top:15px;
+    }
+
+    #collegePopup .subject_trans p{
+        margin-bottom: 10px;
+    }
 </style>
 
 <!-- 등급관리 시작 { -->
@@ -360,7 +367,7 @@ $query_string = http_build_query(array(
                     </div>
                     <div>
                         <p class="p_title">과목별 점수 반영표</p>
-                        <div style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
                     `;
 
                     // 과목별 변환점수 표
