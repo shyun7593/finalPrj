@@ -35,7 +35,6 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
         <!-- 성적입력 시작 { -->
         <section id="smb_my_od">
             <div style="display: flex; align-items:center;gap:30px;margin-bottom:10px;">
-                <h2 style="margin: unset;">성적 입력</h2>
                 <div style="display: flex;gap:10px;">
                     <button class="btn-n btn-green btn-bold" type="buttton" onclick="saveGrade()">저장</button>
                     <?
