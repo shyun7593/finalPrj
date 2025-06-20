@@ -49,13 +49,13 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
-            <div class="tbl_wrap border-tb">
+            <div class="tbl_wrap border-tb" style="height: 80vh;overflow-y:scroll;">
                 <table class="tbl_head01">
                     <colgroup width="15%">
                     <colgroup width="25%">
                     <colgroup width="40%">
                     <colgroup width="20%">
-                    <thead>
+                    <thead class="top-Fix">
                         <th>순번</th>
                         <th>지점명</th>
                         <th>담당자</th>
@@ -126,7 +126,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb" >
+            <div class="tbl_wrap border-tb" style="height: 73vh;overflow-y:scroll;">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">
@@ -135,7 +135,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">
-                    <thead>
+                    <thead class="top-Fix">
                         <th>소속</th>
                         <th>아이디</th>
                         <th>이름</th>
