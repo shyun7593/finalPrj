@@ -87,7 +87,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 <div style="font-weight:800;display:flex;justify-content:space-between;align-items:center;">
                     <div style="display: flex;align-items:center;gap:5px;">
                         <img src="/img/login_img.png" width="20px" height="20px" style="border-radius: 50%;padding:5px;background-color:white;">
-                        <a class="myInfo" href="" style="font-size: 1.3em;color:#e1e1e1"><?=$_SESSION['mb_name'].'님'?></a>
+                        <a class="myInfo" href="myInfo" style="font-size: 1.3em;color:#e1e1e1"><?=$_SESSION['mb_name'].'님'?></a>
                     </div>
                     <div>
                         <a style="background: white;border-radius: 5px;padding: 2px 5px;color: #000;" href="/bbs/logout.php">Logout</a>
