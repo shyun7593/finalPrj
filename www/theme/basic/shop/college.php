@@ -201,7 +201,7 @@ $query_string = http_build_query(array(
                 console.log(json);
                 let html = `
                     <div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
-                        <img src="${json['data']['college']['img']}" style="max-width:80px;"/>
+                        <img src="${json['data']['college']['img']}" style="max-width:80px;min-height:80px;"/>
                         ${json['data']['college']['collegeNm']}
                     </div>
                     <div style="display:flex;gap:5px;align-items:end;margin-bottom:5px;">
