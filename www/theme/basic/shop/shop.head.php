@@ -34,7 +34,7 @@ if (!isset($_SESSION['mb_noticeCnt']) || time() - ($_SESSION['mb_noticeCnt_time'
 }
 
 if($_SESSION['mb_readNotice'] < $_SESSION['mb_noticeCnt']){
-    $newNotice = "<div style='border-radius: 50%;background: red;width:8px;height:8px;'></div>&nbsp;";
+    $newNotice = "<i style='position:absolute;left:78px;' class='xi-bell'></i>";
 } else {
     $newNotice = "";
 }

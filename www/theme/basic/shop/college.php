@@ -27,12 +27,16 @@ FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx
 WHERE {$sql_add}");
 
 $res = sql_query("select 
-                    *, 
+                    gc.*,
+                    gcs.*, 
                     (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx) as 'su', 
-                    (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx) as 'ju'
+                    (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx) as 'ju',
+                    gac.idx as 'myIdx'
                 from g5_college gc
                     LEFT JOIN g5_college_subject gcs on
-                    gc.cIdx = gcs.collegeIdx
+                        gc.cIdx = gcs.collegeIdx
+                    LEFT JOIN g5_add_college gac on
+                        gac.subIdx = gcs.sIdx
                 where 
                     {$sql_add}
                 ORDER BY gc.cName, gcs.sName");
@@ -97,6 +101,9 @@ $query_string = http_build_query(array(
     #collegePopup .subject_trans p{
         margin-bottom: 10px;
     }
+    i {
+        font-size:1.5em;
+    }
 </style>
 
 <!-- 등급관리 시작 { -->
@@ -137,12 +144,12 @@ $query_string = http_build_query(array(
                 <?
                     foreach($res as $k => $v){
                 ?>
-                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov" onclick="viewDetail('<?=$v['sIdx']?>')">
+                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov">
                         <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
-                            <div>
+                            <div onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
                             </div>
-                            <div style="height:100%;padding:10px;display: flex;flex-direction: column;justify-content: space-between;">
+                            <div style="height:100%;padding:10px;display: flex;flex-direction: column;justify-content: space-between;" onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <div>
                                     <div style="font-weight: 900;font-size:1.4em;"><?=$v['cName']?></div>
                                     <div style="color: gray;font-size:1.1em"><?=$v['sName']?></div>
@@ -159,6 +166,13 @@ $query_string = http_build_query(array(
                                     </div>
                                     <?}?>
                                 </div>
+                            </div>
+                            <div style="height: 100%;text-align:end;">
+                                <?if($v['myIdx']){?>
+                                        <i class="xi-star" onclick="addCollege('remove','<?=$v['sIdx']?>')"></i>
+                                    <?}else{?>
+                                        <i class="xi-star-o" onclick="addCollege('add','<?=$v['sIdx']?>')"></i>
+                                <?}?>
                             </div>
                         </div>
                     </div>
@@ -622,6 +636,57 @@ $query_string = http_build_query(array(
         $("#fsearch").submit();
     });
 
+    function addCollege(type,idx){
+        let title = "";
+        let text = "";
+        switch(type){
+            case 'add':
+                text = "관심 대학으로 등록 하시겠습니까?";
+                break;
+            case 'remove':
+                text = "관심 대학에서 제외 하시겠습니까?";
+                break;
+        }
+
+        swal({
+            title : '',
+            text : text,
+            type : "info",
+            showCancelButton : true,
+            confirmButtonClass : "btn-danger",
+            cancelButtonText : "아니오",
+            confirmButtonText : "예",
+            closeOnConfirm : false,
+            closeOnCancel : true
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    $.ajax({
+                        url: "/bbs/inteCollege_update.php",
+                        type: "POST",
+                        data: {
+                            type : type,
+                            idx : idx,
+                            id : '<?=$membId?>',
+                        },
+                        async: false,
+                        error: function(data) {
+                            alert('저장 실패! 관리자에게 문의하세요.');
+                        },
+                        success: function(data) {
+                            if(data == 'success'){
+                                swal('성공!','저장하였습니다.','success');
+                                setTimeout(() => {
+                                    swal.close();
+                                    location.reload();
+                                }, 1500);
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    }
 </script>
 <!-- } 마이페이지 끝 -->
 
