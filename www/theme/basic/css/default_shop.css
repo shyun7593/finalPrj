@@ -218,11 +218,11 @@ box-sizing:border-box;
         padding: 10px 0;
         font-size: 1.3em;
         cursor:pointer;
+        font-weight: 800;
     }
     .top_menu.active{
         background: #0c2233 !important;
         color: white !important;
-        font-weight: 800;
     }
     .info-Content{
         display: none;
