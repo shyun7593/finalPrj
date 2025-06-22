@@ -753,3 +753,9 @@ $(function() {
         return true;
     });
 });
+
+function menuOnOff(e){
+    document.querySelector("#hd_menu").classList.toggle('hidden');
+    document.querySelector("#wrapper").classList.toggle('full');
+    document.querySelector("#hide_btn").classList.toggle('hidden');
+}

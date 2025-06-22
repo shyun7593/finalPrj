@@ -667,7 +667,7 @@ $query_string = http_build_query(array(
                         data: {
                             type : type,
                             idx : idx,
-                            id : '<?=$membId?>',
+                            id : '<?=$_SESSION['ss_mb_id']?>',
                         },
                         async: false,
                         error: function(data) {

@@ -95,6 +95,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 </div>
             </div>
         </div>
+        <button id="toggle_menu" onclick="menuOnOff(event)"><i id="hide_btn" class="xi-hamburger-back" style="font-size: 2em;"></i></button>
 		<?php include_once(G5_THEME_SHOP_PATH.'/category.php'); // 분류 ?>
 		<ul class="hd_menu" style="width: 100%;">
             <? 
