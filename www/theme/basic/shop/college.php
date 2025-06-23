@@ -169,7 +169,7 @@ $query_string = http_build_query(array(
                             </div>
                             <div style="height: 100%;text-align:end;">
                                 <?if($v['myIdx']){?>
-                                        <i class="xi-star" onclick="addCollege('remove','<?=$v['sIdx']?>')"></i>
+                                        <i class="xi-star" style="color:hotpink;" onclick="addCollege('remove','<?=$v['sIdx']?>')"></i>
                                     <?}else{?>
                                         <i class="xi-star-o" onclick="addCollege('add','<?=$v['sIdx']?>')"></i>
                                 <?}?>
@@ -215,8 +215,11 @@ $query_string = http_build_query(array(
                 let html = `
                     <div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
                         <img src="${json['data']['college']['img']}" style="max-width:80px;min-height:80px;"/>
-                        ${json['data']['college']['collegeNm']}
-                    </div>
+                        ${json['data']['college']['collegeNm']}`;
+                if(json['data']['college']['addYn']){
+                    html += `<i class="xi-star" style="color: hotpink;display: flex;color:hotpink;font-size:20px;"></i>`;
+                }
+                html += `</div>
                     <div style="display:flex;gap:5px;align-items:end;margin-bottom:5px;">
                         <div style="font-size:1.5em;font-weight:800;padding-left:10px;"># ${json['data']['college']['subjectNm']}</div>
                         <div style="display:flex;justify-content:start;align-items:center;gap:4px;">

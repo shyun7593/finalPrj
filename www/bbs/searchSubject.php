@@ -60,7 +60,8 @@ $sql = "SELECT
             gs.*,
             gc.*,
             gcc.codeName as 'gun',
-            gcc2.codeName as 'areaName'
+            gcc2.codeName as 'areaName',
+            gac.idx as 'addC'
         FROM g5_college_subject gcs 
         JOIN g5_college gc on
             gc.cIdx = gcs.collegeIdx
@@ -72,6 +73,8 @@ $sql = "SELECT
             gs.suIdx = gcs.susiIdx
         LEFT JOIN g5_jungsi gj on
             gj.juIdx = gcs.jungsiIdx
+        LEFT JOIN g5_add_college gac on
+            gac.subIdx = gcs.sIdx AND memId = '{$_SESSION['ss_mb_id']}'
         WHERE {$add_sql}";
 
 $mres = sql_query($sql);
@@ -92,7 +95,8 @@ foreach ($mres as $k => $v) {
         'img' => $v['c_url'], // 대학로고
         'areaNm' => $v['areaName'], // 지역
         'gun' => $v['gun'], // 가,나,다 군
-        'collegeType' => $v['collegeType'] // 사립, 국립
+        'collegeType' => $v['collegeType'], // 사립, 국립
+        'addYn' => $v['addC']
     ];
 
     if($v['suIdx']){

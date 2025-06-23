@@ -49,11 +49,13 @@ box-sizing:border-box;
 }
 
 .onaction.isactive{
-    background-color: #e4e4e4 !important;
+    background-color: #141f55ad !important;
+    color: white;
 }
 
 .onaction:hover{
-    background-color: #e4e4e4;
+    background-color: #141f55ad;
+    color: white;
     font-weight: bold;
 }
 .fix-onaction{
@@ -105,8 +107,9 @@ box-sizing:border-box;
 
 
 .iswrite{
-    background-color: #089bff;
+    background-color: #0c2233;
     border: unset !important;
+    color:white;
 }
 
 .tbl_2n_color td:not(:first-child){
