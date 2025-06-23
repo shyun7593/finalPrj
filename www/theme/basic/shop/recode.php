@@ -4,9 +4,15 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '실기기록';
 include_once('./_head.php');
 
+if(!$str_date){
+    $str_date = date('Y-01');
+}
 
+if(!$end_date){
+    $end_date = date('Y-m');
+}
 
-$add_sql = " 1=1 ";
+$add_sql = " 1=1 AND (DATE_FORMAT(sp.date,'%Y-%m') between '{$str_date}' AND '{$end_date}')";
 $branch_sql = " 1=1 ";
 
 if($gender){
@@ -30,7 +36,7 @@ switch($_SESSION['mb_profile']){
 
 $sql = "SELECT 
             sp.memberIdx ,
-            sp.`date` ,
+            DATE_FORMAT(sp.`date`,'%Y-%m') as 'date' ,
             sp.sRank ,
             sp.grade ,
             sp.core_Rank,
@@ -212,6 +218,20 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     <input type="hidden" id="branchIdx" name="branchIdx" value="<?=$branchIdx?>">
                     <input type="hidden" id="gender" name="gender" value="<?=$gender?>">
                     <div style="display: flex;align-items:center;gap:10px;">
+                        <div>날&nbsp;&nbsp;&nbsp;짜 : </div>
+                        <div>
+                            <input type="month" class="frm_input" value="<?=$str_date?>" style="height:35px;" id="str_date" name="str_date" >&nbsp;&nbsp;~&nbsp;&nbsp;
+                            <input type="month" class="frm_input" value="<?=$end_date?>" style="height:35px;" id="end_date" name="end_date" >
+                        </div>
+                        <div>
+                            <button class="btn-n active" type="submit" style="margin-right:10px;"><i class="xi-search"></i></button>
+                            <button class="btn-n active" type="button" onclick="chDate('year')">이번년도</button>
+                            <button class="btn-n active" type="button" onclick="chDate('now')">이번달</button>
+                            <button class="btn-n active" type="button" onclick="chDate('prev')">전월</button>
+                            <button class="btn-n active" type="button" onclick="chDate('next')">익월</button>
+                        </div>
+                    </div>
+                    <div style="display: flex;align-items:center;gap:10px;">
                         <div>캠퍼스 : </div>
                         <div>
                             <?if($_SESSION['mb_profile'] == 'C40000001' || $_SESSION['mb_profile'] == 'C40000002'){?>
@@ -249,12 +269,11 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                                 <button type="button" class="subje btn-n" id="situp" onclick="viewTypeChange(event)">윗몸</button>
                                 <button type="button" class="subje btn-n" id="sergent" onclick="viewTypeChange(event)">서전트</button>
                             </div>
-                        
                     </div>
                 </div>
             </form>
             <?if($scnt['cnt'] > 0){?>
-            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:75vh;">
+            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:73vh;">
                 <table class="tbl_head01" style="width: auto;">
                     <thead>
 
@@ -466,6 +485,34 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
 
     function viewCampus(e){
         $("#branchIdx").val(e);
+        $("#fsearch").submit();
+    }
+
+    function chDate(type){
+        switch(type){
+            case 'year':
+                $("#str_date").val('<?=date('Y-01')?>');
+                $("#end_date").val('<?=date('Y-m')?>');
+                break;
+            case 'now':
+                $("#str_date").val('<?=date('Y-m')?>');
+                $("#end_date").val('<?=date('Y-m')?>');
+                break;
+            case 'prev':
+                currentDate = new Date($("#str_date").val());
+                FirstDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 2).toISOString().slice(0,7);
+                lastDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString().slice(0,7);
+                $("#str_date").val(FirstDayofMonth);
+                $("#end_date").val(lastDayofMonth);
+                break;
+            case 'next':
+                currentDate = new Date($("#str_date").val());
+                FirstDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()+1,2).toISOString().slice(0,7);
+                lastDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()+2,1).toISOString().slice(0,7);
+                $("#str_date").val(FirstDayofMonth);
+                $("#end_date").val(lastDayofMonth);
+                break;
+        }
         $("#fsearch").submit();
     }
 </script>
