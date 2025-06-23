@@ -355,7 +355,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                         <?}?>
                     </tbody>
                 </table>
-            </div>
+        </div>
             <?} else {?>
                 <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">

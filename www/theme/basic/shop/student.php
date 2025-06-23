@@ -134,7 +134,7 @@ $query_string = http_build_query(array(
                                 }
                                 ?>
                                 
-                                    <tr style="text-align: center;" class="onaction" onclick="viewStudent('<?=$m['mb_no']?>',event)">
+                                    <tr style="text-align: center;" class="onaction" onclick="viewStudent('<?=$m['mb_no']?>',event),viewPractice('<?=$m['mb_id']?>')">
                                         <td><?= $i?></td>
                                         <td><?= $m['branchName']?></td>
                                         <td><?= $m['mb_name']?></td>
@@ -170,12 +170,24 @@ $query_string = http_build_query(array(
                     </tr>
                 </table>
             </div>
+	    </section>
+	    <!-- } 성적 정보 끝 -->
+	</div>
+    <div id="smb_my_list" class="studentPractice">
+	    <!-- 성적 정보 시작 { -->
+	    <section id="smb_my_od">
+	        <h2>실기 정보</h2>
             <div class="tbl_wrap" >
-                
+                <table class="tbl_head01">
+                    <tr style="text-align: center;">
+                        <td>검색할 학생을 눌러주세요.</td>
+                    </tr>
+                </table>
             </div>
 	    </section>
 	    <!-- } 성적 정보 끝 -->
 	</div>
+ 
     <div id="smb_my_list" style="width: 100%;">
         <!-- 지원대학 시작 { -->
         <section id="smb_my_od">
@@ -206,95 +218,7 @@ $query_string = http_build_query(array(
     
 </div>
 
-<div id="memberPopup">
-    <div class="mb20" id="memberDiv">
-        <div class="tbl_frm01 tbl_wrap">
-            <table>
-                <colgroup>
-                    <col width="15%">
-                    <col width="35%">
-                    <col width="15%">
-                    <col width="35%">
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <th>아이디</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_id" name="mb_id" value="" autocomplete="off" style="width: 100%;pointer-events:none;background-color:#e4e4e4;">
-                        </td>
-                        <th>승인여부</th>
-                        <td>
-                            <select class="frm_input" name="mb_level" id="mb_level" style="width: 100%;">
-                                <option value="0">미승인</option>
-                                <option value="1">승인</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>이름</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_name" name="mb_name" value="" autocomplete="off" style="width: 100%;">
-                            <input type="hidden" id="mb_no" name="mb_no">
-                        </td>
-                        <th>연락처</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_hp" name="mb_hp" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>학교</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_1" name="mb_1" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                        <th>학년</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_2" name="mb_2" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>성별</th>
-                        <td>
-                            <select class="frm_input" name="mb_sex" id="mb_sex" style="width: 100%;">
-                                <option value="M">남자</option>
-                                <option value="F">여자</option>
-                            </select>
-                        </td>
-                        <th>생년월일</th>
-                        <td>
-                            <input type="text" class="frm_input" id="mb_birth" name="mb_birth" value="" autocomplete="off" style="width: 100%;">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>소속</th>
-                        <td>
-                            <select class="frm_input" name="mb_signature" id="mb_signature" style="width: 100%;">
-                                <option value="">선택하세요.</option>
-                            <?
-                                $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
-                                foreach($bsql as $bs => $b){
-                            ?>
-                                <option value="<?=$b['idx']?>"><?=$b['branchName']?></option>
-                            <?}?>
-                            </select>
-                        </td>
-                        <th>권한</th>
-                        <td>
-                            <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;">
-                                <option value="1">관리자</option>
-                                <option value="2">원장</option>
-                                <option value="3">원내학생</option>
-                                <option value="4">일반</option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <button id="closePopup">닫기</button>
-    <button id="memberBtn">수정</button>
-    <button id="resetBtn">비밀번호 초기화</button>
-</div>
+
 <?php
 	// 배열을 쉼표로 구분된 문자열로 변환
 	if (is_array($selectedPartners)) {
@@ -317,200 +241,7 @@ $query_string = http_build_query(array(
 			'&amp;text=' . rawurlencode($text)
 	);?>
 <script>
-function member_leave()
-{
-    return confirm('정말 회원에서 탈퇴 하시겠습니까?')
-}
 
-function out_cd_check(fld, out_cd)
-{
-    if (out_cd == 'no'){
-        alert("옵션이 있는 상품입니다.\n\n상품을 클릭하여 상품페이지에서 옵션을 선택한 후 주문하십시오.");
-        fld.checked = false;
-        return;
-    }
-
-    if (out_cd == 'tel_inq'){
-        alert("이 상품은 전화로 문의해 주십시오.\n\n장바구니에 담아 구입하실 수 없습니다.");
-        fld.checked = false;
-        return;
-    }
-}
-
-function fwishlist_check(f, act)
-{
-    var k = 0;
-    var length = f.elements.length;
-
-    for(i=0; i<length; i++) {
-        if (f.elements[i].checked) {
-            k++;
-        }
-    }
-
-    if(k == 0)
-    {
-        alert("상품을 하나 이상 체크 하십시오");
-        return false;
-    }
-
-    if (act == "direct_buy")
-    {
-        f.sw_direct.value = 1;
-    }
-    else
-    {
-        f.sw_direct.value = 0;
-    }
-
-    return true;
-}
-
-function updateMember(no){
-        $("#mb_no").val(no);
-        $.ajax({
-            url: "/bbs/searchMember.php",
-            type: "POST",
-            data: {
-                mbno : no,
-            },
-            async: false,
-            error: function(data) {
-                alert('에러가 발생하였습니다.');
-                return false;
-            },
-            success: function(data) {
-                json = eval("(" + data + ");");
-                $.each(json.list, function(key, state) {
-                    obj = state;
-                    if(obj.mb_level != 0){
-                        obj.mb_level = '1';
-                    }
-                    $("#mb_name").val(obj.mb_name);
-                    $("#mb_hp").val(obj.mb_hp);
-                    $("#mb_birth").val(obj.mb_birth);
-                    $("#mb_sex").val(obj.mb_sex);
-                    $("#mb_profile").val(obj.mb_profile);
-                    $("#mb_1").val(obj.mb_1);
-                    $("#mb_2").val(obj.mb_2);
-                    $("#mb_signature").val(obj.mb_signature);
-                    $("#mb_level").val(obj.mb_level);
-                    $("#mb_id").val(obj.mb_id);
-                    // $('#selectJaje').append($('<option>', {
-                    //     value: obj.idx,
-                    //     text: obj.ojName
-                    // }));
-                });
-            }
-        });
-        $('#popupBackground').fadeIn(); // 배경 표시
-        $('#memberPopup').fadeIn(); // 팝업 표시
-    }
-
-    $('#closePopup, #popupBackground').click(function() {
-        $('#popupBackground').fadeOut(); // 배경 숨기기
-        $('#memberPopup').fadeOut(); // 팝업 숨기기
-        popValueNull();
-    });
-
-    function popValueNull() {
-        $("#mb_no").val("");
-    }
-
-    $("#memberBtn").on('click',function(){
-        swal({
-            title : '수정하시겠습니까?',
-            text : '',
-            type : "info",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/login_check.php",
-                        type: "POST",
-                        data: {
-                            mb_no : $("#mb_no").val(),
-                            mb_name : $("#mb_name").val(),
-                            mb_hp: $("#mb_hp").val(),
-                            mb_profile: $("#mb_profile").val(),
-                            mb_sex: $("#mb_sex").val(),
-                            mb_1: $("#mb_1").val(),
-                            mb_2: $("#mb_2").val(),
-                            mb_signature: $("#mb_signature").val(),
-                            mb_birth: $("#mb_birth").val(),
-                            mb_level : $("#mb_level").val(),
-                            type : 'update',
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 수정되었습니다.','success');
-                                setTimeout(() => {
-                                    swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
-                            }
-                        }
-                    });
-                }
-            }
-        );
-    });
-
-    $("#resetBtn").on('click',function(){
-        swal({
-            title : '비밀번호를 초기화 하시겠습니까?',
-            text : '',
-            type : "warning",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/login_check.php",
-                        type: "POST",
-                        data: {
-                            mb_no : $("#mb_no").val(),
-                            type : 'password',
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공!','성공적으로 수정되었습니다.','success');
-                                setTimeout(() => {
-                                    swal.close();
-                                    location.reload();
-                                }, 1500);
-                            } else {
-                                console.log(data);
-                            }
-                        }
-                    });
-                }
-            }
-        );
-    });
     function fsearch_submit(e) {
     }
 
@@ -656,6 +387,116 @@ function updateMember(no){
         });
         // $("#student").val(id);
         // $("#fsearch").submit();
+    }
+
+    function viewPractice(idx){
+        $.ajax({
+            url: "/bbs/searchRecode.php",
+            type: "POST",
+            data: {
+                memberIdx: idx,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                console.log(json);
+                if(!Array.isArray(json)){
+                    let html = `
+                    <section id="smb_my_od">
+	                <h2>실기 정보</h2>
+                    <div class="tbl_wrap border-tb">
+                        <table class="tbl_head01" style="width: auto;">
+                            <thead>
+                                <tr class="headd">
+                                    <th style="top:0;z-index:15;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">날짜</th>
+                                    <th style="top:0;z-index:15;min-width:50px;width:50px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">순위</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='core' colspan="2">배근력</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m10m' colspan="2">10m왕복</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='medicine' colspan="2">메디신</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='leftGul' colspan="2">좌전굴</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='stand' colspan="2">제멀</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m20mBu' colspan="2">20m부저</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='situp' colspan="2">윗몸</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='sergent' colspan="2">서전트</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">총점</th>
+                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">평균</th>
+                                </tr>
+                            <tr class="sub-header">
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>점수</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>기록</th>
+                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>점수</th>
+                            </tr>
+                        </thead>
+                            <tbody>`;
+                        for (const tag in json['data']) {
+                            json['data'][tag]
+                            html += `
+                                <tr class="connt">
+                                    <td style="max-width:100px;text-align:center;">${json['data'][tag]['date']}</td>
+                                    <td style="max-width:50px;text-align:center;">${json['data'][tag]['sRank']}</td>
+                                    <td style="width:150px;text-align:center;" class="core core_Rank">${json['data'][tag]['core_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="core core_score">${json['data'][tag]['core_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="m10m m10m_Rank">${json['data'][tag]['10m_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="m10m m10m_score">${json['data'][tag]['10m_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="medicine medicine_Rank">${json['data'][tag]['medicine_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="medicine medicine_score">${json['data'][tag]['medicine_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_Rank">${json['data'][tag]['left_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_score">${json['data'][tag]['left_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="stand stand_Rank">${json['data'][tag]['stand_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="stand stand_score">${json['data'][tag]['stand_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_Rank">${json['data'][tag]['20mBu_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_score">${json['data'][tag]['20mBu_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="situp situp_Rank">${json['data'][tag]['situp_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="situp situp_score">${json['data'][tag]['situp_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="sergent sergent_Rank">${json['data'][tag]['surgent_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="sergent sergent_score">${json['data'][tag]['surgent_score']}</td>
+                                    <td style="width:150px;text-align:center;" class="totals">${json['data'][tag]['total_Rank']}</td>
+                                    <td style="width:150px;text-align:center;" class="avg">${json['data'][tag]['total_Rev']}</td>
+                                </tr>
+                            `;
+                        }
+                                    ``;
+
+                        html += `</tbody>
+                        </table>
+                        </div>
+                    </section>`
+                    $(".studentPractice").html(html);
+                } else {
+                    html = `
+                    <section id="smb_my_od">
+                    <h2>실기 정보</h2>
+                    <div class="tbl_wrap" >
+                        <table class="tbl_head01">
+                            <tr style="text-align: center;">
+                                <td>실기 정보가 없습니다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                    `
+                    $(".studentPractice").html(html);
+                }
+            }
+        });
+
     }
     
 
