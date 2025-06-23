@@ -105,22 +105,17 @@ $res = sql_fetch($sql);
             <?}?>
         </section>
         <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
-        <div id="smb_my_list" style="overflow: hidden;">
+        <!-- <div id="smb_my_list" style="overflow: hidden;">
             <input type="hidden" id="showMemoMem">
             <input type="hidden" id="showMemoMonth">
-            <!-- 최근 주문내역 시작 { -->
             <section id="smb_my_od" style="height: 100%;">
                 <div id="wrapper_title">상담이력</div>
                 <div id="memoArea" style="height: 520px;">
                     
                 </div>
             </section>
-            <!-- } 최근 주문내역 끝 -->
-        </div>
-        <?}?>
-    </div>
-    <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
-    <div id="smb_my_list" class="studentScore">
+        </div> -->
+        <div id="smb_my_list" class="studentScore">
             <!-- 성적 정보 시작 { -->
         <section id="smb_my_od">
             
@@ -137,6 +132,10 @@ $res = sql_fetch($sql);
         </section>
         <!-- } 성적 정보 끝 -->
     </div>
+        <?}?>
+    </div>
+    <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
+    
     <?}?>
 </div>
 
@@ -368,7 +367,7 @@ function viewStudent(){
 
                 let html = `
                     <section id="smb_my_od">
-	        <div id="wrapper_title" style="padding-top:0px;">성적 정보</div>
+	        <div id="wrapper_title">성적 정보</div>
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_one_color">
                     <tr style="text-align: center;">
@@ -476,112 +475,6 @@ function viewStudent(){
         });
         // $("#student").val(id);
         // $("#fsearch").submit();
-    }
-
-    function viewMemberInfo(){
-        let mbId = '<?=$member['mb_no']?>';
-        $("#showMemoMem").val();
-        $.ajax({
-            url: "/bbs/searchMemberDatas.php",
-            type: "POST",
-            data: {
-                mbIdx : mbId,
-            },
-            async: false,
-            error: function(data) {
-                alert('에러가 발생하였습니다.');
-                return false;
-            },
-            success: function(data) {
-                json = eval("(" + data + ");");
-                console.log(json);
-                showMemoView(json,$("#showMemoMonth").val());
-            }
-        });
-    }
-
-    function showMemoView(data,month){
-        if(!month){
-            month = 'C00000000';
-        }
-        const memoData = json.memoData;
-        console.log(memoData);
-        let memoMonn = [];
-        let html1 = `
-            <div id="memoMonth" style="margin-bottom:15px;">
-                <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">등록상담</button>
-                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
-                foreach($buttons as $bt => $b){?>
-                    <button type="button" class="btn-n" value="<?=$b['code']?>" onclick="showMonthMemo(event)"><?=$b['codeName']?></button>
-                <?}?>
-            </div>
-            <div style="display:flex;flex-direction:row;gap:15px;overflow-x:scroll;height:100%;padding-bottom:10px;">
-                    <div class="noview">
-                        상담이력이 없습니다.
-                    </div>
-            `;
-            
-                for (const tag in memoData) {
-                    const tagData = memoData[tag].data;
-                    memoMonn.push(tag);
-                    for (const idx in tagData) {
-                        const item = tagData[idx];
-                        if(tag != month){
-                            html1 += `<div class="${tag}" style="display:none;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
-                        } else{
-                            html1 += `<div class="${tag}" style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
-                        }
-                        html1 += `
-                            <input type="hidden" value="${item.gmIdx}">
-                            <input type="text" readonly style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${item.title}">
-                            <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
-                            <textarea readonly style="border:1px solid #e4e4e4;border-radius:10px;height:370px;resize:none;padding:10px;font-size:1em;width:400px;">${item.memo}</textarea>
-                            <p style="color:#b3b3b3;font-size:0.8em;">작성자 : ${item.regName} ${item.regDate}</p>`;
-
-                        if(item.updName){
-                            html1+=`
-                            <p style="color:#b3b3b3;font-size:0.8em;">수정자 : ${item.updName} ${item.updDate}</p>
-                            `;
-                        }
-
-                html1+=`
-                </div>
-                `;
-                    }
-                }                
-            
-            html1 += `
-            </div>
-            `;
-        $("#memoArea").html(html1);
-        setTimeout(() => {
-            document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
-                if(el.value == month){
-                    el.classList.add('active');
-                    el.click();
-                }
-                if(memoMonn.includes(el.value)){
-                    el.classList.add('iswrite');
-                }
-            });
-        }, 0);
-    }
-    function showMonthMemo(e){
-        $("#showMemoMonth").val($(e.currentTarget).val());
-        document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
-            if(el == e.currentTarget){
-                el.classList.add('active');
-                $(`.${el.value}`).css('display','flex');
-                if($(`.${el.value}`).children().length == 0){
-                    $('.noview').css('display','flex');
-                } else {
-                    $('.noview').css('display','none');
-                }
-            } else {
-                el.classList.remove('active');
-                $(`.${el.value}`).css('display','none');
-            }
-        });
     }
 </script>
 <!-- } 마이페이지 끝 -->
