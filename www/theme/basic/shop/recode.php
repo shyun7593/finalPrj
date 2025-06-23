@@ -18,13 +18,8 @@ if($branchIdx){
 }
 
 switch($_SESSION['mb_profile']){
-    case 'C40000001': // 관리자
+    case 'C40000001': case 'C40000002': // 관리자, 선생님
         $add_sql .= " AND 1=1 ";
-        break;
-    case 'C40000002': // 선생님
-        $add_sql .= " AND mb.mb_signature = '{$_SESSION['mb_signature']}' ";
-        $branch_sql .= " AND b.idx = '{$_SESSION['mb_signature']}' ";
-        $branchIdx = $_SESSION['mb_signature'];
         break;
     case 'C40000003': // 학생
         $add_sql .= " AND sp.memberIdx = '{$_SESSION['ss_mb_id']}' ";
@@ -211,7 +206,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
 <div id="smb_my">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od">
+        <section id="smb_my_od" style="margin:0;">
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
                 <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
                     <input type="hidden" id="branchIdx" name="branchIdx" value="<?=$branchIdx?>">
@@ -219,7 +214,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div>캠퍼스 : </div>
                         <div>
-                            <?if($_SESSION['mb_profile'] == 'C40000001'){?>
+                            <?if($_SESSION['mb_profile'] == 'C40000001' || $_SESSION['mb_profile'] == 'C40000002'){?>
                             <button type="button" class="btn-n <?if($branchIdx ==  '') echo "active";?>" onclick="viewCampus('')">전체</button>
                             <?}?>
                             <?
@@ -259,7 +254,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                 </div>
             </form>
             <?if($scnt['cnt'] > 0){?>
-            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:450px;">
+            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:75vh;">
                 <table class="tbl_head01" style="width: auto;">
                     <thead>
 

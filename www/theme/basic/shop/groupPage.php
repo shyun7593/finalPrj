@@ -22,6 +22,11 @@ FROM g5_branch");
 
 $sql_add = " 1=1 ";
 
+if($cid){
+    $sql_add .= " AND gm.mb_profile = '{$cid}' ";
+}
+
+
 if($bid){
     $sql_add .= " AND gb.idx = {$bid} ";
 }
@@ -39,7 +44,15 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         AND gm.mb_id NOT IN ( '{$member['mb_id']}')
                         AND gm.mb_id != 'admin'");
 ?>
-
+<style>
+    #resetBtn{
+        background-color: black !important;
+        color: white;
+        border: unset !important;
+        width: 100%;
+        height: 45px;
+    }
+</style>
 <!-- 등급관리 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
 <div id="smb_my_list">
@@ -102,19 +115,31 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                 <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
                     <table class="tbl_head01">
                         <colgroup width="10%">
-                        <colgroup width="20%">
+                        <colgroup width="10%">
+                        <colgroup width="10%">
                         <colgroup width="65%">
                         <colgroup width="5%">
                         <tbody>
                             <tr>
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
-                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == "C40000002") echo "class='isauto';"?>>
-                                        <option value="" <?if(!$bid) echo "selected";?>>전체</option>
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                        <option value="" <?if(!$bid) echo "selected";?>>지점</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
                                             foreach($bsql as $bs => $b){?>
                                             <option value="<?=$b['idx']?>" <?if($bid == $b['idx']) echo "selected";?>><?=$b['branchName']?></option>
+                                            <?}
+                                        ?>
+                                    </select>
+                                </td>
+                                <td style="padding:10px;">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="cid" id="cid">
+                                        <option value="" <?if(!$cid) echo "selected";?>>등급</option>
+                                        <?
+                                            $csql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' AND useYn = 1");
+                                            foreach($csql as $cs => $c){?>
+                                            <option value="<?=$c['code']?>" <?if($cid == $c['code']) echo "selected";?>><?=$c['codeName']?></option>
                                             <?}
                                         ?>
                                     </select>
@@ -223,7 +248,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         </td>
                         <th>비밀번호</th>
                         <td>
-                            <button id="resetBtn">비밀번호 초기화</button>
+                            <button id="resetBtn" class="btn-n">비밀번호 초기화</button>
                         </td>
                     </tr>
                     <tr>
@@ -690,6 +715,10 @@ function updateMember(no){
         $("#text").val('');
         $("#fsearch").submit();
     });
+
+    $("#cid").on('change',function(){
+        $("#fsearch").submit();
+    })
 
 </script>
 <!-- } 마이페이지 끝 -->
