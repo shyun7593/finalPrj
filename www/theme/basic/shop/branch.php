@@ -47,11 +47,43 @@ $query_string = http_build_query(array(
     'text' => $_GET['text'],
 ));
 ?>
+<style>
+    .memoPlace{
+        padding: 10px;
+        width: 100%;
+        border: 1px solid #e4e4e4;
+        border-radius: 15px;
+    }
+
+    #memberMemo{
+        width: 100%;
+        min-height: 500px;
+        padding: 5px 10px;
+        resize: none;
+        font-size:1.2em;
+        border:none !important;
+    }
+    .memoWrite{
+        margin-top: 5px;
+        color: #bdb9b9;
+    }
+    .memoBtn{
+        margin-top:5px;
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap:10px;
+    }
+    .memoBtn button{
+        font-size:1.2em;
+        min-width: 100px;
+    }
+</style>
 <!-- 마이페이지 시작 { -->
-<div id="smb_my" style="margin-bottom:0px;">
+<div id="smb_my" style="display:grid;grid-template-columns:3fr 1fr;column-gap:20px;">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od">
+        <section id="smb_my_od" style="margin-bottom:0;">
             <div style="display: flex;">
                 <h2>사용자 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 회원수 : <?= $mcnt['cnt'] ?></span></h2>
                 <div style="position: absolute;right: 0;top: -5px;">
@@ -87,7 +119,7 @@ $query_string = http_build_query(array(
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb" style="height: 300px;overflow-y:scroll;">
+            <div class="tbl_wrap border-tb" style="height:78vh;overflow-y:scroll;">
                 <table class="tbl_head01">
                     <colgroup width="*">
                     <thead class="top-Fix">
@@ -128,7 +160,8 @@ $query_string = http_build_query(array(
                                     break;
                             }
                         ?>
-                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>'),viewStudent('<?=$m['mb_no']?>')">
+                        <!-- <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>'),viewStudent('<?=$m['mb_no']?>')"> -->
+                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemo(event,'<?=$m['mb_no']?>','<?=$m['mb_name']?>')">
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['mb_name'] ?></td>
                             <td><?= $m['mb_1'] ?></td>
@@ -137,6 +170,12 @@ $query_string = http_build_query(array(
                             <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
                             <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
                             <td>
+                                <?
+                                    $meres = sql_fetch("SELECT * FROM g5_memo gm WHERE gm.memberIdx = {$m['mb_no']}");
+                                ?>
+                                <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx']) echo 'iswrite';?>">상담내역</button>
+                            </td>
+                            <!-- <td>
                                 <?
                                     $meres = sql_query("WITH RECURSIVE dateMonth AS (
                                                 SELECT code,codeName
@@ -157,7 +196,7 @@ $query_string = http_build_query(array(
                                 ?>
                                     <button type="button" class="btn-n <?if($me['idx']) echo 'iswrite';?>" value="<?=$me['code']?>"><?=$me['codeName']?></button>
                                 <?}?>
-                            </td>
+                            </td> -->
                             <td>
                             <?
                                     $scres = sql_query("WITH RECURSIVE dateMonth AS (
@@ -174,7 +213,7 @@ $query_string = http_build_query(array(
                                                         ORDER BY d.code;");
                                     foreach($scres as $k => $s){
                                 ?>
-                                    <button type="button" class="btn-n <?if($s['cnt'] > 0) echo 'iswrite';?>" value="<?=$s['code']?>"><?=$s['codeName']?></button>
+                                    <button type="button" style="pointer-events: none;" class="btn-n <?if($s['cnt'] > 0) echo 'iswrite';?>" value="<?=$s['code']?>"><?=$s['codeName']?></button>
                                 <?}?>
                             </td>
                         </tr>
@@ -189,35 +228,24 @@ $query_string = http_build_query(array(
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
-</div>
-<div style="display: grid;grid-template-columns:1fr 2.5fr;gap:20px;">
-    <div id="smb_my_list">
-        <input type="hidden" id="showMemoMem">
-        <input type="hidden" id="showMemoMonth">
-        <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od">
-            <h2>상담 내역</h2>
-            <div id="memoArea">
-                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
-                    학생을 클릭하면 상담내용이 보입니다.
+    <div>
+        <div id="smb_my_list" style="position:sticky;top:20px;">
+            <input type="hidden" id="showMemoMem">
+            <input type="hidden" id="showMemoMonth">
+            <input type="hidden" id="memoType" value="add">
+            <input type="hidden" id="memberIdx">
+            <input type="hidden" id="memoIdx">
+            <!-- 최근 주문내역 시작 { -->
+            <section id="smb_my_od">
+                <h2><span class="memberName"></span>상담 내역</h2>
+                <div id="memoArea">
+                    <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
+                        학생을 클릭하면 상담내용이 보입니다.
+                    </div>
                 </div>
-            </div>
-        </section>
-        <!-- } 최근 주문내역 끝 -->
-    </div>
-    <div id="smb_my_list">
-        <input type="hidden" id="showMemoMem">
-        <input type="hidden" id="showMemoMonth">
-        <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od" style="position:sticky;top:20px;">
-            <h2>성적 정보</h2>
-            <div id="studentScore">
-                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;align-items:center;">
-                    학생을 클릭하면 성적이 보입니다.
-                </div>
-            </div>
-        </section>
-        <!-- } 최근 주문내역 끝 -->
+            </section>
+            <!-- } 최근 주문내역 끝 -->
+        </div>
     </div>
 </div>
     <?php
@@ -254,6 +282,7 @@ $query_string = http_build_query(array(
 </script>
 
 <script>
+    let prevMemo = '';
     function fsearch_submit(e) {
     }
 
@@ -261,6 +290,156 @@ $query_string = http_build_query(array(
         $("#text").val('');
         $("#fsearch").submit();
     });
+
+    function viewMemo(e,memberIdx,memberName){
+        document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('isactive');
+            } else {
+                el.classList.remove('isactive');
+            }
+        });
+        $(".memberName").html(memberName + ' - ');
+        showMemoView2(memberIdx);
+    }
+
+    function showMemoView2(memberIdx){
+        $.ajax({
+            url: "/bbs/searchMemberMemo.php",
+            type: "POST",
+            data: {
+                memberIdx : memberIdx,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                
+                console.log(json);
+                if((!Array.isArray(json))){
+                    $("#memoType").val('update');
+                    $("#memoIdx").val(json['data'].idx);
+                    $("#memberIdx").val(memberIdx);
+                    prevMemo = json['data'].memo;
+                    let html = `
+                        <div class="memoPlace">
+                            <textarea id="memberMemo">${json['data'].memo}</textarea>
+                        </div>
+                        <div class="memoWrite">
+                            작성자 : ${json['data'].regName} ${json['data'].regDate}
+                        </div>`;
+                    if(json['data'].updName){
+                        html += `
+                        <div class="memoWrite">
+                            수정자 : ${json['data'].updName} ${json['data'].updDate}
+                        </div>`;
+                    }
+                    html += `
+                        <div class="memoBtn">
+                            <button type="button" class="btn-n active no-hover" onclick="saveMemo()">저장</button>
+                            <button type="button" class="btn-n no-hover" onclick="cancelMemo()">취소</button>
+                        </div>
+                    `;
+                    $("#memoArea").html(html);
+                } else {
+                    $("#memoType").val('add');
+                    $("#memoIdx").val('');
+                    $("#memberIdx").val(memberIdx);
+                    prevMemo = '';
+                    let html = `
+                        <div class="memoPlace">
+                            <textarea id="memberMemo" placeholder="상담내역을 작성해주세요."></textarea>
+                        </div>
+                        <div class="memoBtn">
+                            <button type="button" class="btn-n active no-hover" onclick="saveMemo()">저장</button>
+                            <button type="button" class="btn-n no-hover" onclick="cancelMemo()">취소</button>
+                        </div>
+                    `;
+                    $("#memoArea").html(html);
+                }
+            }
+        });
+    }
+
+    function saveMemo(){
+        let type = $("#memoType").val();
+        let idx = $("#memoIdx").val();
+        let memberIdx = $("#memberIdx").val();
+        let text = '';
+        let msg = '';
+        if(type == 'update'){
+            text = '상담내역을 수정 하시겠습니까?';
+            msg = '수정';
+        } else{
+            text = '상담내역을 저장 하시겠습니까?';
+            msg = '저장';
+        }
+        swal({
+            title : '',
+            text : text,
+            type : "info",
+            showCancelButton : true,
+            confirmButtonClass : "btn-danger",
+            cancelButtonText : "아니오",
+            confirmButtonText : "예",
+            closeOnConfirm : false,
+            closeOnCancel : true
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    $.ajax({
+                        url: "/bbs/updateMemberMemo.php",
+                        type: "POST",
+                        data: {
+                            memoIdx : idx,
+                            memo : $("#memberMemo").val(),
+                            memberIdx : memberIdx,
+                            type : type,
+                        },
+                        async: false,
+                        error: function(data) {
+                            alert('에러가 발생하였습니다.');
+                            return false;
+                        },
+                        success: function(data) {
+                            if(data == 'success'){
+                                swal('성공',msg + ' 되었습니다.','success');
+                                setTimeout(() => {
+                                    showMemoView2(memberIdx);
+                                    swal.close();
+                                }, 1500);
+                            }
+                        }
+                    })                    
+                }
+            }
+        );
+    }
+    
+    
+
+    function cancelMemo(){
+        swal({
+            title : '',
+            text : '이전 메모로 돌리시겠습니까?',
+            type : "info",
+            showCancelButton : true,
+            confirmButtonClass : "btn-danger",
+            cancelButtonText : "아니오",
+            confirmButtonText : "예",
+            closeOnConfirm : false,
+            closeOnCancel : true
+            },
+            function(isConfirm){
+                if(isConfirm){
+                    $("#memberMemo").val(prevMemo);
+                }
+            }
+        );
+    }
 
     function viewMemberInfo(e,mbId){
        

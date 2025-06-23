@@ -83,7 +83,7 @@ box-sizing:border-box;
     color:black;
 }
 
-.btn-n:hover{
+.btn-n:hover:not(.no-hover){
     background-color: black;
     color: white;
 }
