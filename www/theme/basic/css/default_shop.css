@@ -126,15 +126,20 @@ box-sizing:border-box;
     color: white;
     font-weight: 700;
 }
+.tbl_one_color tbody th{
+    border-top:1px solid #141f55ad !important;
+    border-bottom:1px solid #141f55ad !important;
+}
 /* .tbl_one_color td:not(:first-child){
     background-color: #8cb8c9;
     color: black;
     font-weight: 700;
 } */
 .tbl_one_color td{
-    background-color: #eeeeee69;
     color: black;
     font-weight: 700;
+    border-top:1px solid #141f55ad;
+    border-bottom:1px solid #141f55ad;
 }
 
 .auto_input{
