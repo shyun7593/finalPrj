@@ -127,7 +127,7 @@ $nres2 = sql_query($nsql2);
                         }
                     ?>
 
-                        <tr style="text-align: center;" class="onaction" onclick="noticeView('<?=$n2['idx']?>')">
+                        <tr style="text-align: center;" class="onaction2" onclick="noticeView('<?=$n2['idx']?>')">
                             <td><?=$orderN?></td>
                             <td style="text-align:left;padding-left: 10px;display:flex;align-items:center;"><?= $newT2.$n2['title'] ?></td>
                             <td><?= $n2['regName'] ?></td>

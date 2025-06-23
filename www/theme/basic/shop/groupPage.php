@@ -93,7 +93,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                     
                                 ?>
 
-                        <tr style="text-align: center;" class="onaction" onclick="popupBranch('update','<?=$m['idx']?>')">
+                        <tr style="text-align: center;" class="onaction2" onclick="popupBranch('update','<?=$m['idx']?>')">
                             <td><?= $ccc ?></td>
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['branchManager'] ?></td>
@@ -210,7 +210,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             // }
                             ?>
                             
-                                <tr style="text-align: center;" class="onaction" onclick="updateMember('<?=$m['mb_no']?>')">
+                                <tr style="text-align: center;" class="onaction2" onclick="updateMember('<?=$m['mb_no']?>')">
                                     <td><?= $m['branchName']?></td>
                                     <td><?= $m['mb_id']?></td>
                                     <td><?= $m['mb_name']?></td>

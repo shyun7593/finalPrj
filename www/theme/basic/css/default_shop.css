@@ -44,20 +44,33 @@ box-sizing:border-box;
     display: none !important;
 }
 
-.onaction{
+.onaction, .onaction2{
     cursor: pointer;
 }
 
 .onaction.isactive{
     background-color: #141f55ad !important;
     color: white;
+    font-weight: 800;
 }
+
 
 .onaction:hover{
     background-color: #141f55ad;
     color: white;
     font-weight: bold;
 }
+
+.onaction2.isactive{
+    background-color: #e4e4e4 !important;
+    font-weight: 800;
+}
+
+.onaction2:hover{
+    background-color: #e4e4e4 !important;
+    font-weight: bold;
+}
+
 .fix-onaction{
     cursor: pointer;
 }
