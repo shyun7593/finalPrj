@@ -110,12 +110,16 @@ box-sizing:border-box;
 }
 
 .tbl_2n_color td:not(:first-child){
-    border-left: 1px solid white;
+    border-left: 1px solid #e4e4e4;
 }
 
-.tbl_2n_color tr:nth-child(2n){
-    background-color: #a2c8e161;
+.tbl_2n_color tbody tr{
+    border-bottom: 1px solid #e4e4e4;
 }
+
+/* .tbl_2n_color tr:nth-child(2n){
+    background-color: #a2c8e161;
+} */
 
 .tbl_one_color th{
     background-color: #141f55ad;

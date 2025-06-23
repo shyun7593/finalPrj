@@ -278,7 +278,7 @@ $query_string = http_build_query(array(
                 };
 
                 let html = `
-                    <section id="smb_my_od">
+                    <section id="smb_my_od" style="margin-bottom:20px;">
 	        <h2>성적 정보</h2>
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_one_color">
@@ -299,17 +299,17 @@ $query_string = http_build_query(array(
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_2n_color">
                     <thead>
-                        <th>구분</th>
-                        <th colspan="5">국어</th>
-                        <th colspan="5">수학</th>
-                        <th colspan="2">영어</th>
-                        <th colspan="5">탐구Ⅰ</th>
-                        <th colspan="5">탐구Ⅱ</th>
-                        <th colspan="2">한국사</th>
-                        <th colspan="3">제2외국어</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;"></th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="5">국어</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="5">수학</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="2">영어</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="5">탐구Ⅰ</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="5">탐구Ⅱ</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;border-right:1px solid #e4e4e4;color:white;" colspan="2">한국사</th>
+                        <th style="letter-spacing: 1.2px;background:#141f55ad !important;color:white;" colspan="3">제2외국어</th>
                     </thead>
                     <tbody>
-                        <tr style="text-align: center; background-color:#eeeeee69">
+                        <tr style="text-align: center;background-color: #141f55ad;color: white;font-weight: bold;">
                             <td>구분</td>
                             <td>과목</td>
                             <td>원</td>
@@ -406,42 +406,42 @@ $query_string = http_build_query(array(
                 console.log(json);
                 if(!Array.isArray(json)){
                     let html = `
-                    <section id="smb_my_od">
+                    <section id="smb_my_od" style="margin-bottom:20px;">
 	                <h2>실기 정보</h2>
-                    <div class="tbl_wrap border-tb">
-                        <table class="tbl_head01" style="width: auto;">
+                    <div class="tbl_wrap border-tb" style="border-bottom:unset;">
+                        <table class="tbl_head01 tbl_2n_color" style="width: auto;">
                             <thead>
                                 <tr class="headd">
-                                    <th style="top:0;z-index:15;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">날짜</th>
-                                    <th style="top:0;z-index:15;min-width:50px;width:50px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">순위</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='core' colspan="2">배근력</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m10m' colspan="2">10m왕복</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='medicine' colspan="2">메디신</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='leftGul' colspan="2">좌전굴</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='stand' colspan="2">제멀</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m20mBu' colspan="2">20m부저</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='situp' colspan="2">윗몸</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='sergent' colspan="2">서전트</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">총점</th>
-                                    <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">평균</th>
+                                    <th style="letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">날짜</th>
+                                    <th style="letter-spacing: 1.2px;top:0;z-index:15;min-width:50px;width:50px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">순위</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='core' colspan="2">배근력</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m10m' colspan="2">10m왕복</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='medicine' colspan="2">메디신</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='leftGul' colspan="2">좌전굴</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='stand' colspan="2">제멀</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='m20mBu' colspan="2">20m부저</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='situp' colspan="2">윗몸</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" class='sergent' colspan="2">서전트</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">총점</th>
+                                    <th style="letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:100px;width:100px;color:white;background:#141f55ad;border-right:1px solid white;" rowspan="2">평균</th>
                                 </tr>
                             <tr class="sub-header">
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>점수</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>기록</th>
-                                <th style="position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='core'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m10m'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='medicine'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='leftGul'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='stand'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='m20mBu'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='situp'>점수</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>기록</th>
+                                <th style="letter-spacing: 1.2px;position:sticky;top:45px;min-width:100px;background:#141f55ad;color:white;border-right:1px solid white" class='sergent'>점수</th>
                             </tr>
                         </thead>
                             <tbody>`;
@@ -451,24 +451,24 @@ $query_string = http_build_query(array(
                                 <tr class="connt">
                                     <td style="max-width:100px;text-align:center;">${json['data'][tag]['date']}</td>
                                     <td style="max-width:50px;text-align:center;">${json['data'][tag]['sRank']}</td>
-                                    <td style="width:150px;text-align:center;" class="core core_Rank">${json['data'][tag]['core_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="core core_score">${json['data'][tag]['core_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="m10m m10m_Rank">${json['data'][tag]['10m_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="m10m m10m_score">${json['data'][tag]['10m_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="medicine medicine_Rank">${json['data'][tag]['medicine_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="medicine medicine_score">${json['data'][tag]['medicine_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_Rank">${json['data'][tag]['left_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_score">${json['data'][tag]['left_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="stand stand_Rank">${json['data'][tag]['stand_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="stand stand_score">${json['data'][tag]['stand_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_Rank">${json['data'][tag]['20mBu_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_score">${json['data'][tag]['20mBu_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="situp situp_Rank">${json['data'][tag]['situp_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="situp situp_score">${json['data'][tag]['situp_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="sergent sergent_Rank">${json['data'][tag]['surgent_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="sergent sergent_score">${json['data'][tag]['surgent_score']}</td>
-                                    <td style="width:150px;text-align:center;" class="totals">${json['data'][tag]['total_Rank']}</td>
-                                    <td style="width:150px;text-align:center;" class="avg">${json['data'][tag]['total_Rev']}</td>
+                                    <td style="width:150px;text-align:center;" class="core core_Rank">${json['data'][tag]['core_Rank'] ? json['data'][tag]['core_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="core core_score">${json['data'][tag]['core_score'] ? json['data'][tag]['core_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="m10m m10m_Rank">${json['data'][tag]['10m_Rank'] ? json['data'][tag]['10m_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="m10m m10m_score">${json['data'][tag]['10m_score'] ? json['data'][tag]['10m_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="medicine medicine_Rank">${json['data'][tag]['medicine_Rank'] ? json['data'][tag]['medicine_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="medicine medicine_score">${json['data'][tag]['medicine_score'] ? json['data'][tag]['medicine_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_Rank">${json['data'][tag]['left_Rank'] ? json['data'][tag]['left_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="leftGul leftGul_score">${json['data'][tag]['left_score'] ? json['data'][tag]['left_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="stand stand_Rank">${json['data'][tag]['stand_Rank'] ? json['data'][tag]['stand_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="stand stand_score">${json['data'][tag]['stand_score'] ? json['data'][tag]['stand_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_Rank">${json['data'][tag]['20mBu_Rank'] ? json['data'][tag]['20mBu_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="m20mBu m20mBu_score">${json['data'][tag]['20mBu_score'] ? json['data'][tag]['20mBu_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="situp situp_Rank">${json['data'][tag]['situp_Rank'] ? json['data'][tag]['situp_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="situp situp_score">${json['data'][tag]['situp_score'] ? json['data'][tag]['situp_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="sergent sergent_Rank">${json['data'][tag]['surgent_Rank'] ? json['data'][tag]['surgent_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="sergent sergent_score">${json['data'][tag]['surgent_score'] ? json['data'][tag]['surgent_score'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="totals">${json['data'][tag]['total_Rank'] ? json['data'][tag]['total_Rank'] : '-'}</td>
+                                    <td style="width:150px;text-align:center;" class="avg">${json['data'][tag]['total_Rev'] ? json['data'][tag]['total_Rev'] : '-'}</td>
                                 </tr>
                             `;
                         }
