@@ -318,7 +318,6 @@ $query_string = http_build_query(array(
             success: function(data) {
                 json = eval("(" + data + ");");
                 
-                console.log(json);
                 if((!Array.isArray(json))){
                     $("#memoType").val('update');
                     $("#memoIdx").val(json['data'].idx);
