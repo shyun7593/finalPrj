@@ -6,7 +6,9 @@ ini_set('memory_limit', '512M');    // 메모리 제한도 충분히 늘리기
 include('../vendor/autoload.php');
 include_once('../common.php');
 
-$regId = "master";
+$regId = $_SESSION['ss_mb_id'];
+$gradeYear = $_POST['gradeYear'];
+$gradeMonth = $_POST['gradeMonth'];
 
 $client = new Google_Client();
 $client->setApplicationName('Google Sheets API with PHP');
@@ -22,11 +24,6 @@ $service = new Google_Service_Sheets($client);
 // // 스프레드시트 ID 및 시트 이름 설정
 // $spreadsheetId = '1LdNf4_s5CV8SdvMPMad3g_YvxhPOtZcXkq1ktpx10Ek';  // 예: 1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms
 $spreadsheetId = '1RSVMScdHfMOuwQQYApBVNPi8mFr0sutFmiB9kibKRfo';  // 2025-2026 등급컷
-$range3 = '표백등!B3:F'; // 3월
-$range6 = '표백등!H3:L'; // 6월
-$range9 = '표백등!N3:R'; // 9월
-$range0 = '표백등!T3:X'; // 가채점
-$range1 = '표백등!Z3:AD'; // 수능
 
 function getCodeMap() {
     static $map = null;
@@ -46,190 +43,70 @@ function subjectCode($subject) {
     return isset($map[$subject]) ? $map[$subject] : $subject;
 }
 
-function delPrevDate($gType){
-    sql_query("DELETE FROM g5_gradeCut WHERE gradeYear = '". date('Y') ."' AND gradeType = '{$gType}'");
+function delPrevDate($gradeYear,$gType){
+    sql_query("DELETE FROM g5_gradeCut WHERE gradeYear = '{$gradeYear}' AND gradeType = '{$gType}'");
+}
+
+switch($gradeMonth){
+    case 'C60000001': // 3모
+        $range = '표백등!B3:F'; // 3월        
+        break;
+    case 'C60000002': // 6모
+        $range = '표백등!H3:L'; // 6월
+        break;
+    case 'C60000003': // 9모
+        $range = '표백등!N3:R'; // 9월
+        break;
+    case 'C60000004': // 가채점
+        $range = '표백등!T3:X'; // 가채점
+        break;
+    case 'C60000005': // 수능
+        $range = '표백등!Z3:AD'; // 수능
+        break;
+    
 }
 
 try {
-    // 3월
-    $response3 = $service->spreadsheets_values->get($spreadsheetId, $range3);
-    $values3 = $response3->getValues();
-    // 6월
-    $response6 = $service->spreadsheets_values->get($spreadsheetId, $range6);
-    $values6 = $response6->getValues();
-    // 9월
-    $response9 = $service->spreadsheets_values->get($spreadsheetId, $range9);
-    $values9 = $response9->getValues();
-    // 가채점
-    $response0 = $service->spreadsheets_values->get($spreadsheetId, $range0);
-    $values0 = $response0->getValues();
-    // 수능
-    $response1 = $service->spreadsheets_values->get($spreadsheetId, $range1);
-    $values1 = $response1->getValues();
+    $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+    $values = $response->getValues();
 } catch (Exception $e) {
     echo '오류 발생';
     exit;
 }
-if (empty($values3)) {
+
+
+if (empty($values)) {
     
 } else {
-    delPrevDate('C60000001');
-    foreach ($values3 as $row) {
+    delPrevDate($gradeYear,$gradeMonth);
+    foreach ($values as $row) {
         $subCode = subjectCode($row[0]);
         sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
+            gradeYear = '{$gradeYear}',
             gradeCode = '{$subCode}',
             gradeScore = '{$row[1]}',
             gradePscore = '{$row[2]}',
             gradeSscore = '{$row[3]}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
-            gradeType = 'C60000001'
+            gradeType = '{$gradeMonth}'
         ");
         if(strstr($subCode,'C2004')){
             $subCode2 = str_replace('C2004', 'C2005', $subCode);
             sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
+                gradeYear = '{$gradeYear}',
                 gradeCode = '{$subCode2}',
                 gradeScore = '{$row[1]}',
                 gradePscore = '{$row[2]}',
                 gradeSscore = '{$row[3]}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
-                gradeType = 'C60000001'
-            ");
-        }
-    }
-}
-
-if (empty($values6)) {
-    
-} else {
-    delPrevDate('C60000002');
-    foreach ($values6 as $row) {
-        $subCode = subjectCode($row[0]);
-        
-        sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
-            gradeCode = '{$subCode}',
-            gradeScore = '{$row[1]}',
-            gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
-            gGrade = '{$row[4]}',
-            regId = '{$regId}',
-            gradeType = 'C60000002'
-        ");
-
-        if(strstr($subCode,'C2004')){
-            $subCode2 = str_replace('C2004', 'C2005', $subCode);
-            sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
-                gradeCode = '{$subCode2}',
-                gradeScore = '{$row[1]}',
-                gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
-                gGrade = '{$row[4]}',
-                regId = '{$regId}',
-                gradeType = 'C60000002'
+                gradeType = '{$gradeMonth}'
             ");
         }
     }
 }
 
 
-
-if (empty($values9)) {
-    
-} else {
-    delPrevDate('C60000003');
-    foreach ($values9 as $row) {
-        $subCode = subjectCode($row[0]);
-        sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
-            gradeCode = '{$subCode}',
-            gradeScore = '{$row[1]}',
-            gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
-            gGrade = '{$row[4]}',
-            regId = '{$regId}',
-            gradeType = 'C60000003'
-        ");
-        if(strstr($subCode,'C2004')){
-            $subCode2 = str_replace('C2004', 'C2005', $subCode);
-            sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
-                gradeCode = '{$subCode2}',
-                gradeScore = '{$row[1]}',
-                gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
-                gGrade = '{$row[4]}',
-                regId = '{$regId}',
-                gradeType = 'C60000003'
-            ");
-        }
-    }
-}
-
-if (empty($values0)) {
-} else {
-    delPrevDate('C60000004');
-    foreach ($values0 as $row) {
-        $subCode = subjectCode($row[0]);
-        sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
-            gradeCode = '{$subCode}',
-            gradeScore = '{$row[1]}',
-            gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
-            gGrade = '{$row[4]}',
-            regId = '{$regId}',
-            gradeType = 'C60000004'
-        ");
-        if(strstr($subCode,'C2004')){
-            $subCode2 = str_replace('C2004', 'C2005', $subCode);
-            sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
-                gradeCode = '{$subCode2}',
-                gradeScore = '{$row[1]}',
-                gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
-                gGrade = '{$row[4]}',
-                regId = '{$regId}',
-                gradeType = 'C60000004'
-            ");
-        }
-    }
-}
-
-if (empty($values1)) {
-} else {
-    delPrevDate('C60000005');
-    foreach ($values1 as $row) {
-        $subCode = subjectCode($row[0]);
-        sql_query("INSERT INTO g5_gradeCut set
-            gradeYear = '2025',
-            gradeCode = '{$subCode}',
-            gradeScore = '{$row[1]}',
-            gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
-            gGrade = '{$row[4]}',
-            regId = '{$regId}',
-            gradeType = 'C60000005'
-        ");
-        if(strstr($subCode,'C2004')){
-            $subCode2 = str_replace('C2004', 'C2005', $subCode);
-            sql_query("INSERT INTO g5_gradeCut set
-                gradeYear = '2025',
-                gradeCode = '{$subCode2}',
-                gradeScore = '{$row[1]}',
-                gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
-                gGrade = '{$row[4]}',
-                regId = '{$regId}',
-                gradeType = 'C60000005'
-            ");
-        }
-    }
-}
 echo 'success';
 ?>

@@ -50,11 +50,11 @@ if($res['idx']){
                 <?if($_SESSION['ss_mb_id'] == $res['regId'] || $_SESSION['mb_profile'] == 'C40000001'){?>
                     <button type="button" class="btn-n btn-large active" onclick="viewUpdateForm()">수정하기</button>    
                 <?}?>
-                <button type="button" class="btn-n btn-large" onclick="goBack()">뒤로가기</button>
+                <button type="button" class="btn-n btn-large no-hover" onclick="goBack()">뒤로가기</button>
             </div>
             <div class="updateView" style="display: none;text-align: center;">
                 <button type="button" class="btn-n btn-large active" onclick="saveNotice('<?=$res['idx']?>')">저장하기</button>
-                <button type="button" class="btn-n btn-large" onclick="resetUpdate()">취소</button>
+                <button type="button" class="btn-n btn-large no-hover" onclick="resetUpdate()">취소</button>
             </div>
         </section>
         <!-- } 최근 주문내역 끝 -->

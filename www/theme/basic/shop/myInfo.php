@@ -94,13 +94,21 @@ $res = sql_fetch($sql);
                 </table>
             </div>
             <div style="display: flex;justify-content:right;gap:10px;margin-top:10px;">
-                <input type="button" id="resetInfo" value="취소" style="cursor:pointer;height:40px;width:100px;" class="btn-n btn-green">
+                <input type="button" id="resetInfo" value="취소" style="cursor:pointer;height:40px;width:100px;" class="btn-n btn-green no-hover">
                 <input type="button" id="updateInfo" value="수정" style="cursor:pointer;height:40px;width:100px;" class="btn-n active">
             </div>
             <?if($_SESSION['mb_profile'] == 'C40000001'){?>
                 <div id="wrapper_title">데이터 업데이트</div>
-                <div style="margin-top: 20px;">
-                    <input type="button" id="updateGradeCut" value="등급컷" style="cursor:pointer;height:40px;width: 100px;" class="btn-n active">
+                <div>
+                    <h2>등급컷</h2>
+                    <div style="margin-top: 10px;">
+                        <?
+                            $csql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C60000000' AND useYn = 1");
+                            foreach($csql as $cs => $c){
+                        ?>
+                            <button type="button" value="<?=$c['code']?>" style="cursor:pointer;height:40px;width: 100px;" class="updateGradeCut btn-n active no-hover"><?=$c['codeName']?></button>
+                        <?}?>
+                    </div>
                 </div>
             <?}?>
         </section>
@@ -296,9 +304,12 @@ function changePass(){
 }
 
 
-$("#updateGradeCut").on('click',function(){
+$(".updateGradeCut").on('click',function(){
+    let code = $(this).val();
+    let mon = $(this).text();
+    
     swal({
-        title : '<?=date('Y')?> 등급컷',
+        title : '<?=date('Y')?>' + '년 ' + mon +' 등급컷',
         text : '수정하시겠습니까?',
         type : "info",
         showCancelButton : true,
@@ -317,6 +328,7 @@ $("#updateGradeCut").on('click',function(){
                     type: "POST",
                     data: {
                         gradeYear: <?=date('Y')?>,
+                        gradeMonth: code,
                     },
                     contentType: "application/x-www-form-urlencoded",
                     async: true,
