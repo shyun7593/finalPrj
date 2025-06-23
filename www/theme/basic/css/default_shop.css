@@ -496,14 +496,14 @@ border:1px solid #558ab7 !important;
     }
 }
 
-#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #0c2233;z-index: 10;transition: transform 0.3s ease;}
+#hd_menu {position:fixed;margin:0 auto;height: 100%;width: 250px;border-right: 1px solid #e1e1e1;background-color: #0c2233;z-index: 10;transition: transform 0.5s ease;}
 #hd_menu.hidden {
     transform: translateX(-230px);
   }
 #toggle_menu{position:absolute;transform: translateX(-10px);border: unset;border-radius: 50%;padding: 5px;color: white;background: #0c2233;transform: translate(-16px, 23px);};
 #hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
 #hd_menu button#menu_open {float:left;width:265px;height:50px;border:0;background:#3a8afd;text-align:left;color:#fff;padding:0 20px;font-weight:bold;font-size:1.167em}
-#hide_btn{transition: transform 0.3s ease;}
+#hide_btn{transition: transform 0.5s ease;}
 #hide_btn.hidden{transform: rotate(180deg);}
 .hd_menu {float:left;display:inline-block;width:935px;font-size:1.3em}
 .hd_menu:after {display:block;visibility:hidden;clear:both;content:""}
@@ -562,10 +562,29 @@ box-shadow:0 2px 5px rgba(0,0,0,0.2)}
 #category_all_bg {display:none;background:rgba(0,0,0,0.1);width:100%;height:100%;position:fixed;left:0;top:0;z-index:999}
 #category .no-cate{text-align:center;padding:15px}
 
+ /* 초기 상태 제어용 (transition 없음) */
+body.menu-closed #hd_menu {
+    display: none;
+    transition: none;
+  }
+  body.menu-closed #wrapper {
+    margin-left: 20px;
+    width: calc(100% - 40px);
+    transition: none;
+  }
+  body.menu-closed #hide_btn {
+    display: none;
+    transition: none;
+  }
+/* transition 비활성화용 클래스 */
+.no-transition {
+    transition: none !important;
+  }
+  
 
 /* 중간 레이아웃 */
 /* #wrapper {z-index:5;margin:0 auto;width:1200px;position:relative} */
-#wrapper {z-index:5;position:relative;width:calc(100% - 250px);font-size: 1.2em;min-width: 1400px;padding: 20px 50px 0 50px;margin-left: 250px;transition: margin-left 0.3s ease, width 0.3s ease;}
+#wrapper {z-index:5;position:relative;width:calc(100% - 250px);font-size: 1.2em;min-width: 1400px;padding: 20px 50px 0 50px;margin-left: 250px;transition: margin-left 0.5s ease, width 0.5s ease;}
 #wrapper.full {margin-left:20px;width: calc(100% - 20px);}
 #wrapper.is_community{background:#fff}
 #wrapper:after {display:block;visibility:hidden;clear:both;content:""}

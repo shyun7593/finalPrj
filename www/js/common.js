@@ -754,8 +754,55 @@ $(function() {
     });
 });
 
-function menuOnOff(e){
-    document.querySelector("#hd_menu").classList.toggle('hidden');
-    document.querySelector("#wrapper").classList.toggle('full');
-    document.querySelector("#hide_btn").classList.toggle('hidden');
-}
+// function menuOnOff(e){
+//     document.querySelector("#hd_menu").classList.toggle('hidden');
+//     document.querySelector("#wrapper").classList.toggle('full');
+//     document.querySelector("#hide_btn").classList.toggle('hidden');
+// }
+
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const menuStatus = localStorage.getItem('menuStatus') || 'open';
+    const body = document.body;
+    const menu = document.querySelector("#hd_menu");
+    const wrapper = document.querySelector("#wrapper");
+    const hideBtn = document.querySelector("#hide_btn");
+  
+    // 1) transition 제거
+    wrapper.classList.add('no-transition');
+    body.classList.remove('menu-closed');
+    // 2) 메뉴 상태에 따라 클래스 세팅
+    if (menuStatus === 'closed') {
+      menu.classList.add('hidden');
+      wrapper.classList.add('full');
+      hideBtn.classList.add('hidden');
+    } else {
+      menu.classList.remove('hidden');
+      wrapper.classList.remove('full');
+      hideBtn.classList.remove('hidden');
+    }
+  
+    // 3) 다음 프레임에서 transition 활성화
+    requestAnimationFrame(() => {
+      wrapper.classList.remove('no-transition');
+    });
+  });
+  
+  
+  
+  // 버튼으로 상태 전환
+  function menuOnOff() {
+    const menu = document.querySelector("#hd_menu");
+    const wrapper = document.querySelector("#wrapper");
+    const hideBtn = document.querySelector("#hide_btn");
+  
+    const isClosing = !menu.classList.contains('hidden');
+  
+    menu.classList.toggle('hidden');
+    wrapper.classList.toggle('full');
+    hideBtn.classList.toggle('hidden');
+  
+    localStorage.setItem('menuStatus', isClosing ? 'closed' : 'open');
+  }
+  
+
