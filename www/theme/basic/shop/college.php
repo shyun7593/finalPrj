@@ -31,12 +31,15 @@ $res = sql_query("select
                     gcs.*, 
                     (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx) as 'su', 
                     (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx) as 'ju',
-                    gac.idx as 'myIdx'
+                    gac.idx as 'myIdx',
+                    gcc.codeName as 'areaName'
                 from g5_college gc
                     LEFT JOIN g5_college_subject gcs on
                         gc.cIdx = gcs.collegeIdx
                     LEFT JOIN g5_add_college gac on
                         gac.subIdx = gcs.sIdx
+                    JOIN g5_cmmn_code gcc on
+                        gcc.code = gcs.areaCode
                 where 
                     {$sql_add}
                 ORDER BY gc.cName, gcs.sName");
@@ -104,57 +107,74 @@ $query_string = http_build_query(array(
     i {
         font-size:1.5em;
     }
+
+    .myicon{
+        display: none;
+    }
+    .myicon.view{
+        display: block;
+    }
+    .no-view{
+        display: none;
+    }
 </style>
 
 <!-- 등급관리 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns: 1fr;">
-            <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
-                <div class="tbl_wrap border-tb" style="margin-bottom: 15px;">
-                    <table class="tbl_head01">
-                        <colgroup width="10%">
-                        <colgroup width="10%">
-                        <colgroup width="75%">
-                        <colgroup width="5%">
-                        <tbody>
-                            <tr>
-                                <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
-                                <td style="padding:10px;">
-                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="stype" id="stype">
-                                        <option value="" <?if(!$stype) echo "selected";?>>정시/수시</option>
-                                        <option value="jungsi" <?if($stype == 'jungsi') echo "selected";?>>정시</option>
-                                        <option value="susi" <?if($stype == 'susi') echo "selected";?>>수시</option>
-                                    </select>
-                                </td>
-                                <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="대학명, 학과명" class="frm_input" style="width: 100%;padding:0 10px;" value="<?=$text?>"></td>
-                                <td style="padding:10px;"><input type="submit" class="search-btn" value=""></td>
-                            </tr>
-                        </tbody>
-                    </table>
+            
+            <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                    <div>
+                        <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
+                        <button type="button" data-value="정시" class="ctype btn-n" onclick="viewTypeChange(event)">정시</button>
+                        <button type="button" data-value="수시" class="ctype btn-n" onclick="viewTypeChange(event)">수시</button>
+                    </div>
                 </div>
-            </form>
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
+                    <div>
+                        <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
+                        <?
+                            $asql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C10000000' AND useYN = 1");
+                            foreach($asql as $as => $a){
+                        ?>
+                            <button type="button" data-value="<?=$a['codeName']?>" class="areaCode btn-n" onclick="viewArea(event,'<?=$a['codeName']?>')"><?=$a['codeName']?></button>
+                        <?}?>
+                    </div>
+                </div>
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
+                    <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
+                        <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="대학명, 학과명" class="frm_input" style="width: 100%;padding:0 10px;" value="<?=$text?>"></td>
+                        <td style="padding:10px;"><input type="button" class="search-btn" value="" onclick="viewCollege()"></td>
+                    </div>
+                </div>
+            </div>
 <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <h2>대학 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 학과 수 : <?= $cnt['cnt']?></h2>
+            <h2>대학 리스트<span style="font-size: small;" class="cntTotal">&nbsp;&nbsp;&nbsp; 학과 수 : <?= $cnt['cnt']?></h2>
             <div class="smb_my_more" style="cursor:pointer;">
                 <!-- <a onclick="popupBranch('insert','')">등록</a> -->
             </div>
-            <?if($cnt['cnt']>0){?>
-            <div style="display: grid;grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));gap: 20px;margin-top:20px;height: 74vh;overflow-y: scroll;padding:10px;">
+            
+            <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));grid-auto-rows: 150px;gap: 20px;margin-top:20px;height: 69vh;overflow-y: scroll;padding:10px;">
                 <?
                     foreach($res as $k => $v){
                 ?>
-                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov">
+                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov colleges" data-area="<?=$v['areaName']?>" data-college="<?=$v['cName']?>" data-subject="<?=$v['sName']?>" data-susi="<?=$v['su']?>" data-jungsi="<?=$v['ju']?>">
                         <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
                             <div onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
                             </div>
                             <div style="height:100%;padding:10px;display: flex;flex-direction: column;justify-content: space-between;" onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <div>
-                                    <div style="font-weight: 900;font-size:1.4em;"><?=$v['cName']?></div>
+                                    <div style="font-weight: 900;font-size:1.3em;"><?=$v['cName']?></div>
                                     <div style="color: gray;font-size:1.1em"><?=$v['sName']?></div>
+                                    <div style="color: gray;font-size:1em"># <?=$v['areaName']?></div>
                                 </div>
-                                <div style="display: flex;gap:15px;align-items:center;">
+                                <div style="display: flex;gap:5px;align-items:center;margin-top:5px;width:100%;">
                                     <?if($v['ju']>0 && (!$stype || $stype == 'jungsi')){?>
                                     <div style="width: 45%;background: #ffc0cb70;border-radius: 15px;text-align: center;font-weight: bold;color:hotpink;padding:3px;">
                                         정시
@@ -168,19 +188,16 @@ $query_string = http_build_query(array(
                                 </div>
                             </div>
                             <div style="height: 100%;text-align:end;">
-                                <?if($v['myIdx']){?>
-                                        <i class="xi-star" style="color:hotpink;" onclick="addCollege('remove','<?=$v['sIdx']?>')"></i>
-                                    <?}else{?>
-                                        <i class="xi-star-o" onclick="addCollege('add','<?=$v['sIdx']?>')"></i>
-                                <?}?>
+                                <i class="xi-star<?if($v['myIdx']) echo " view";?> myicon" style="color:hotpink;" onclick="addCollege(event,'remove','<?=$v['sIdx']?>')"></i>
+                                <i class="xi-star-o<?if(!$v['myIdx']) echo " view";?> myicon" onclick="addCollege(event,'add','<?=$v['sIdx']?>')"></i>
                             </div>
                         </div>
                     </div>
                 <?}?>
             </div>
-        <?} else{?>
-                    <div style="display:flex;align-items:center;height: 200px;width:100%;justify-content:center;padding:20px;font-size: 1.5em;font-weight: 800;">검색 결과가 없습니다.</div>
-                <?}?>
+        
+            <div class="no-college<?if($cnt['cnt'] > 0) echo ' no-view';?>" style="display:none;align-items:center;height: 200px;width:100%;justify-content:center;padding:20px;font-size: 1.5em;font-weight: 800;">검색 결과가 없습니다.</div>
+        
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
@@ -631,14 +648,8 @@ $query_string = http_build_query(array(
         $('#collegePopup').fadeOut(); // 팝업 숨기기
     });
 
-    function fsearch_submit(e) {
-    }
-    $("#stype").on("change",function(){
-        $("#text").val('');
-        $("#fsearch").submit();
-    });
-
-    function addCollege(type,idx){
+    function addCollege(e,type,idx){
+        let icons = e.currentTarget;
         let title = "";
         let text = "";
         switch(type){
@@ -649,7 +660,7 @@ $query_string = http_build_query(array(
                 text = "관심 대학에서 제외 하시겠습니까?";
                 break;
         }
-
+        
         swal({
             title : '',
             text : text,
@@ -678,9 +689,11 @@ $query_string = http_build_query(array(
                         success: function(data) {
                             if(data == 'success'){
                                 swal('성공!','저장하였습니다.','success');
+                                icons.parentNode.children.forEach((el,i,arr)=>{
+                                    el.classList.toggle('view');
+                                });
                                 setTimeout(() => {
                                     swal.close();
-                                    location.reload();
                                 }, 1500);
                             }
                         }
@@ -688,6 +701,183 @@ $query_string = http_build_query(array(
                 }
             }
         );
+    }
+
+    function returnView(){
+        document.querySelectorAll('.colleges').forEach((el,i,arr)=>{
+            el.style.display = "";
+        });
+    }
+
+    function viewTypeChange(e){
+        document.querySelectorAll('.ctype').forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('active');
+            } else {
+                el.classList.remove('active');
+            }
+        });
+        viewCollege();
+    }
+
+    function viewArea(e,area){
+        e.currentTarget.classList.toggle('active');
+        
+        if(document.querySelectorAll('.areaCode').length - 1 == document.querySelectorAll('.areaCode.active').length || area == ''){
+            document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                if(el.textContent == '전체'){
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        } else {
+            
+            if(document.querySelectorAll('.areaCode').length - 1 == document.querySelectorAll('.areaCode.active').length || area == ''){
+                document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                    if(el.textContent == '전체'){
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            } else {
+                document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                    if(el.textContent == '전체'){
+                        el.classList.remove('active');
+                    }
+                });
+            }
+        }
+        viewCollege();
+    }
+
+    $("#text").on('keydown',function(e){
+        if(e.keyCode == 13){
+            viewCollege();
+        }
+    });
+
+    function viewCollege(){
+        let cnt = 0;
+        let area = [];
+        let ctype = document.querySelector('.ctype.active').dataset.value;
+        let text = $("#text").val();
+        document.querySelectorAll('.areaCode.active').forEach((el,i,arr)=>{
+            if(el.dataset.value){
+                area.push(el.dataset.value);
+            }
+        });
+        document.querySelectorAll('.colleges').forEach((el,i,arr)=>{
+            if(area.length > 0 && ctype && text){
+                if(ctype == '정시'){
+                    if(area.includes(el.dataset.area) && (el.dataset.college.includes(text) || el.dataset.subject.includes(text)) && el.dataset.jungsi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                } else if(ctype == '수시'){
+                    if(area.includes(el.dataset.area) && (el.dataset.college.includes(text) || el.dataset.subject.includes(text)) && el.dataset.susi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }
+            } else if(area.length > 0 && ctype && !text){
+                if(ctype == '정시'){
+                    if(area.includes(el.dataset.area) && el.dataset.jungsi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                } else if(ctype == '수시'){
+                    if(area.includes(el.dataset.area) && el.dataset.susi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }    
+            } else if(area.length > 0 && !ctype && text){
+                if(area.includes(el.dataset.area) && (el.dataset.college.includes(text) || el.dataset.subject.includes(text))){
+                    el.style.display = "";
+                    cnt++;
+                } else {
+                    el.style.display = "none";
+                }
+            } else if(area.length > 0 && !ctype && !text){
+                if(area.includes(el.dataset.area)){
+                    el.style.display = "";
+                    cnt++;
+                } else {
+                    el.style.display = "none";
+                }
+            } else if(area.length == 0 && ctype && text){
+                if(ctype == '정시'){
+                    if((el.dataset.college.includes(text) || el.dataset.subject.includes(text)) && el.dataset.jungsi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                } else if(ctype == '수시'){
+                    if((el.dataset.college.includes(text) || el.dataset.subject.includes(text)) && el.dataset.susi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }
+    
+            } else if(area.length == 0 && ctype && !text){
+                if(ctype == '정시'){
+                    if(el.dataset.jungsi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                } else if(ctype == '수시'){
+                    if(el.dataset.susi == 1){
+                        el.style.display = "";
+                        cnt++;
+                    } else {
+                        el.style.display = "none";
+                    }
+                }
+            } else if(area.length == 0 && !ctype && text){
+                if((el.dataset.college.includes(text) || el.dataset.subject.includes(text))){
+                    el.style.display = "";
+                    cnt++;
+                } else {
+                    el.style.display = "none";
+                }
+            } else if(area.length == 0 && !ctype && !text){
+                el.style.display = "";
+                cnt++;
+            }
+        });
+
+        $(".cntTotal").html(`<span style="font-size: small;" class="cntTotal">&nbsp;&nbsp;&nbsp; 학과 수 : ${cnt}</span>`);
+
+        if(cnt == 0){
+            $(".yes-college").css('display','none');
+            $(".no-college").css('display','flex');
+        } else{
+            $(".yes-college").css('display','grid');
+            $(".no-college").css('display','none');
+        }
+
+        if(ctype){
+            console.log('모집', ctype);
+        }
+
+        if(text){
+            console.log('검색', text);
+        }
     }
 </script>
 <!-- } 마이페이지 끝 -->

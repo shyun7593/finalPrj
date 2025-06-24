@@ -218,7 +218,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     <input type="hidden" id="branchIdx" name="branchIdx" value="<?=$branchIdx?>">
                     <input type="hidden" id="gender" name="gender" value="<?=$gender?>">
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div>날&nbsp;&nbsp;&nbsp;짜 : </div>
+                        <div style="font-weight:800;">날&nbsp;&nbsp;&nbsp;짜 : </div>
                         <div>
                             <input type="month" class="frm_input" value="<?=$str_date?>" style="height:35px;" id="str_date" name="str_date" >&nbsp;&nbsp;~&nbsp;&nbsp;
                             <input type="month" class="frm_input" value="<?=$end_date?>" style="height:35px;" id="end_date" name="end_date" >
@@ -232,7 +232,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                         </div>
                     </div>
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div>캠퍼스 : </div>
+                        <div style="font-weight:800;">캠퍼스 : </div>
                         <div>
                             <?if($_SESSION['mb_profile'] == 'C40000001' || $_SESSION['mb_profile'] == 'C40000002'){?>
                             <button type="button" class="btn-n <?if($branchIdx ==  '') echo "active";?>" onclick="viewCampus('')">전체</button>
@@ -247,7 +247,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     </div>
                     <?if($_SESSION['mb_profile'] != 'C40000003'){?>
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div>성&nbsp;&nbsp;&nbsp;별 : </div>
+                        <div style="font-weight:800;">성&nbsp;&nbsp;&nbsp;별 : </div>
                         <div>
                             <button type="button" class="btn-n <?if($gender == '') echo "active";?>" onclick="viewGender('')">전체</button>
                             <button type="button" class="btn-n <?if($gender == 'M') echo "active";?>" onclick="viewGender('M')">남</button>
@@ -256,7 +256,7 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     </div>
                     <?}?>
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div>종&nbsp;&nbsp;&nbsp;목 : </div>
+                        <div style="font-weight:800;">종&nbsp;&nbsp;&nbsp;목 : </div>
                         
                             <div>
                                 <button type="button" class="subje btn-n active" id="tall" onclick="viewTypeChange(event)">전체</button>
