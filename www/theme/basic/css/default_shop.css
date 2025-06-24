@@ -49,13 +49,13 @@ box-sizing:border-box;
 }
 
 .onaction.isactive{
-    background-color: #dfe3f0!important;
+    background-color: #a2a2d5 !important;
     font-weight: 800;
 }
 
 
 .onaction:hover{
-    background-color: #dfe3f0;
+    background-color: #a2a2d5;
     font-weight: bold;
 }
 
@@ -70,9 +70,10 @@ box-sizing:border-box;
 
 
 .btn-n{
+    background-color: #dfe3f0;
     border-radius: 5px;
     padding:5px 10px;
-    border: 1px solid #bfbfbf;
+    border: 1px solid #dfe3f0;
 }
 
 .btn-n.btn-green{

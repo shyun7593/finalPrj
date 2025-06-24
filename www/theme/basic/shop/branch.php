@@ -435,6 +435,7 @@ $query_string = http_build_query(array(
             function(isConfirm){
                 if(isConfirm){
                     $("#memberMemo").val(prevMemo);
+                    swal.close();
                 }
             }
         );
