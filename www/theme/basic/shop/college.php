@@ -401,8 +401,10 @@ $query_string = http_build_query(array(
                         html+=`</div>`;
                     }
                     html += `
-                    <p class="p_title">접수/마감일</p>
-                        <div class="inner_Cont">
+                    </div>
+                    <div>
+                        <p class="p_title">접수/마감일</p>
+                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
                             <table style="text-align:center;" border="1">
                                 <colgroup width='*'>
                                 <colgroup width='*'>
@@ -433,8 +435,6 @@ $query_string = http_build_query(array(
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div>
                         <p class="p_title">과목별 점수 반영표</p>
                         <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
                     `;
@@ -905,14 +905,6 @@ $query_string = http_build_query(array(
         } else{
             $(".yes-college").css('display','grid');
             $(".no-college").css('display','none');
-        }
-
-        if(ctype){
-            console.log('모집', ctype);
-        }
-
-        if(text){
-            console.log('검색', text);
         }
     }
 </script>
