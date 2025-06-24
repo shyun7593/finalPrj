@@ -159,7 +159,7 @@ $query_string = http_build_query(array(
                 <!-- <a onclick="popupBranch('insert','')">등록</a> -->
             </div>
             
-            <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));grid-auto-rows: 150px;gap: 20px;margin-top:20px;height: 69vh;overflow-y: scroll;padding:10px;">
+            <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));grid-auto-rows: 160px;gap: 20px;margin-top:20px;height: 69vh;overflow-y: scroll;padding:10px;">
                 <?
                     foreach($res as $k => $v){
                 ?>
