@@ -163,7 +163,13 @@ foreach ($mres as $k => $v) {
             'KorAdd' => $v['juKorAdd'], // 국어 가산점
             'MathAdd' => $v['juMathAdd'], // 수학 가산점
             'TamAdd' => $v['juTamAdd'], // 탐구 가산점
-            'Psub' => $v['juPsub'] // 실기 종목
+            'Psub' => $v['juPsub'], // 실기 종목
+            'AppStart' => $v['AppStart'], // 원서 시작일
+            'AppEnd' => $v['juAppEnd'], // 원서 종료일
+            'PrStart' => $v['juPrStart'], // 실기 시작일
+            'PrEnd' => $v['juPrEnd'], // 실기 종료일
+            'PsDate' => $v['juPsDate'], // 합격자 발표
+            'Pro' => $v['juPro'] // 교직여부
         ];
     } else {
         $data['jungsi'] = [];

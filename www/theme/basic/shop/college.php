@@ -291,10 +291,14 @@ $query_string = http_build_query(array(
                     if(parseInt(json['data']['jungsi']['person'])){
                         tag = " 명";
                     }
+                    let pro = "";
+                    if(json['data']['jungsi']['Pro']){
+                        pro = " / 교직이수 : " + json['data']['jungsi']['Pro'];
+                    }
                     html += `
                         <div id="jInfo" class="info-Content view">
                             <div>
-                            <p class="p_title">모집 인원 : <span style="font-weight:normal;">${json['data']['jungsi']['person']}${tag}</span></p>`;
+                            <p class="p_title">모집 인원 : <span style="font-weight:normal;">${json['data']['jungsi']['person']}${tag}${pro}</span></p>`;
                     
                     // 요소 반영 비율
                     html += `
@@ -397,6 +401,38 @@ $query_string = http_build_query(array(
                         html+=`</div>`;
                     }
                     html += `
+                    <p class="p_title">접수/마감일</p>
+                        <div class="inner_Cont">
+                            <table style="text-align:center;" border="1">
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <colgroup width='*'>
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">원서</th>
+                                        <th colspan="2">실기</th>
+                                        <th rowspan="2">합격</th>
+                                    </tr>
+                                    <tr>
+                                        <th>접수</th>
+                                        <th>마감</th>
+                                        <th>시작</th>
+                                        <th>마감</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 3px;">${json['data']['jungsi']['AppStart'] ? json['data']['jungsi']['AppStart'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                        <td style="padding:4px 3px;">${json['data']['jungsi']['AppEnd'] ? json['data']['jungsi']['AppEnd'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                        <td style="padding:4px 3px;">${json['data']['jungsi']['PrStart'] ? json['data']['jungsi']['PrStart'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                        <td style="padding:4px 3px;">${json['data']['jungsi']['PrEnd'] ? json['data']['jungsi']['PrEnd'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                        <td style="padding:4px 3px;">${json['data']['jungsi']['PsDate'] ? json['data']['jungsi']['PsDate'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div>
                         <p class="p_title">과목별 점수 반영표</p>
