@@ -163,7 +163,7 @@ $query_string = http_build_query(array(
                 <?
                     foreach($res as $k => $v){
                 ?>
-                    <div style="height:150px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov colleges" data-area="<?=$v['areaName']?>" data-college="<?=$v['cName']?>" data-subject="<?=$v['sName']?>" data-susi="<?=$v['su']?>" data-jungsi="<?=$v['ju']?>">
+                    <div style="height:160px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov colleges" data-area="<?=$v['areaName']?>" data-college="<?=$v['cName']?>" data-subject="<?=$v['sName']?>" data-susi="<?=$v['su']?>" data-jungsi="<?=$v['ju']?>">
                         <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
                             <div onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
