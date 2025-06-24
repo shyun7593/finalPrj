@@ -49,13 +49,13 @@ box-sizing:border-box;
 }
 
 .onaction.isactive{
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    background-color: #ebeef9 !important;
     font-weight: 800;
 }
 
 
 .onaction:hover{
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: #ebeef9;
     font-weight: bold;
 }
 
@@ -73,7 +73,7 @@ box-sizing:border-box;
     background-color: #dfe3f0;
     border-radius: 5px;
     padding:5px 10px;
-    border: 1px solid rgba(0,0,0,.1);
+    border: 1px solid #dfe3f0;
 }
 
 .btn-n.btn-green{
