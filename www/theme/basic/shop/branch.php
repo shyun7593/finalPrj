@@ -464,7 +464,6 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
-                console.log(json);
                 showMemoView(json,$("#showMemoMonth").val());
                 const target = document.getElementById('fsearch');
                 if (target) {
@@ -662,7 +661,6 @@ $query_string = http_build_query(array(
                 return false;
             },
             success: function(data) {
-                console.log(data);
                 const count = Object.keys(data['monthList']).length;
 
                 const getValue = (monthCode, subject, field) => {

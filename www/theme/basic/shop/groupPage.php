@@ -516,7 +516,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -559,7 +559,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -597,7 +597,7 @@ function updateMember(no){
                         //     text: obj.ojName
                         // }));
                     });
-                    console.log(json);
+                    
                 }
             });
         }
@@ -651,7 +651,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -699,7 +699,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });

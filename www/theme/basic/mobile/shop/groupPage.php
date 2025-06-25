@@ -374,7 +374,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -417,7 +417,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });

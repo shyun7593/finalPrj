@@ -662,12 +662,11 @@ $query_string = http_build_query(array(
                     $(".top_menu").on('click',function(){
                         let wView =$(this).data('type');
                         let rView =$(this).data('rm');
-                         console.log(wView,rView);
                         
-                            $(`#${wView}`).addClass('view');
-                            $(`.${wView}`).addClass('active');
-                            $(`#${rView}`).removeClass('view');
-                            $(`.${rView}`).removeClass('active');
+                        $(`#${wView}`).addClass('view');
+                        $(`.${wView}`).addClass('active');
+                        $(`#${rView}`).removeClass('view');
+                        $(`.${rView}`).removeClass('active');
                         
                     });
                }, 0);

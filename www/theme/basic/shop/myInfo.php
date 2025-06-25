@@ -231,7 +231,7 @@ $("#updateInfo").on('click',function(){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -291,7 +291,7 @@ function changePass(){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -333,7 +333,6 @@ $(".updateGradeCut").on('click',function(){
                     contentType: "application/x-www-form-urlencoded",
                     async: true,
                     error: function(xhr, status, error) {
-                        console.log("에러 상태:", status, "에러 메시지:", error);
                         $('.sa-button-container').css('display','flex');
                         swal('관리자에게 문의하세요.','에러가 발생하였습니다.','error');
                         return false;
@@ -344,7 +343,6 @@ $(".updateGradeCut").on('click',function(){
                             swal('성공!','성공적으로 수정되었습니다.','success');
                         } else {
                             swal('관리자에게 문의하세요.','에러가 발생하였습니다.','error');
-                            console.log(data);
                         }
                     }
                 });
@@ -370,7 +368,6 @@ function viewStudent(){
                 return false;
             },
             success: function(data) {
-                console.log(data);
                 const count = Object.keys(data['monthList']).length;
 
                 const getValue = (monthCode, subject, field) => {

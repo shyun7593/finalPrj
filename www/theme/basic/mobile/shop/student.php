@@ -390,7 +390,7 @@ function updateMember(no){
                     //     text: obj.ojName
                     // }));
                 });
-                console.log(json);
+                
             }
         });
         $('#popupBackground').fadeIn(); // 배경 표시
@@ -450,7 +450,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -493,7 +493,7 @@ function updateMember(no){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -529,7 +529,7 @@ function updateMember(no){
                 return false;
             },
             success: function(data) {
-                console.log(data);
+                
                 const count = Object.keys(data['monthList']).length;
 
                 const getValue = (monthCode, subject, field) => {

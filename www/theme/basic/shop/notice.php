@@ -295,7 +295,7 @@ const editor = new toastui.Editor({
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });

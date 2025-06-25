@@ -155,7 +155,7 @@ if($res['idx']){
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });

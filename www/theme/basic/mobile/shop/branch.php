@@ -430,7 +430,6 @@ $query_string = http_build_query(array(
                         //     text: obj.ojName
                         // }));
                     });
-                    console.log(json);
                 }
             });
         }
@@ -480,7 +479,6 @@ $query_string = http_build_query(array(
                     //     text: obj.ojName
                     // }));
                 });
-                console.log(json);
             }
         });
         $('#popupBackground').fadeIn(); // 배경 표시
@@ -542,7 +540,7 @@ $query_string = http_build_query(array(
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -594,7 +592,7 @@ $query_string = http_build_query(array(
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });
@@ -637,7 +635,7 @@ $query_string = http_build_query(array(
                                     location.reload();
                                 }, 1500);
                             } else {
-                                console.log(data);
+                                
                             }
                         }
                     });

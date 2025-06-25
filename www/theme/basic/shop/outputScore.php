@@ -395,7 +395,7 @@ $query_string = http_build_query(array(
         $(".school").text(data['info']['school'] ? data['info']['school'] : '');
         $(".layer").text(data['info']['layer'] ? data['info']['layer'] : '');
         $(".gender").text(data['info']['gender'] ? data['info']['gender'] : '');
-        console.log(data);
+        
         if(data['scoreData'][month]){
             $("#kor_Code").val(data['scoreData'][month]['data']['국어']['subCode'] ? data['scoreData'][month]['data']['국어']['subCode']  : '');
             $("#math_Code").val(data['scoreData'][month]['data']['수학']['subCode'] ? data['scoreData'][month]['data']['수학']['subCode']  : '');
@@ -547,7 +547,6 @@ $query_string = http_build_query(array(
             success: function (res) {
                 const data = JSON.parse(res);
                 cache[key] = data;
-                console.log(data);
                 if(prefix != 'eng' && prefix != 'his'){
                     $(`input[name='${prefix}_Pscore']`).val(data.pscore);
                     $(`input[name='${prefix}_Sscore']`).val(data.sscore);
