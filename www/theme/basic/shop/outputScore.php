@@ -25,7 +25,7 @@ $query_string = http_build_query(array(
 
 <style>
     .outputScore table tr th{
-        background-color: #dfe3f0 !important;
+        background-color: rgba(31, 119, 180,0.1) !important;
     }
     .outputScore th, .outputScore td{
         border: 1px solid #d3d3d3 !important;   
