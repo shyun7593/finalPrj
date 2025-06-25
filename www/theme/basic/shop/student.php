@@ -298,17 +298,17 @@ $query_string = http_build_query(array(
             <div class="tbl_wrap" >
                 <table class="tbl_head01 tbl_2n_color">
                     <thead>
-                        <th style="letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;"></th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="5">국어</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="5">수학</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="2">영어</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="5">탐구Ⅰ</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="5">탐구Ⅱ</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;border-right:1px solid #d3d3d3;" colspan="2">한국사</th>
-                        <th style="color:black;letter-spacing: 1.2px;background:#dfe3f0 !important;" colspan="3">제2외국어</th>
+                        <th style="letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;"></th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="5">국어</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="5">수학</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="2">영어</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="5">탐구Ⅰ</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="5">탐구Ⅱ</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;border-right:1px solid #d3d3d3;" colspan="2">한국사</th>
+                        <th style="color:black;letter-spacing: 1.2px;background:rgba(31, 119, 180,0.1) !important;" colspan="3">제2외국어</th>
                     </thead>
                     <tbody>
-                        <tr style="text-align: center;background-color: #dfe3f0;font-weight: bold;">
+                        <tr style="text-align: center;background-color: rgba(31, 119, 180,0.1);font-weight: bold;">
                             <td>구분</td>
                             <td>과목</td>
                             <td>원</td>
@@ -411,36 +411,36 @@ $query_string = http_build_query(array(
                             <table class="tbl_head01 tbl_2n_color" style="width: auto;">
                                 <thead>
                                     <tr class="headd">
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:#dfe3f0;border-right:1px solid #d3d3d3;" rowspan="2">날짜</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:50px;width:50px;background:#dfe3f0;border-right:1px solid #d3d3d3;" rowspan="2">순위</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='core' colspan="2">배근력</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='m10m' colspan="2">10m왕복</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='medicine' colspan="2">메디신</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='leftGul' colspan="2">좌전굴</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='stand' colspan="2">제멀</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='m20mBu' colspan="2">20m부저</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='situp' colspan="2">윗몸</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:#dfe3f0;border-right:1px solid #d3d3d3;" class='sergent' colspan="2">서전트</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3;" rowspan="2">총점</th>
-                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3;" rowspan="2">평균</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" rowspan="2">날짜</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" rowspan="2">순위</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='core' colspan="2">배근력</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='m10m' colspan="2">10m왕복</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='medicine' colspan="2">메디신</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='leftGul' colspan="2">좌전굴</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='stand' colspan="2">제멀</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='m20mBu' colspan="2">20m부저</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='situp' colspan="2">윗몸</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:120px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" class='sergent' colspan="2">서전트</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" rowspan="2">총점</th>
+                                        <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:0;z-index:13;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;" rowspan="2">평균</th>
                                     </tr>
                                 <tr class="sub-header">
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='core'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='core'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='m10m'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='m10m'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='medicine'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='medicine'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='leftGul'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='leftGul'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='stand'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='stand'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='m20mBu'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='m20mBu'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='situp'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='situp'>점수</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='sergent'>기록</th>
-                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:#dfe3f0;border-right:1px solid #d3d3d3" class='sergent'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='core'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='core'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='m10m'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='m10m'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='medicine'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='medicine'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='leftGul'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='leftGul'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='stand'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='stand'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='m20mBu'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='m20mBu'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='situp'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='situp'>점수</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='sergent'>기록</th>
+                                    <th style="color:black;font-weight:800;letter-spacing: 1.2px;position:sticky;top:45px;min-width:60px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3" class='sergent'>점수</th>
                                 </tr>
                             </thead>
                                 <tbody>`;
