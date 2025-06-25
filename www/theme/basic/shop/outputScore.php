@@ -4,30 +4,45 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '성적산출';
 include_once('./_head.php');
 
-if(!$month){
-    $month = 'C60000001';
+
+switch($_SESSION['mb_profile']){
+    case 'C40000001':
+        break;
+    case 'C40000002':
+        $bid = $_SESSION['mb_signature'];
+        break;
 }
 
-if(!$year){
-    $year = date('Y');
+if(!$selMonth){
+    $selMonth = '3모';
 }
 
-$recD = sql_fetch("SELECT regDate FROM g5_gradeCut WHERE gradeType = '{$month}' AND gradeYear = '{$year}' limit 1");
-
-if($_SESSION['mb_student']){
-    $membId = $_SESSION['mb_student'];
-} else {
-    $membId = $member['mb_id'];
-}
-
-$bcnt = sql_query("select COUNT(*) as 'cnt'
-                        from g5_branch");
-
-$m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
-
+$query_string = http_build_query(array(
+    'bid' => $_GET['bid'],
+));
 
 ?>
 
+<style>
+    .outputScore table tr th{
+        background-color: #dfe3f0 !important;
+    }
+    .outputScore th, .outputScore td{
+        border: 1px solid #d3d3d3 !important;   
+        padding:8px 5px !important;
+        text-align: center !important;
+    }
+    .outputScore table input{
+        width:100%;
+        text-align: center;
+    }
+    .isauto{
+        pointer-events: none;
+        border: unset !important;
+        background-color: unset !important;
+        box-shadow: unset !important;
+    }
+</style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
 
@@ -168,28 +183,149 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
     <div id="smb_my_list" style="width: 100%;">
         <!-- 지원대학 시작 { -->
         <section id="smb_my_od">
-            <h2>대학</h2>
-
-            <div class="tbl_wrap border-tb">
-                <table class="tbl_head01">
-                    <colgroup width="*">
-                    <colgroup width="*">
-                    <colgroup width="*">
-                    <colgroup width="*">
-                    <colgroup width="10%">
-                    <thead>
-                        <th>학교명</th>
-                        <th>커트라인</th>
-                        <th>본인점수</th>
-                        <th>지원가능여부</th>
-                        <th>저장시간</th>
-                        <th></th>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
+            
+                <input type="hidden" id="kor_Code" name="kor_Code">
+                <input type="hidden" id="math_Code" name="math_Code">
+                <input type="hidden" id="eng_Code" name="eng_Code">
+                <input type="hidden" id="tam1_Code" name="tam1_Code">
+                <input type="hidden" id="tam2_Code" name="tam2_Code">
+                <input type="hidden" id="his_Code" name="his_Code">
+                <div class="tbl_wrap outputScore" style="width:60vw;">
+                    <table class="tbl_head01 tbl_2n_color">
+                        <colgroup>
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                            <col width="100px">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th rowspan="2">캠퍼스</th>
+                                <td rowspan="2">
+                                <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                                    <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] == 'C40000002') echo 'class="isauto"';?>>
+                                        <option value="">선택</option>
+                                        <?
+                                            $camSql = sql_query("SELECT * FROM g5_branch");
+                                            
+                                            foreach($camSql as $cm => $c){
+                                        ?>
+                                            <option value="<?=$c['idx']?>" <?if($bid == $c['idx']) echo 'selected';?>><?=$c['branchName']?></option>
+                                        <?}?>
+                                    </select>
+                                </form>
+                                </td>
+                                <th colspan="7">성적표</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>국어</th>
+                                <th>수학</th>
+                                <th>영어</th>
+                                <th>탐구1</th>
+                                <th>탐구2</th>
+                                <th>한국사</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">시험구분</th>
+                                <td rowspan="2" class="selMonth">
+                                    <?if($bid){?>
+                                        <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                                            <?
+                                                $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+                                                foreach($msql as $ms => $m){
+                                            ?>
+                                                <option value="<?=$m['code']?>"><?=$m['codeName']?></option>
+                                            <?}?>
+                                        </select>
+                                    <?}else{?>
+                                        캠퍼스 먼저 선택해주세요.
+                                    <?}?>
+                                </td>
+                                <th>과목</th>
+                                <td><input type="text" class="frm_input isauto" name="korSub"></td>
+                                <td><input type="text" class="frm_input isauto" name="mathSub"></td>
+                                <td><input type="text" class="frm_input isauto" name="engSub"></td>
+                                <td><input type="text" class="frm_input isauto" name="tamSub1"></td>
+                                <td><input type="text" class="frm_input isauto" name="tamSub2"></td>
+                                <td><input type="text" class="frm_input isauto" name="hisSub"></td>
+                            </tr>
+                            <tr>
+                                <th>원점수</th>
+                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
+                            </tr>
+                            <tr>
+                                <th>이름</th>
+                                <td class="studentNm">
+                                    <?if($bid){?>
+                                        <select name="selStudent" id="selStudent"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                                            <option value="" <?if(!$selStudent) echo 'selected';?>>선택하세요.</option>
+                                            <?
+                                                $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}'");
+                                                foreach($memsql as $mm => $me){
+                                            ?>
+                                                <option value="<?=$me['mb_no']?>" <?if($selStudent && $selStudent == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
+                                            <?}?>
+                                        </select>
+                                    <?}else{?>
+                                        캠퍼스 먼저 선택해주세요.
+                                    <?}?>
+                                </td>
+                                <th>최고표점</th>
+                                <td class="kor"><input type="number" class="frm_input isauto" name="kor_TopRate"></td>
+                                <td class="math"><input type="number" class="frm_input isauto" name="math_TopRate"></td>
+                                <td></td>
+                                <td class="tam1"><input type="number" class="frm_input isauto" name="tam1_TopRate"></td>
+                                <td class="tam2"><input type="number" class="frm_input isauto" name="tam2_TopRate"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>학교</th>
+                                <td class="school"></td>
+                                <th>표준점수</th>
+                                <td><input type="number" name="kor_Pscore" class="frm_input isauto"></td>
+                                <td><input type="number" name="math_Pscore" class="frm_input isauto"></td>
+                                <td></td>
+                                <td><input type="number" name="tam1_Pscore" class="frm_input isauto"></td>
+                                <td><input type="number" name="tam2_Pscore" class="frm_input isauto"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>학년</th>
+                                <td class="layer"></td>
+                                <th>백분위</th>
+                                <td><input type="text" name="kor_Sscore" class="frm_input isauto"></td>
+                                <td><input type="text" name="math_Sscore" class="frm_input isauto"></td>
+                                <td></td>
+                                <td><input type="text" name="tam1_Sscore" class="frm_input isauto"></td>
+                                <td><input type="text" name="tam2_Sscore" class="frm_input isauto"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>성별</th>
+                                <td class="gender"></td>
+                                <th>등급</th>
+                                <td><input type="text" name="kor_Grade" class="frm_input isauto" /></td>
+                                <td><input type="text" name="math_Grade" class="frm_input isauto" /></td>
+                                <td><input type="text" name="eng_Grade" class="frm_input isauto" /></td>
+                                <td><input type="text" name="tam1_Grade" class="frm_input isauto" /></td>
+                                <td><input type="text" name="tam2_Grade" class="frm_input isauto" /></td>
+                                <td><input type="text" name="his_Grade" class="frm_input isauto" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
         </section>
         <!-- } 지원대학 끝 -->
     </div>
@@ -198,152 +334,229 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
 
 
 <script>
-
-    function viewMonth(e){
-        let id = e.currentTarget.id;
-        location.href = './myscore?month=' + id;
-    }
-
-    function saveGrade(){
-        let month = '<?=$month?>';
-        
-        let gradeArray = $(".mySubgrade");
-
-        let subject = [];
-        let upperCode = [];
-        let origin = [];
-        let sscore = [];
-        let pscore = [];
-        let grade = [];
-
-        let totalGrade = $("#grade").val();
-        let admitt = $("#admittupperCode").val();
-        
-        
-        for(let i = 0; i < gradeArray.length; i++){
-            
-            let row = $(gradeArray[i]);
-
-            if(i != 5 && i != 2 && i != 7 && i != 6){
-                if(!row.find('td:eq(0)').find('input[name="subjectCode"]').val() ||
-                !row.find('td:eq(1)').find('input[type="number"]').val() ||
-                !row.find('td:eq(2)').find('input[type="number"]').val() ||
-                !row.find('td:eq(3)').find('input[type="number"]').val() ||
-                !row.find('td:eq(4)').find('input[type="number"]').val()
-            ){
-                swal("경고!",'제2외국어를 제외한 과목은 필수로 입력해주세요.','warning');
-                setTimeout(() => {
-                    swal.close();
-                }, 1500);
-                return false;
-                }
-            }
-
-            if(i == 2 || i == 5){
-                if(!row.find('td:eq(1)').find('input[type="number"]').val() || 
-                !row.find('td:eq(4)').find('input[type="number"]').val()){
-                    swal("경고!",'점수, 등급을 필수로 입력해주세요.','warning');
-                    setTimeout(() => {
-                        swal.close();
-                    }, 1500);
-                    return false;
-                }
-            }            
-
-            subject.push(row.find('td:eq(0)').find('input[name="subjectCode"]').val());
-            upperCode.push(row.find('td:eq(0)').find('input[name="upperCode"]').val());
-            origin.push(row.find('td:eq(1)').find('input[type="number"]').val());
-            pscore.push(row.find('td:eq(2)').find('input[type="number"]').val());
-            sscore.push(row.find('td:eq(3)').find('input[type="number"]').val());
-            grade.push(row.find('td:eq(4)').find('input[type="number"]').val());
-        }
-
+    let topRate = "";
+    $(document).ready(function(){
         $.ajax({
-            url: "/bbs/myGrade_update.php",
+            url: "/bbs/searchTopRate.php",
             type: "POST",
-            data: {
-                subject : subject,
-                upperCode : upperCode,
-                origin : origin,
-                sscore : sscore,
-                pscore : pscore,
-                grade : grade,
-                month : month,
-                totalGrade : totalGrade,
-                admitt:admitt,
-                id : '<?=$membId?>',
-            },
+            data: {},
             async: false,
             error: function(data) {
-                alert('저장 실패! 관리자에게 문의하세요.');
+                alert('에러가 발생하였습니다.');
+                return false;
             },
             success: function(data) {
-                if(data == 'success'){
-                    swal('성공!','저장하였습니다.','success');
-                    setTimeout(() => {
-                        swal.close();
-                        location.reload();
-                    }, 1500);
-                }
+                topRate = eval("(" + data + ");");
             }
         });
+    })
+    function fsearch_submit(e){
+        
     }
 
-    $("select[name='subject']").on("change",function(){
-            const $row = $(this).closest('tr');
-            $row.find('input[name="origin"]').val('');
-            $row.find('input[name="sscore"]').val('');
-            $row.find('input[name="pscore"]').val('');
-            $row.find('input[name="grade"]').val('');
-        
-        $(this).closest('tr').find('input[name="subjectCode"]').val($(this).val());
+    let json ="";
+
+    $("#bid").on('change',function(){
+        $("#fsearch").submit();
     });
 
+    $("#selStudent").on('change',function(){
+        let vl = $(this).val();
+        if(vl){
+            $.ajax({
+                url: "/bbs/searchScore.php",
+                type: "POST",
+                data: {
+                    mb_no : vl,
+                },
+                async: false,
+                error: function(data) {
+                    alert('에러가 발생하였습니다.');
+                    return false;
+                },
+                success: function(data) {
+                    json = eval("(" + data + ");");
+                    showView(json);
+                }
+            });
+        } else {
+            rePage();
+        }
+    });
+
+    $("#selMonth").on('change',function(){
+        if($("#selStudent").val()){
+            showView(json);
+        }
+    });
+
+    function showView(data){
+        let month = $("#selMonth").val();
+        $(".school").text(data['info']['school'] ? data['info']['school'] : '');
+        $(".layer").text(data['info']['layer'] ? data['info']['layer'] : '');
+        $(".gender").text(data['info']['gender'] ? data['info']['gender'] : '');
+        console.log(data);
+        if(data['scoreData'][month]){
+            $("#kor_Code").val(data['scoreData'][month]['data']['국어']['subCode'] ? data['scoreData'][month]['data']['국어']['subCode']  : '');
+            $("#math_Code").val(data['scoreData'][month]['data']['수학']['subCode'] ? data['scoreData'][month]['data']['수학']['subCode']  : '');
+            $("#eng_Code").val(data['scoreData'][month]['data']['영어']['subCode'] ? data['scoreData'][month]['data']['영어']['subCode']  : '');
+            $("#tam1_Code").val(data['scoreData'][month]['data']['탐구영역1']['subCode'] ? data['scoreData'][month]['data']['탐구영역1']['subCode']  : '');
+            $("#tam2_Code").val(data['scoreData'][month]['data']['탐구영역2']['subCode'] ? data['scoreData'][month]['data']['탐구영역2']['subCode']  : '');
+            $("#his_Code").val(data['scoreData'][month]['data']['한국사']['subCode'] ? data['scoreData'][month]['data']['한국사']['subCode']  : '');
+            $("input[name='kor_Origin']").removeClass('isauto');
+            $("input[name='math_Origin']").removeClass('isauto');
+            $("input[name='eng_Origin']").removeClass('isauto');
+            $("input[name='tam1_Origin']").removeClass('isauto');
+            $("input[name='tam2_Origin']").removeClass('isauto');
+            $("input[name='his_Origin']").removeClass('isauto');
+
+            $("input[name='korSub']").val(data['scoreData'][month]['data']['국어']['subject'] ? data['scoreData'][month]['data']['국어']['subject'] : '');
+            $("input[name='mathSub']").val(data['scoreData'][month]['data']['수학']['subject'] ? data['scoreData'][month]['data']['수학']['subject'] : '');
+            $("input[name='engSub']").val('');
+            $("input[name='tamSub1']").val(data['scoreData'][month]['data']['탐구영역1']['subject'] ? data['scoreData'][month]['data']['탐구영역1']['subject'] : '');
+            $("input[name='tamSub2']").val(data['scoreData'][month]['data']['탐구영역2']['subject'] ? data['scoreData'][month]['data']['탐구영역2']['subject'] : '');
+            $("input[name='hisSub']").val('');
+
+            // 원점수
+            $("input[name='kor_Origin']").val(data['scoreData'][month]['data']['국어']['origin']);
+            $("input[name='math_Origin']").val(data['scoreData'][month]['data']['수학']['origin']);
+            $("input[name='eng_Origin']").val(data['scoreData'][month]['data']['영어']['origin']);
+            $("input[name='tam1_Origin']").val(data['scoreData'][month]['data']['탐구영역1']['origin']);
+            $("input[name='tam2_Origin']").val(data['scoreData'][month]['data']['탐구영역2']['origin']);
+            $("input[name='his_Origin']").val(data['scoreData'][month]['data']['한국사']['origin']);
+            
+            // 최고표점
+            $("input[name='kor_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['국어']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['국어']['subject']]['topRate'] : 0);
+            $("input[name='math_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['수학']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['수학']['subject']]['topRate'] : 0);
+            $("input[name='tam1_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] : 0);
+            $("input[name='tam2_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] : 0);
+
+            // 표점
+            $("input[name='kor_Pscore']").val(data['scoreData'][month]['data']['국어']['pscore']);
+            $("input[name='math_Pscore']").val(data['scoreData'][month]['data']['수학']['pscore']);
+            $("input[name='tam1_Pscore']").val(data['scoreData'][month]['data']['탐구영역1']['pscore']);
+            $("input[name='tam2_Pscore']").val(data['scoreData'][month]['data']['탐구영역2']['pscore']);
+
+            // 백분위
+            $("input[name='kor_Sscore']").val(data['scoreData'][month]['data']['국어']['sscore']);
+            $("input[name='math_Sscore']").val(data['scoreData'][month]['data']['수학']['sscore']);
+            $("input[name='tam1_Sscore']").val(data['scoreData'][month]['data']['탐구영역1']['sscore']);
+            $("input[name='tam2_Sscore']").val(data['scoreData'][month]['data']['탐구영역2']['sscore']);
+
+            // 등급
+            $("input[name='kor_Grade']").val(data['scoreData'][month]['data']['국어']['grade']);
+            $("input[name='math_Grade']").val(data['scoreData'][month]['data']['수학']['grade']);
+            $("input[name='eng_Grade']").val(data['scoreData'][month]['data']['영어']['grade']);
+            $("input[name='tam1_Grade']").val(data['scoreData'][month]['data']['탐구영역1']['grade']);
+            $("input[name='tam2_Grade']").val(data['scoreData'][month]['data']['탐구영역2']['grade']);
+            $("input[name='his_Grade']").val(data['scoreData'][month]['data']['한국사']['grade']);
+
+
+        } else {
+            rePage();
+        }
+    }
+
+    function rePage(){
+        $("#kor_Code").val('');
+            $("#math_Code").val('');
+            $("#eng_Code").val('');
+            $("#tam1_Code").val('');
+            $("#tam2_Code").val('');
+            $("#his_Code").val('');
+
+            $("input[name='kor_Origin']").addClass('isauto');
+            $("input[name='math_Origin']").addClass('isauto');
+            $("input[name='eng_Origin']").addClass('isauto');
+            $("input[name='tam1_Origin']").addClass('isauto');
+            $("input[name='tam2_Origin']").addClass('isauto');
+            $("input[name='his_Origin']").addClass('isauto');
+
+            $("input[name='korSub']").val('');
+            $("input[name='mathSub']").val('');
+            $("input[name='engSub']").val('');
+            $("input[name='tamSub1']").val('');
+            $("input[name='tamSub2']").val('');
+            $("input[name='hisSub']").val('');
+
+            // 원점수
+            $("input[name='kor_Origin']").val('');
+            $("input[name='math_Origin']").val('');
+            $("input[name='eng_Origin']").val('');
+            $("input[name='tam1_Origin']").val('');
+            $("input[name='tam2_Origin']").val('');
+            $("input[name='his_Origin']").val('');
+            
+            // 최고표점
+            $("input[name='kor_TopRate']").val('');
+            $("input[name='math_TopRate']").val('');
+            $("input[name='tam1_TopRate']").val('');
+            $("input[name='tam2_TopRate']").val('');
+
+            // 표점
+            $("input[name='kor_Pscore']").val('');
+            $("input[name='math_Pscore']").val('');
+            $("input[name='tam1_Pscore']").val('');
+            $("input[name='tam2_Pscore']").val('');
+
+            // 백분위
+            $("input[name='kor_Sscore']").val('');
+            $("input[name='math_Sscore']").val('');
+            $("input[name='tam1_Sscore']").val('');
+            $("input[name='tam2_Sscore']").val('');
+
+            // 등급
+            $("input[name='kor_Grade']").val('');
+            $("input[name='math_Grade']").val('');
+            $("input[name='eng_Grade']").val('');
+            $("input[name='tam1_Grade']").val('');
+            $("input[name='tam2_Grade']").val('');
+            $("input[name='his_Grade']").val('');
+
+            $(".school").text('');
+            $(".layer").text('');
+            $(".gender").text('');
+    }
 
     const cache = {};
+    $('input[name*="_Origin"]').on('change', function () {
+        const fullName = $(this).attr('name'); // 예: "user_Origin"
+        const prefix = $(this).attr('name').split('_')[0]; // '_' 앞 부분만 추출
+        const subjectCode = $(`#${prefix}_Code`).val();
+        const month = $("#selMonth").val();
+        const score = $(this).val();
+       
 
-    $('input[name="origin"]').on('change', function () {
+        // const month = "<?=$month?>";
         
-        const $row = $(this).closest('tr');
-        const subjectCode = $row.find('input[name="subjectCode"]').val();
+        const key = `${subjectCode}-${month}-${score}`; // origin 값 포함!
         
-        if(!subjectCode){
-            swal('','과목을 선택해 주세요.','warning');
-            $row.find('input[name="origin"]').val('');
-            $row.find('input[name="sscore"]').val('');
-            $row.find('input[name="pscore"]').val('');
-            $row.find('input[name="grade"]').val('');
+        if (cache[key]) {
+            if(prefix != 'eng' && prefix != 'his'){
+                    $(`input[name='${prefix}_Pscore']`).val(cache[key].pscore);
+                    $(`input[name='${prefix}_Sscore']`).val(cache[key].sscore);
+                }
+                $(`input[name='${prefix}_Grade']`).val(cache[key].gGrade);
             return;
         }
 
-        const month = "<?=$month?>";
-        const score = $(this).val();
-        const key = `${subjectCode}-${month}-${score}`; // origin 값 포함!
-        
-            if (cache[key]) {
-                applyScore($row, cache[key]);
-                return;
-            }
-
-            $.ajax({
-                type: 'POST',
-                url: '/bbs/get_gradeCut.php',
-                data: { subjectCode, month, score },
-                success: function (res) {
-                    const data = JSON.parse(res);
-                    cache[key] = data;
-                    applyScore($row, data);
+        $.ajax({
+            type: 'POST',
+            url: '/bbs/get_gradeCut.php',
+            data: { subjectCode, month, score },
+            success: function (res) {
+                const data = JSON.parse(res);
+                cache[key] = data;
+                console.log(data);
+                if(prefix != 'eng' && prefix != 'his'){
+                    $(`input[name='${prefix}_Pscore']`).val(data.pscore);
+                    $(`input[name='${prefix}_Sscore']`).val(data.sscore);
                 }
-            });
-        
+                $(`input[name='${prefix}_Grade']`).val(data.gGrade);
+            }
+        });
         
     });
-
-    function applyScore($row, data) {
-        $row.find('input[name="sscore"]').val(data.sscore);
-        $row.find('input[name="pscore"]').val(data.pscore);
-        $row.find('input[name="grade"]').val(data.gGrade);
-    }
 
 </script>
 <!-- } 마이페이지 끝 -->

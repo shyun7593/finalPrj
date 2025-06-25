@@ -44,7 +44,8 @@ SELECT
     gms.origin,
     gms.pscore ,
     gms.sscore ,
-    gms.grade
+    gms.grade ,
+    gms.subject as 'subCode'
 FROM
     dateMonth d
 LEFT JOIN g5_member_score gms on
@@ -68,6 +69,7 @@ foreach ($mres as $k => $v) {
     $pscore = $v['pscore']; // 표준점수
     $sscore = $v['sscore']; // 백분위
     $grade = $v['grade']; // 등급
+    $subCode = $v['subCode']; // 등급
 
     // 배열 초기화
     if (!isset($data[$scoreMonth])) {
@@ -84,7 +86,8 @@ foreach ($mres as $k => $v) {
             'origin' => $origin,
             'pscore' => $pscore,
             'sscore' => $sscore,
-            'grade' => $grade
+            'grade' => $grade,
+            'subCode' => $subCode
         ];
     }
 }
