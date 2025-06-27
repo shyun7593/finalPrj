@@ -278,41 +278,41 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     <thead>
 
                         <tr class="headd">
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:#dfe3f0;" rowspan="2">날짜</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:#dfe3f0;" rowspan="2">순위</th>
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:#dfe3f0;" rowspan="2">이름</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:#dfe3f0;" rowspan="2">성</th>
-                            <th style="top:0;z-index:15;min-width:180px;width:180px;background:#dfe3f0;" rowspan="2">학교</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:#dfe3f0;" rowspan="2">학년</th>
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:#dfe3f0;" rowspan="2">캠퍼스</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='core' colspan="2">배근력</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='m10m' colspan="2">10m왕복</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='medicine' colspan="2">메디신</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='leftGul' colspan="2">좌전굴</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='stand' colspan="2">제멀</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='m20mBu' colspan="2">20m부저</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='situp' colspan="2">윗몸</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" class='sergent' colspan="2">서전트</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;border-right:2px solid white;" rowspan="2">총점</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:#dfe3f0;" rowspan="2">평균</th>
+                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">날짜</th>
+                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">순위</th>
+                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">이름</th>
+                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">성</th>
+                            <th style="top:0;z-index:15;min-width:180px;width:180px;background:rgba(31, 119, 180,0.1);" rowspan="2">학교</th>
+                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">학년</th>
+                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">캠퍼스</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='core' colspan="2">배근력</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='m10m' colspan="2">10m왕복</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='medicine' colspan="2">메디신</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='leftGul' colspan="2">좌전굴</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='stand' colspan="2">제멀</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='m20mBu' colspan="2">20m부저</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='situp' colspan="2">윗몸</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='sergent' colspan="2">서전트</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:2px solid white;" rowspan="2">총점</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">평균</th>
                         </tr>
                     <tr class="sub-header">
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='core'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='core'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='m10m'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='m10m'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='medicine'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='medicine'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='leftGul'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='leftGul'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='stand'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='stand'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='situp'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='situp'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:1px solid white;border-top:1px solid white;" class='sergent'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:#dfe3f0;border-right:2px solid white;border-top:1px solid white;" class='sergent'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='core'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='core'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m10m'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m10m'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='medicine'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='medicine'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='stand'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='stand'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='situp'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='situp'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='sergent'>기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:2px solid white;border-top:1px solid white;" class='sergent'>점수</th>
                     </tr>
                 </thead>
                     <tbody>

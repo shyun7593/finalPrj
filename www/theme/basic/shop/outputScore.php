@@ -28,7 +28,7 @@ $query_string = http_build_query(array(
         background-color: rgba(31, 119, 180,0.1) !important;
     }
     .outputScore th, .outputScore td{
-        border: 1px solid #d3d3d3 !important;   
+        border: 1px solid white !important;   
         padding:8px 5px !important;
         text-align: center !important;
     }
@@ -190,7 +190,7 @@ $query_string = http_build_query(array(
                 <input type="hidden" id="tam1_Code" name="tam1_Code">
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
                 <input type="hidden" id="his_Code" name="his_Code">
-                <div class="tbl_wrap outputScore" style="width:60vw;">
+                <div class="tbl_wrap outputScore border-tb" style="width:60vw;">
                     <table class="tbl_head01 tbl_2n_color">
                         <colgroup>
                             <col width="100px">

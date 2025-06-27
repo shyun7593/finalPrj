@@ -16,6 +16,14 @@ $sql = " select *
 $res = sql_fetch($sql);
 
 ?>
+<style>
+    .sc_border tr th{
+        background-color: rgba(31, 119, 180,0.1) !important;
+    }
+    .sc_border tr th:not(:last-child){
+        border-right: 1px solid #d3d3d3;
+    }
+</style>
 <!-- 등급관리 시작 { -->
 <div id="smb_my">
     <div id="smb_my_list" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
@@ -152,7 +160,7 @@ $res = sql_fetch($sql);
         document.querySelectorAll("#wrapper_title")[0].setAttribute('style','display:none');
         if('<?=$_SESSION['mb_profile']?>' == 'C40000004' || '<?=$_SESSION['mb_profile']?>' == 'C40000003'){
             viewStudent();
-            viewMemberInfo();
+            // viewMemberInfo();
         }
     })
 const pattern = /[a-zA-Z0-9]/; // 영문자 또는 숫자
@@ -378,7 +386,7 @@ function viewStudent(){
                     <section id="smb_my_od">
 	        <div id="wrapper_title">성적 정보</div>
             <div class="tbl_wrap" >
-                <table class="tbl_head01 tbl_one_color">
+                <table class="tbl_head01 tbl_one_color ">
                     <tr style="text-align: center;">
                         <th>소속</th>
                         <td>${data['info']['branch']}</td>
@@ -393,9 +401,9 @@ function viewStudent(){
                     </tr>
                 </table>
             </div>
-            <div class="tbl_wrap" >
+            <div class="tbl_wrap  border-tb" >
                 <table class="tbl_head01 tbl_2n_color">
-                    <thead>
+                    <thead class="sc_border">
                         <th>구분</th>
                         <th colspan="5">국어</th>
                         <th colspan="5">수학</th>
@@ -406,7 +414,7 @@ function viewStudent(){
                         <th colspan="3">제2외국어</th>
                     </thead>
                     <tbody>
-                        <tr style="text-align: center; background-color:#eeeeee69">
+                        <tr style="text-align: center; background-color:rgba(31, 119, 180,0.1);">
                             <td>구분</td>
                             <td>과목</td>
                             <td>원</td>
