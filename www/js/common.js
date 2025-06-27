@@ -784,6 +784,7 @@ $(function() {
       
         // 3) 다음 프레임에서 transition 활성화
         requestAnimationFrame(() => {
+            document.body.classList.remove('preload');
           wrapper.classList.remove('no-transition');
         });
 

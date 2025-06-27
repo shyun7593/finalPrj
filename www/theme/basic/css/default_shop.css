@@ -16,6 +16,13 @@
   /* 초기화 */
   html {overflow-y:scroll}
   body {margin:0;padding:0;font-size:0.75em;font-family: 'IBMPlexSansKR-Regular', sans-serif;background:#fff}
+  body.preload #hd_menu,
+body.preload #wrapper,
+body.preload #hide_btn {
+  transition: none !important;
+  visibility: hidden; /* optional */
+}
+
   html, h1, h2, h3, h4, h5, h6, form, fieldset, img {margin:0;padding:0;border:0}
   h1, h2, h3, h4, h5, h6 {font-size:1em;font-family: 'IBMPlexSansKR-Regular', sans-serif;}
   article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display:block}
