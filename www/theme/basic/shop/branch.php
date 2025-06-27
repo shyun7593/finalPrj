@@ -173,7 +173,7 @@ $query_string = http_build_query(array(
                                 <?
                                     $meres = sql_fetch("SELECT * FROM g5_memo gm WHERE gm.memberIdx = {$m['mb_no']}");
                                 ?>
-                                <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx']) echo 'iswrite';?>">상담내역</button>
+                                <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx'] && $meres['memo']) echo 'iswrite';?>">상담내역</button>
                             </td>
                             <!-- <td>
                                 <?
@@ -325,7 +325,7 @@ $query_string = http_build_query(array(
                     prevMemo = json['data'].memo;
                     let html = `
                         <div class="memoPlace">
-                            <textarea id="memberMemo">${json['data'].memo}</textarea>
+                            <textarea id="memberMemo" placeholder="상담내역을 작성해주세요.">${json['data'].memo}</textarea>
                         </div>
                         <div class="memoWrite">
                             작성자 : ${json['data'].regName} ${json['data'].regDate}
