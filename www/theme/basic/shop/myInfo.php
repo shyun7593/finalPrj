@@ -385,8 +385,8 @@ function viewStudent(){
                 let html = `
                     <section id="smb_my_od">
 	        <div id="wrapper_title">성적 정보</div>
-            <div class="tbl_wrap" >
-                <table class="tbl_head01 tbl_one_color ">
+            <div class="tbl_wrap border-tb" style="border-bottom:unset;">
+                <table class="tbl_head01 tbl_one_color">
                     <tr style="text-align: center;">
                         <th>소속</th>
                         <td>${data['info']['branch']}</td>
@@ -401,7 +401,7 @@ function viewStudent(){
                     </tr>
                 </table>
             </div>
-            <div class="tbl_wrap  border-tb" >
+            <div class="tbl_wrap border-tb">
                 <table class="tbl_head01 tbl_2n_color">
                     <thead class="sc_border">
                         <th>구분</th>
