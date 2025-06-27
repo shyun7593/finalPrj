@@ -129,7 +129,6 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
     });
     
     $("#toggle_menu").click(function(){
-        console.log($(this).children());
         var $this = $(this).children();
 
         try {
