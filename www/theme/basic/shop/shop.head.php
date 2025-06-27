@@ -13,7 +13,20 @@ $q = isset($_GET['q']) ? clean_xss_tags($_GET['q'], 1, 1) : '';
 //     }
 // }
 
-
+$adm_menu_cookie = array(
+    'container' => '',
+    'left_menu'       => '',
+    'btn_gnb'   => '',
+);
+if( ! empty($_COOKIE['g5_admin_btn_gnb']) ){
+    $adm_menu_cookie['container'] = 'full';
+    $adm_menu_cookie['left_menu'] = 'hidden';
+    $adm_menu_cookie['btn_gnb'] = 'hidden';
+}
+$wrapper_class = array();
+if( defined('G5_IS_COMMUNITY_PAGE') && G5_IS_COMMUNITY_PAGE ){
+    $wrapper_class[] = 'is_community';
+}
 
 if ($_SESSION['mb_last_update'] !== sql_fetch("SELECT mb_last_update FROM g5_member WHERE mb_no = '{$_SESSION['mb_no']}'")['mb_last_update']) {
     $userIn = sql_fetch("SELECT * FROM g5_member WHERE mb_no = '{$_SESSION['mb_no']}'");
@@ -80,7 +93,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
         include G5_BBS_PATH.'/newwin.inc.php'; // 팝업레이어
 	} ?>
 	
-    <div id="hd_menu">
+    <div id="hd_menu" class="<?php echo $adm_menu_cookie['left_menu'];?>">
         <img class="hd_img" src="/img/final_logo.png">
         <div id="memberBox">
             <div id="memberInfo">
@@ -95,7 +108,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
                 </div>
             </div>
         </div>
-        <button id="toggle_menu" onclick="menuOnOff(event)"><i id="hide_btn" class="xi-hamburger-back" style="font-size: 2em;"></i></button>
+        <button id="toggle_menu" type="button"><i id="hide_btn" class="xi-hamburger-back <?php echo $adm_menu_cookie['btn_gnb'];?>" style="font-size: 2em;"></i></button>
 		<?php include_once(G5_THEME_SHOP_PATH.'/category.php'); // 분류 ?>
 		<ul class="hd_menu" style="width: 100%;">
             <? 
@@ -108,14 +121,35 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
         </ul>
     </div>
 </div>
-<?php
-    $wrapper_class = array();
-    if( defined('G5_IS_COMMUNITY_PAGE') && G5_IS_COMMUNITY_PAGE ){
-        $wrapper_class[] = 'is_community';
-    }
-?>
+<script>
+    var menu_cookie_key = 'g5_admin_btn_gnb';
+
+    $(".tnb_mb_btn").click(function(){
+        $(".tnb_mb_area").toggle();
+    });
+    
+    $("#toggle_menu").click(function(){
+        console.log($(this).children());
+        var $this = $(this).children();
+
+        try {
+            if( ! $this.hasClass("hidden") ){
+                set_cookie(menu_cookie_key, 1, 60*60*24*365);
+            } else {
+                delete_cookie(menu_cookie_key);
+            }
+        }
+        catch(err) {
+        }
+
+        $("#hd_menu").toggleClass("hidden");
+        $("#wrapper").toggleClass("full");
+        $this.toggleClass("hidden");
+
+    });
+</script>
 <!-- 전체 콘텐츠 시작 { -->
-<div id="wrapper" class="<?php echo implode(' ', $wrapper_class); ?>">
+<div id="wrapper" class="<?php echo $adm_menu_cookie['container'];?>">
     <!-- #container 시작 { -->
     <div id="container">
     <div id="popupBackground"></div>
