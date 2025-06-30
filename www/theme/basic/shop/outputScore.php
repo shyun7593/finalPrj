@@ -65,7 +65,7 @@ $query_string = http_build_query(array(
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
     <div id="smb_my_list" style="width: 100%;">
-        <section id="smb_my_od">
+        <section id="smb_my_od" style="margin:unset;">
                 <input type="hidden" id="kor_Code" name="kor_Code">
                 <input type="hidden" id="math_Code" name="math_Code">
                 <input type="hidden" id="eng_Code" name="eng_Code">
@@ -207,6 +207,42 @@ $query_string = http_build_query(array(
                         </tbody>
                     </table>
                 </div>
+                <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                    <div>
+                        <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
+                        <?
+                            $gsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C30000000' AND useYN = 1");
+                            foreach($gsql as $gs => $g){
+                        ?>
+                            <button type="button" data-value="<?=$g['code']?>" class="ctype btn-n" onclick="viewTypeChange(event)"><?=$g['codeName']?></button>
+                        <?}?>
+                    </div>
+                </div>
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
+                    <div>
+                        <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
+                        <?
+                            $asql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C10000000' AND useYN = 1");
+                            foreach($asql as $as => $a){
+                        ?>
+                            <button type="button" data-value="<?=$a['code']?>" class="areaCode btn-n" onclick="viewArea(event,'<?=$a['codeName']?>')"><?=$a['codeName']?></button>
+                        <?}?>
+                    </div>
+                </div>
+                <div style="display: flex;align-items:center;gap:10px;">
+                    <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
+                    <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
+                        <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="대학명, 학과명" class="frm_input" style="width: 100%;padding:0 10px;" value="<?=$text?>"></td>
+                        <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" onclick="viewColleges('',1)"></td>
+                    </div>
+                </div>
+                <div>
+                    <h2 style="margin:10px 0 0px !important;">전체 : <span class="totalCnt"></span> / 현재 페이지 : <span class="now-page"></span></h2>
+                </div>
+            </div>
             </form>
         </section>
         <!-- } 지원대학 끝 -->
@@ -266,6 +302,7 @@ $query_string = http_build_query(array(
 <script>
     let topRate = "";
     let curpage = 1;
+    let areas = [];
     $(document).ready(function(){
         $.ajax({
             url: "/bbs/searchTopRate.php",
@@ -285,7 +322,52 @@ $query_string = http_build_query(array(
             viewScores('<?=$_SESSION['mb_no']?>');
             viewColleges('<?=$_SESSION['mb_no']?>');
         }
-    })
+    });
+
+    function viewTypeChange(e){
+        document.querySelectorAll('.ctype').forEach((el,i,arr)=>{
+            if(el == e.currentTarget){
+                el.classList.add('active');
+            } else {
+                el.classList.remove('active');
+            }
+        });
+    }
+
+    function viewArea(e,area){
+        areas = [];
+        e.currentTarget.classList.toggle('active');
+        if(document.querySelectorAll('.areaCode').length - 1 == document.querySelectorAll('.areaCode.active').length || area == ''){
+            document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                if(el.textContent == '전체'){
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        } else {
+            if(document.querySelectorAll('.areaCode').length - 1 == document.querySelectorAll('.areaCode.active').length || area == ''){
+                document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                    if(el.textContent == '전체'){
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            } else {
+                document.querySelectorAll('.areaCode').forEach((el,i,arr)=>{
+                    if(el.textContent == '전체'){
+                        el.classList.remove('active');
+                    }
+                });
+            }
+        }
+        document.querySelectorAll('.areaCode.active').forEach((el,i,arr)=>{
+            if(el.dataset.value){
+                areas.push("'" + el.dataset.value + "'");
+            }
+        });
+    }
     function fsearch_submit(e){
         
     }
@@ -398,14 +480,32 @@ $query_string = http_build_query(array(
         });
     }
 
+    $("#text").on('keydown',function(e){
+        if(e.keyCode == 13){
+            $("#searchEnter").click();
+        }
+    })
+
     function viewColleges(val,page){
         if(!page){
             page = 1;
         } else {
             curpage = page;
         }
+        if(!val){
+            val = $("#selStudent option:selected").val();
+        }
+
+        if(!val){
+            setTimeout(() => {
+                swal("경고!","학생 먼저 선택해주세요.","info");
+            }, 10);
+            return false;
+        }
         $(".collegeInfos table tbody").html('');
         $(".paging").html('');
+        $(".totalCnt").html('0');
+        $(".now-page").html('0');
         $.ajax({
             url: "/bbs/searchCollege.php",
             type: "POST",
@@ -413,6 +513,9 @@ $query_string = http_build_query(array(
                 mb_no : val,
                 page : page,
                 rows : 20,
+                area: areas,
+                code : $(".ctype.active").data('value'),
+                texts : $("#text").val(),
             },
             async: false,
             error: function(data) {
@@ -422,12 +525,13 @@ $query_string = http_build_query(array(
             success: function(data) {
                 json = eval("(" + data + ");");
                 drawPaging(val,json['paging'].page, json['paging'].total_page, 'viewColleges');
-                // console.log(json);
+                $(".totalCnt").html(json['paging'].total_count + '개');
+                $(".now-page").html(json['paging'].page + ' of ' + json['paging'].total_page);
+                console.log(json);
                 json.data.forEach(function(row, idx){
                     let no = (json['paging'].page - 1) * 20 + (idx + 1);
                     addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);
                 });
-                
             }
         });
     }

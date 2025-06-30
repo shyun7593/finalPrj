@@ -4,6 +4,30 @@ include_once('./_common.php');
 
 
 $mb_no = $_POST['mb_no']; // 학생인덱스
+$area = $_POST['area']; // 지역코드
+$code = $_POST['code']; // 가나다군 코드
+$texts = $_POST['texts']; // 학과, 대학명
+
+foreach ($area as $ar => $a){
+    $areas .= $a . ',';
+}
+$areas = str_replace("\\", '', $areas);
+$areas =rtrim($areas, ',');
+
+$add_sql = " 1=1 ";
+
+if($areas){
+    $add_sql .= " AND gcs.areaCode in ({$areas}) ";
+}
+
+if($code){
+    $add_sql .= " AND gcs.cmmn1 = '{$code}' ";
+}
+
+if($texts){
+    $add_sql .= " AND (gcs.sName like '%{$texts}%' OR gc.cName like '%{$texts}%') ";
+}
+
 
 $mb_id = sql_fetch("SELECT mb_id FROM g5_member WHERE mb_no = '{$mb_no}'");
 
@@ -46,7 +70,7 @@ $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 20;
 
 $cnt_row = sql_fetch("SELECT 
     COUNT(*) as 'cnt'
-FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx");
+FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx WHERE {$add_sql}");
 $total_count = $cnt_row['cnt'];
 $total_page = max(1, ceil($total_count / $rows));
 $offset = ($page - 1) * $rows;
@@ -112,6 +136,7 @@ JOIN g5_cmmn_code gcc2 on
     gcc2.code = gcs.areaCode
 LEFT JOIN g5_jungsi gj on
     gj.juIdx = gcs.jungsiIdx
+WHERE {$add_sql}
 ) as A
 ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName
 LIMIT {$offset}, {$rows}";
