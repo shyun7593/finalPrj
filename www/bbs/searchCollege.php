@@ -70,7 +70,7 @@ $rows = isset($_POST['rows']) ? intval($_POST['rows']) : 20;
 
 $cnt_row = sql_fetch("SELECT 
     COUNT(*) as 'cnt'
-FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx WHERE {$add_sql}");
+FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx JOIN g5_jungsi gj on gj.juIdx = gcs.jungsiIdx  WHERE {$add_sql}");
 $total_count = $cnt_row['cnt'];
 $total_page = max(1, ceil($total_count / $rows));
 $offset = ($page - 1) * $rows;
@@ -134,7 +134,7 @@ JOIN g5_cmmn_code gcc on
     gcc.code = gcs.cmmn1
 JOIN g5_cmmn_code gcc2 on
     gcc2.code = gcs.areaCode
-LEFT JOIN g5_jungsi gj on
+JOIN g5_jungsi gj on
     gj.juIdx = gcs.jungsiIdx
 WHERE {$add_sql}
 ) as A

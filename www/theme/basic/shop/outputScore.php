@@ -257,6 +257,7 @@ $query_string = http_build_query(array(
                         </colgroup>
                         <thead>
                             <tr>
+                                <td></td>
                                 <td colspan="2">추천대학</td>
                                 <td colspan="6">대학정보</td>
                                 <td>수능</td>
@@ -264,6 +265,7 @@ $query_string = http_build_query(array(
                                 <td colspan="2">실기</td>
                             </tr>
                             <tr>
+                                <td></td>
                                 <td>선생님</td>
                                 <td>본인</td>
                                 <td>지역</td>
@@ -542,6 +544,7 @@ $query_string = http_build_query(array(
         }
         let html = `
             <tr>
+                <td>${no}</td>
                 <td`;
         if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
             html += ` class="checkAuto"`;
