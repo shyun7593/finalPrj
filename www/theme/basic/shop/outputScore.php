@@ -58,6 +58,9 @@ $query_string = http_build_query(array(
         pointer-events: none !important;
         background-color: #eee !important;
     }
+    .cutline.remove-view{
+        display: none !important;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -221,7 +224,7 @@ $query_string = http_build_query(array(
                                 <td colspan="2">추천대학</td>
                                 <td colspan="6">대학정보</td>
                                 <td>수능</td>
-                                <td colspan="5">커트라인</td>
+                                <td class="cutline" colspan="5">커트라인</td>
                                 <td colspan="2">실기</td>
                             </tr>
                             <tr>
@@ -234,11 +237,11 @@ $query_string = http_build_query(array(
                                 <td>학과명</td>
                                 <td>인원</td>
                                 <td>환산점수</td>
-                                <td>수능</td>
-                                <td>내신</td>
-                                <td>실기</td>
-                                <td>기타</td>
-                                <td>총점</td>
+                                <td class="cutline">수능</td>
+                                <td class="cutline">내신</td>
+                                <td class="cutline">실기</td>
+                                <td class="cutline">기타</td>
+                                <td class="cutline">총점</td>
                                 <td>점수</td>
                                 <td>계산</td>
                             </tr>
@@ -462,11 +465,11 @@ $query_string = http_build_query(array(
                 <td>${subject}</td>
                 <td>${person}</td>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="cutline"></td>
+                <td class="cutline"></td>
+                <td class="cutline"></td>
+                <td class="cutline"></td>
+                <td class="cutline"></td>
                 <td>0</td>
                 <td>`;
         if(silgi){
@@ -480,6 +483,9 @@ $query_string = http_build_query(array(
             </tr>
         `;
         $(".collegeInfos table tbody").append(html);
+        if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
+            $(".cutline").addClass('remove-view');
+        }
     }
 
     function showSilgi(subIdx,area,gun,college,subject,sub){
