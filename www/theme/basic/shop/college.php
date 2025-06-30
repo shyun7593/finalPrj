@@ -37,7 +37,7 @@ $res = sql_query("select
                     LEFT JOIN g5_college_subject gcs on
                         gc.cIdx = gcs.collegeIdx
                     LEFT JOIN g5_add_college gac on
-                        gac.subIdx = gcs.sIdx
+                        gac.subIdx = gcs.sIdx AND gac.memId = '{$_SESSION['ss_mb_id']}' AND gac.memId = gac.regId
                     JOIN g5_cmmn_code gcc on
                         gcc.code = gcs.areaCode
                 where 
