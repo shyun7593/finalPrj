@@ -250,14 +250,14 @@ $query_string = http_build_query(array(
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
-            <div class="mb20" style="margin-bottom: 10px;">
+            <div class="mb20">
             <div class="tbl_wrap collegeInfos border-tb">
-                    <table class="tbl_head01 tbl_2n_color">
+                    <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;">
                         <colgroup>
                         </colgroup>
                         <thead>
                             <tr>
-                                <td></td>
+                                <td style="width:60px;"></td>
                                 <td colspan="2">추천대학</td>
                                 <td colspan="6">대학정보</td>
                                 <td>수능</td>
@@ -265,7 +265,7 @@ $query_string = http_build_query(array(
                                 <td colspan="2">실기</td>
                             </tr>
                             <tr>
-                                <td></td>
+                                <td style="width:60px;"></td>
                                 <td>선생님</td>
                                 <td>본인</td>
                                 <td>지역</td>
@@ -544,7 +544,7 @@ $query_string = http_build_query(array(
         }
         let html = `
             <tr>
-                <td>${no}</td>
+                <td style="width:60px;">${no}</td>
                 <td`;
         if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
             html += ` class="checkAuto"`;
