@@ -525,13 +525,13 @@ $query_string = http_build_query(array(
                 return false;
             },
             success: function(data) {
-                json = eval("(" + data + ");");
-                drawPaging(val,json['paging'].page, json['paging'].total_page, 'viewColleges');
-                $(".totalCnt").html(json['paging'].total_count + '개');
-                $(".now-page").html(json['paging'].page + ' of ' + json['paging'].total_page);
-                console.log(json);
-                json.data.forEach(function(row, idx){
-                    let no = (json['paging'].page - 1) * 20 + (idx + 1);
+                coll = eval("(" + data + ");");
+                drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
+                $(".totalCnt").html(coll['paging'].total_count + '개');
+                $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
+                console.log(coll);
+                coll.data.forEach(function(row, idx){
+                    let no = (coll['paging'].page - 1) * 20 + (idx + 1);
                     addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);
                 });
             }
@@ -596,7 +596,7 @@ $query_string = http_build_query(array(
     }
 
     function showSilgi(subIdx,area,gun,college,subject,sub){
-        let json = ""
+        let silg = ""
         $.ajax({
             url: "/bbs/searchCollegeSilgi.php",
             type: "POST",
@@ -609,10 +609,10 @@ $query_string = http_build_query(array(
                 alert('저장 실패! 관리자에게 문의하세요.');
             },
             success: function(data) {
-                json = eval("(" + data + ");");
+                silg = eval("(" + data + ");");
             }
         });
-        const count = Object.keys(json['data']).length;
+        const count = Object.keys(silg['data']).length;
         
         let subs = sub.split(',');
         let html = `<div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
