@@ -101,6 +101,57 @@ function number_format(data)
     return number;
 }
 
+function drawPaging(val,page, total_page, fnc) {
+    let html = '<ul class="paging-list">';
+    page = parseInt(page);
+    total_page = parseInt(total_page);
+    let prev = "";
+    let next = "";
+    if (total_page > 1) {
+        if (page == 1) {
+            prev = " style='visibility:hidden;'";
+        }
+        if (page == total_page) {
+            next = " style='visibility:hidden;'";
+        }
+        // 맨앞
+        html += `<li${prev}>
+                    <a href="javascript:void(0);" onclick="${fnc}(${val},1)" class="page-btn first">
+                    <img src="/theme/basic/img/firstPage.png" alt="처음" style="width:22px; height:22px; vertical-align:middle;">
+                    </a>
+                </li>
+                <li${prev}>
+                    <a href="javascript:void(0);" onclick="${fnc}(${val},${page-1})" class="page-btn prev">
+                    <img src="/theme/basic/img/prevPage.png" alt="이전" style="width:22px; height:22px; vertical-align:middle;">
+                    </a>
+                </li>`;
+        
+        // 숫자
+        for (let i = 1; i <= total_page; i++) {
+            if (i == page) {
+                html += `<li><a href="javascript:void(0);" class="page-btn active">${i}</a></li>`;
+            } else {
+                html += `<li><a href="javascript:void(0);" onclick="${fnc}(${val},${i})" class="page-btn">${i}</a></li>`;
+            }
+        }
+        // 다음
+        html += `<li${next}>
+                    <a href="javascript:void(0);" onclick="${fnc}(${val},${page+1})" class="page-btn next">
+                    <img src="/theme/basic/img/nextPage.png" alt="다음" style="width:22px; height:22px; vertical-align:middle;">
+                    </a>
+                </li>
+                <li${next}>
+                    <a href="javascript:void(0);" onclick="${fnc}(${val},${total_page})" class="page-btn last">
+                        <img src="/theme/basic/img/lastPage.png" alt="맨뒤" style="width:22px; height:22px; vertical-align:middle;">
+                    </a>
+                </li>`;
+
+    }
+    html += "</ul>";
+    $(".paging").html(html);
+    
+}
+
 // 새 창
 function popup_window(url, winname, opt)
 {

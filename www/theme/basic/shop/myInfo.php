@@ -150,9 +150,6 @@ $res = sql_fetch($sql);
     </div>
         <?}?>
     </div>
-    <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
-    
-    <?}?>
 </div>
 
 <script>

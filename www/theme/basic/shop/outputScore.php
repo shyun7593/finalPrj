@@ -8,7 +8,7 @@ include_once('./_head.php');
 switch($_SESSION['mb_profile']){
     case 'C40000001':
         break;
-    case 'C40000002':
+    case 'C40000002': case 'C40000003':
         $bid = $_SESSION['mb_signature'];
         break;
 }
@@ -16,6 +16,7 @@ switch($_SESSION['mb_profile']){
 if(!$selMonth){
     $selMonth = '3모';
 }
+
 
 $query_string = http_build_query(array(
     'bid' => $_GET['bid'],
@@ -42,148 +43,26 @@ $query_string = http_build_query(array(
         background-color: unset !important;
         box-shadow: unset !important;
     }
+    .collegeInfos table td{
+        text-align: center;
+    }
+    .collegeInfos table thead tr:not(:first-child) td{
+        border-top: 1px solid #e4e4e4;
+        border-bottom: 1px solid #e4e4e4;
+    }
+    .collegeInfos table thead {
+        background-color: rgba(31, 119, 180, 0.1) !important;
+        font-weight: bold;
+    }
+    .collegeInfos table .checkAuto, .collegeInfos table td.checkAuto input{
+        pointer-events: none !important;
+        background-color: #eee !important;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
-
-    <div id="smb_my_list">
-        <!-- 성적입력 시작 { -->
-        <!-- <section id="smb_my_od">
-            <div style="display: flex; align-items:center;gap:30px;margin-bottom:10px;">
-                <div style="display: flex;gap:10px;">
-                    <button class="btn-n btn-green btn-bold" type="buttton" onclick="saveGrade()">저장</button>
-                    <?
-                        foreach($m_cmmn as $mcm => $m){
-                            $cnt = sql_fetch("SELECT COUNT(*) as cnt FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = '{$m['code']}'");
-                            ?>
-                        <button class="btn-n <?if($month == $m['code']) echo "active";?> <?if($cnt['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="<?=$m['code']?>" onclick="viewMonth(event)" type="buttton"><?=$m['codeName']?></button>
-                    <?}?>
-                </div>
-                <div style="position:absolute;right:0;">
-                    점수 업데이트 : <?=$recD['regDate']?>
-                </div>
-            </div>
-
-
-            <div class="tbl_wrap border-tb">
-                <table class="tbl_head01">
-                    <colgroup width="20%">
-                    <colgroup width="20%">
-                    <colgroup width="20%">
-                    <colgroup width="20%">
-                    <colgroup width="20%">
-                    <thead>
-                        <th>영역</th>
-                        <th>원점수</th>
-                        <th>표준점수</th>
-                        <th>백분위</th>
-                        <th>등급</th>
-                    </thead>
-                    <tbody>
-                        <?
-                        $subs = sql_query("SELECT code, codeName,upperCode FROM g5_cmmn_code gcc WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '과목' AND useYn = 1) ORDER BY codeDesc");
-                        foreach($subs as $sub => $s){
-                            $i = 0;
-                            $sub = "";
-                            $memberGrade = sql_fetch("SELECT gms.* FROM g5_member_score gms WHERE gms.memId = '{$membId}' AND gms.scoreMonth = '{$month}' AND upperCode = '{$s['code']}'");
-                            ?>
-                            <tr style="text-align: center;" class="mySubgrade">
-                                <?if($s['codeName'] != '영어' && $s['codeName'] != '한국사' && $s['codeName'] != '제2외국어/한문'){?>
-                                <td style="text-align: left;">
-                                    <?=$s['codeName']?><br>
-                                    <select name="subject" class="frm_input" style="width: 100%;">
-                                        <option value="">선택하세요</option>
-                                        <?$jsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
-                                        foreach($jsql as $js => $j){
-                                            if(!$memberGrade['subject']){
-                                                if(strstr($s['code'],'C2005')){
-                                                    $i2 = 1;
-                                                    if($i == 1){
-                                                        $sub = $j['code'];
-                                                    }
-                                                } else {
-                                                    $i2 = 0;
-                                                    if($i == 0){
-                                                        $sub = $j['code'];
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code']) || (!$memberGrade['subject'] && $i==$i2)) echo 'selected';?>><?=$j['codeName']?></option>
-                                        <?$i++;}?>
-                                    </select>
-                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}else{echo "{$sub}";}?>">
-                                    <input type="hidden" name="upperCode" value="<?=$s['code']?>">
-                                </td>
-                                <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(<?if($s['codeName'] == '탐구영역1' || $s['codeName'] == '탐구영역2'){echo 50;}else{ echo 100;}?>, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
-                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="pscore" value="<?=$memberGrade['pscore']?>"></td>
-                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="sscore" value="<?=$memberGrade['sscore']?>"></td>
-                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
-                                <?} else if($s['codeName'] == '제2외국어/한문'){?>
-                                    <td style="text-align: left;">
-                                    <?=$s['codeName']?><br>
-                                    <select name="subject" class="frm_input" style="width: 100%;">
-                                        <option value="">선택하세요</option>
-                                        <?$jsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
-                                        foreach($jsql as $js => $j){
-                                            ?>
-                                            <option value="<?=$j['code']?>" <?if(($memberGrade['subject'] == $j['code'])) echo 'selected';?>><?=$j['codeName']?></option>
-                                        <?}?>
-                                    </select>
-                                    <input type="hidden" name="subjectCode" value="<?if($memberGrade['subject']){echo "{$memberGrade['subject']}";}?>">
-                                    <input type="hidden" name="upperCode" value="<?=$s['code']?>">
-                                </td>
-                                <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(50, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
-                                <td><br>-</td>
-                                <td><br>-</td>
-                                <td><br><input type="number" class="frm_input" style="width: 100%;text-align:center;" name="grade" value="<?=$memberGrade['grade']?>"></td>
-                                <?} else{
-                                    $subJectCd = sql_fetch("SELECT code FROM g5_cmmn_code WHERE upperCode = '{$s['code']}'");
-                                    ?>
-                                    <td style="text-align: left;">
-                                        <?=$s['codeName']?>
-                                        <input type="hidden" name="subjectCode" value="<?=$subJectCd['code']?>">
-                                        <input type="hidden" name="upperCode" value="<?=$s['code']?>">
-                                    </td>
-                                    <td><br><input type="number" oninput="this.value = Math.max(0, Math.min(<?if($s['codeName'] == '한국사'){echo 50;}else{ echo 100;}?>, this.value))" class="frm_input" style="width: 100%;text-align:center;" name="origin" value="<?=$memberGrade['origin']?>"></td>
-                                    <td><br>-</td>
-                                    <td><br>-</td>
-                                    <td><br><input type="number" class="frm_input" style="text-align:center;width: 100%;" name="grade" value="<?=$memberGrade['grade']?>"></td>    
-                                <?}?>
-                            </tr>
-                        <?}?>
-                        
-                        <tr style="text-align: center;">
-                            <td style="text-align:left;">
-                                내신
-                            </td>
-                            <td colspan="4">
-                                <select class="frm_input" id="grade" name="grade" style="width: 100%;">
-                                    <option value="">선택하세요.</option>
-                                    <?
-                                        $admitt = sql_query("SELECT code, codeName FROM g5_cmmn_code WHERE upperCode = 'C50000000' AND useYN = 1");
-                                        $memberGrade = sql_fetch("SELECT gms.* FROM g5_member_score gms WHERE gms.memId = '{$membId}' AND gms.scoreMonth = '{$month}' AND upperCode = 'C50000000'");
-                                        foreach($admitt as $adm => $a){
-                                    ?>
-                                    <option value="<?=$a['code']?>" <?if($memberGrade['subject'] == $a['code']) echo 'selected';?>><?=$a['codeName']?></option>
-                                    <?}?>
-                                </select>
-                                <input type="hidden" name="admittupperCode" id="admittupperCode" value="C50000000">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top:10px;">
-                <button class="btn-n btn-green btn-bold btn-large" type="buttton" onclick="saveGrade()">저장</button>
-            </div>
-        </section> -->
-        <!-- } 성적입력 끝 -->
-    </div>
     <div id="smb_my_list" style="width: 100%;">
-        <!-- 지원대학 시작 { -->
         <section id="smb_my_od">
-            
                 <input type="hidden" id="kor_Code" name="kor_Code">
                 <input type="hidden" id="math_Code" name="math_Code">
                 <input type="hidden" id="eng_Code" name="eng_Code">
@@ -208,7 +87,7 @@ $query_string = http_build_query(array(
                                 <th rowspan="2">캠퍼스</th>
                                 <td rowspan="2">
                                 <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
-                                    <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] == 'C40000002') echo 'class="isauto"';?>>
+                                    <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
                                         <option value="">선택</option>
                                         <?
                                             $camSql = sql_query("SELECT * FROM g5_branch");
@@ -268,13 +147,13 @@ $query_string = http_build_query(array(
                                 <th>이름</th>
                                 <td class="studentNm">
                                     <?if($bid){?>
-                                        <select name="selStudent" id="selStudent"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
-                                            <option value="" <?if(!$selStudent) echo 'selected';?>>선택하세요.</option>
+                                        <select name="selStudent" id="selStudent" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;text-align:center;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
+                                            <option value="">선택하세요.</option>
                                             <?
                                                 $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}'");
                                                 foreach($memsql as $mm => $me){
                                             ?>
-                                                <option value="<?=$me['mb_no']?>" <?if($selStudent && $selStudent == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
+                                                <option value="<?=$me['mb_no']?>" data-id="<?=$me['mb_id']?>" <?if($_SESSION['mb_profile'] == 'C40000003' && $_SESSION['mb_no'] == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
                                             <?}?>
                                         </select>
                                     <?}else{?>
@@ -329,8 +208,56 @@ $query_string = http_build_query(array(
         </section>
         <!-- } 지원대학 끝 -->
     </div>
+    <div id="smb_my_list">
+        <!-- 최근 주문내역 시작 { -->
+        <section id="smb_my_od">
+            <div class="mb20" style="margin-bottom: 10px;">
+            <div class="tbl_wrap collegeInfos border-tb">
+                    <table class="tbl_head01 tbl_2n_color">
+                        <colgroup>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <td colspan="2">추천대학</td>
+                                <td colspan="6">대학정보</td>
+                                <td>수능</td>
+                                <td colspan="5">커트라인</td>
+                                <td colspan="2">실기</td>
+                            </tr>
+                            <tr>
+                                <td>선생님</td>
+                                <td>본인</td>
+                                <td>지역</td>
+                                <td>형태</td>
+                                <td>군</td>
+                                <td>대학명</td>
+                                <td>학과명</td>
+                                <td>인원</td>
+                                <td>환산점수</td>
+                                <td>수능</td>
+                                <td>내신</td>
+                                <td>실기</td>
+                                <td>기타</td>
+                                <td>총점</td>
+                                <td>점수</td>
+                                <td>계산</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <div class="paging" style="text-align:center; margin:20px 0;"></div>
+    </div>
 </div>
-
+<div id="collegePopup">
+    <div class="mb20" id="collegeDiv">
+        
+    </div>
+</div>
 
 
 <script>
@@ -349,6 +276,11 @@ $query_string = http_build_query(array(
                 topRate = eval("(" + data + ");");
             }
         });
+
+        if("<?=$_SESSION['mb_profile']?>" == 'C40000003'){
+            viewScores('<?=$_SESSION['mb_no']?>');
+            viewColleges('<?=$_SESSION['mb_no']?>');
+        }
     })
     function fsearch_submit(e){
         
@@ -363,22 +295,8 @@ $query_string = http_build_query(array(
     $("#selStudent").on('change',function(){
         let vl = $(this).val();
         if(vl){
-            $.ajax({
-                url: "/bbs/searchScore.php",
-                type: "POST",
-                data: {
-                    mb_no : vl,
-                },
-                async: false,
-                error: function(data) {
-                    alert('에러가 발생하였습니다.');
-                    return false;
-                },
-                success: function(data) {
-                    json = eval("(" + data + ");");
-                    showView(json);
-                }
-            });
+            viewScores(vl);
+            viewColleges(vl);
         } else {
             rePage();
         }
@@ -455,6 +373,190 @@ $query_string = http_build_query(array(
         } else {
             rePage();
         }
+    }
+
+    function viewScores(val){
+        $.ajax({
+            url: "/bbs/searchScore.php",
+            type: "POST",
+            data: {
+                mb_no : val,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                showView(json);
+            }
+        });
+    }
+
+    function viewColleges(val,page){
+        if(!page){
+            page = 1;
+        }
+        $(".collegeInfos table tbody").html('');
+        $(".paging").html('');
+        $.ajax({
+            url: "/bbs/searchCollege.php",
+            type: "POST",
+            data: {
+                mb_no : val,
+                page : page,
+                rows : 20,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                drawPaging(val,json['paging'].page, json['paging'].total_page, 'viewColleges');
+                // console.log(json);
+                json.data.forEach(function(row, idx){
+                    let no = (json['paging'].page - 1) * 20 + (idx + 1);
+                    addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub);
+                });
+                
+            }
+        });
+    }
+
+    function addCollegeRow(no,subIdx,teacher,student,area,type,gun,college,subject,person,silgi){
+        if(!person){
+            person = '-';
+        }
+        let html = `
+            <tr>
+                <td`;
+        if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
+            html += ` class="checkAuto"`;
+        }
+        html += `><input type="checkbox" onclick="addCollege(this,${subIdx})" style="cursor:pointer;"`;
+        
+        if(teacher==1){
+            html += ` checked`;
+        }
+        html += `></td>
+                <td`;
+        if('<?=$_SESSION['mb_profile']?>' != 'C40000003'){
+            html += ` class="checkAuto"`;
+        }
+        html += `><input type="checkbox" onclick="addCollege(this,${subIdx})" style="cursor:pointer;"`;
+        
+        if(student==1){
+            html += ` checked`;
+        }
+        html += `></td>
+                <td>${area}</td>
+                <td>${type}</td>
+                <td>${gun}</td>
+                <td>${college}</td>
+                <td>${subject}</td>
+                <td>${person}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>0</td>
+                <td>`;
+        if(silgi){
+            html += `<button type="button" class="btn-n active" onclick="showSilgi('${subIdx}','${area}','${gun}','${college}','${subject}','${silgi}')">계산</button>`;
+        } 
+        html += `</td>
+            </tr>
+        `;
+        $(".collegeInfos table tbody").append(html);
+    }
+
+    function showSilgi(subIdx,area,gun,college,subject,sub){
+        let subs = sub.split(',');
+        let html = `<div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
+                    [실기] [${area}, ${gun}] ${college} ${subject}
+                </div>
+        <div>
+            <table class="tbl_frm01 tbl_wrap" style="margin-top:20px;border-collapse:collapse;">
+                <colgroup>
+                    <col width="60%">
+                    <col width="20%">
+                    <col width="20%">
+                </colgroup>
+                <thead>
+                    <tr style="border:1px solid #e4e4e4;font-size:1.5em;">
+                        <th style="font-weight:800;text-align:left;background-color:#d3d3d3;border-right:1px solid white;">실기</th>
+                        <th style="font-weight:800;text-align:center;background-color:#d3d3d3;border-right:1px solid white;">기록</th>
+                        <th style="font-weight:800;text-align:center;background-color:#d3d3d3;">점수</th>
+                    <tr>
+                </thead>
+                <tbody>
+        `;
+        for(let i = 0; i < subs.length; i++){
+            html += `
+                <tr style="font-size:1.2em;">
+                    <td style="border:1px solid #e4e4e4;">${subs[i]}</td>
+                    <td style="border:1px solid #e4e4e4;"><input name="${subs[i]}" type="text" class="frm_input"></td>
+                    <td style="border:1px solid #e4e4e4;"></td>
+                </tr>
+            `;
+        }
+        html += `
+                <tbody>
+            </table>
+        </div>
+        <div style="position:absolute;bottom:20px;right:20px;display:flex;gap:15px;">
+            <button type="button" style="width:120px;height:50px;font-size:1.5em;" class="btn-n iswrite">계산</button>
+            <button type="button" style="width:120px;height:50px;font-size:1.5em;" class="btn-n" id="closePopup">닫기</button>
+        </div>`;
+        $("#collegeDiv").html(html);
+        $('#popupBackground').fadeIn(); // 배경 표시
+        $('#collegePopup').fadeIn(); // 팝업 표시
+        $('#closePopup, #popupBackground').click(function() {
+            $('#popupBackground').fadeOut(); // 배경 숨기기
+            $('#collegePopup').fadeOut(); // 팝업 숨기기
+        });
+    }
+
+
+    function addCollege(el,idx){
+        let type = "";
+        if($(el).is(':checked')){
+            type = "add";
+        } else {
+            type = "remove";
+        }
+        $.ajax({
+            url: "/bbs/inteCollege_update.php",
+            type: "POST",
+            data: {
+                type : type,
+                idx : idx,
+                id : $("#selStudent option:selected").data('id'),
+            },
+            async: false,
+            error: function(data) {
+                alert('저장 실패! 관리자에게 문의하세요.');
+            },
+            success: function(data) {
+                if(data == 'success'){
+                    let msg = "";
+                    if(type == 'add'){
+                        msg = "관심대학 등록되었습니다.";
+                    } else {
+                        msg = "관심대학에서 삭제되었습니다.";
+                    }
+                    swal('성공!',msg,'success');
+                    setTimeout(() => {
+                        swal.close();
+                    }, 1500);
+                }
+            }
+        });
     }
 
     function rePage(){

@@ -1723,3 +1723,66 @@ html.no-overflowscrolling #sc_coupon_frm, html.no-overflowscrolling #od_coupon_f
 .chk_box input[type="radio"]:checked + label {color:#305af9}
 .chk_box input[type="radio"]:checked + label span:before {width:7px;height:7px;background:#305af9;content:'';position:absolute;top:3px;left:3px;border-radius:50%}
 
+.paging {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0 10px 0;
+}
+.paging-list {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.paging-list li {
+    /* 공백용 */
+}
+.page-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    border-radius: 14px;
+    background: #466094;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 500;
+    border: 1.5px solid #466094;
+    transition: all 0.14s;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+}
+.page-btn.active {
+    background: #fff;
+    color: #223059;
+    border: 1.5px solid #223059;
+    font-weight: 700;
+    pointer-events: none;
+}
+.page-btn.first, .page-btn.last, .page-btn.prev, .page-btn.next  {
+    padding: 0;
+    background: #6b86b7;
+    color: #fff;
+    border: 1px solid #6b86b7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.page-btn:hover:not(.active):not(.prev):not(.next),
+.page-btn:focus:not(.active):not(.prev):not(.next) {
+    background: #2e3d5a;
+    color: #fff;
+    border-color: #2e3d5a;
+}
+.page-btn.first:hover,
+.page-btn.last:hover,
+.page-btn.prev:hover,
+.page-btn.next:hover {
+    background: #33476b;
+    border-color: #33476b;
+}
