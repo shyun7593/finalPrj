@@ -422,14 +422,14 @@ $query_string = http_build_query(array(
                 // console.log(json);
                 json.data.forEach(function(row, idx){
                     let no = (json['paging'].page - 1) * 20 + (idx + 1);
-                    addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub);
+                    addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);
                 });
                 
             }
         });
     }
 
-    function addCollegeRow(no,subIdx,teacher,student,area,type,gun,college,subject,person,silgi){
+    function addCollegeRow(no,subIdx,teacher,student,area,type,gun,college,subject,person,silgi,silgiexist){
         if(!person){
             person = '-';
         }
@@ -470,7 +470,11 @@ $query_string = http_build_query(array(
                 <td>0</td>
                 <td>`;
         if(silgi){
-            html += `<button type="button" class="btn-n active" onclick="showSilgi('${subIdx}','${area}','${gun}','${college}','${subject}','${silgi}')">계산</button>`;
+            html += `<button type="button" class="btn-n`;
+            if(silgiexist > 0){
+                html += ` active`;
+            }
+            html += `" onclick="showSilgi('${subIdx}','${area}','${gun}','${college}','${subject}','${silgi}')">계산</button>`;
         } 
         html += `</td>
             </tr>

@@ -61,7 +61,8 @@ $sql = "SELECT
 	collegeName,
     collegeType,
 	addS,
-	addT
+	addT,
+    silgi
 FROM
 (
 -- SELECT 
@@ -99,7 +100,9 @@ SELECT
     (SELECT
         COUNT(*) FROM g5_add_college gac WHERE gac.subIdx = gcs.sIdx AND gac.memId = '{$mb_id['mb_id']}' AND gac.regId = '{$mb_id['mb_id']}') as 'addS',
     (SELECT
-        COUNT(*) FROM g5_add_college gac2 WHERE gac2.subIdx = gcs.sIdx AND gac2.memId = '{$mb_id['mb_id']}' AND gac2.regId != '{$mb_id['mb_id']}') as 'addT'
+        COUNT(*) FROM g5_add_college gac2 WHERE gac2.subIdx = gcs.sIdx AND gac2.memId = '{$mb_id['mb_id']}' AND gac2.regId != '{$mb_id['mb_id']}') as 'addT',
+    (SELECT
+        COUNT(*) FROM g5_college_silgi ggs WHERE ggs.csubIdx = gcs.sIdx AND ggs.memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0) as 'silgi'
 FROM g5_college_subject gcs 
 JOIN g5_college gc on
     gc.cIdx = gcs.collegeIdx
@@ -139,7 +142,8 @@ foreach ($mres as $k => $v) {
         'bCut' => $v['collegeType'], // 내신커트
         'cCut' => $v['collegeType'], // 실기커트
         'dCut' => $v['collegeType'], // 기타커트
-        'pSub' => $v['pSub'] // 실기과목
+        'pSub' => $v['pSub'], // 실기과목
+        'silgi' => $v['silgi'] // 실기 작성여부
     ];
 }
 
