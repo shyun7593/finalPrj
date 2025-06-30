@@ -262,6 +262,7 @@ $query_string = http_build_query(array(
 
 <script>
     let topRate = "";
+    let curpage = 1;
     $(document).ready(function(){
         $.ajax({
             url: "/bbs/searchTopRate.php",
@@ -397,6 +398,8 @@ $query_string = http_build_query(array(
     function viewColleges(val,page){
         if(!page){
             page = 1;
+        } else {
+            curpage = page;
         }
         $(".collegeInfos table tbody").html('');
         $(".paging").html('');
@@ -476,6 +479,24 @@ $query_string = http_build_query(array(
     }
 
     function showSilgi(subIdx,area,gun,college,subject,sub){
+        let json = ""
+        $.ajax({
+            url: "/bbs/searchCollegeSilgi.php",
+            type: "POST",
+            data: {
+                subIdx : subIdx,
+                id : $("#selStudent option:selected").data('id'),
+            },
+            async: false,
+            error: function(data) {
+                alert('저장 실패! 관리자에게 문의하세요.');
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+            }
+        });
+        const count = Object.keys(json['data']).length;
+        
         let subs = sub.split(',');
         let html = `<div style="display: flex;justify-content: center;align-items: center;gap: 15px;font-size: 2em;font-weight: 800;">
                     [실기] [${area}, ${gun}] ${college} ${subject}
@@ -496,24 +517,43 @@ $query_string = http_build_query(array(
                 </thead>
                 <tbody>
         `;
-        for(let i = 0; i < subs.length; i++){
-            html += `
-                <tr style="font-size:1.2em;">
-                    <td style="border:1px solid #e4e4e4;">${subs[i]}</td>
-                    <td style="border:1px solid #e4e4e4;"><input name="${subs[i]}" type="text" class="frm_input"></td>
-                    <td style="border:1px solid #e4e4e4;"></td>
-                </tr>
-            `;
+        if(count > 0){
+            for(let j = 0; j < count; j++){
+                html += `
+                    <tr style="font-size:1.2em;">
+                        <td style="border:1px solid #e4e4e4;">${json['data'][j]['subject']}</td>
+                        <td style="border:1px solid #e4e4e4;"><input name="${json['data'][j]['subject']}" type="text" class="frm_input" value="${json['data'][j]['recode']}"></td>
+                        <td style="border:1px solid #e4e4e4;">${json['data'][j]['score']}</td>
+                    </tr>
+                `;
+            }
+        } else {
+            for(let i = 0; i < subs.length; i++){
+                html += `
+                    <tr style="font-size:1.2em;">
+                        <td style="border:1px solid #e4e4e4;">${subs[i]}</td>
+                        <td style="border:1px solid #e4e4e4;"><input name="${subs[i]}" type="text" class="frm_input"></td>
+                        <td style="border:1px solid #e4e4e4;">0</td>
+                    </tr>
+                `;
+            }
         }
         html += `
                 <tbody>
             </table>
         </div>
         <div style="position:absolute;bottom:20px;right:20px;display:flex;gap:15px;">
-            <button type="button" style="width:120px;height:50px;font-size:1.5em;" class="btn-n iswrite">계산</button>
+            <button id="calcSilgi" type="button" style="width:120px;height:50px;font-size:1.5em;" class="btn-n iswrite"`;
+        if(count > 0){
+            html += `onclick="calcSilgi(${subIdx},'update')"`;
+        } else {
+            html += `onclick="calcSilgi(${subIdx},'add')"`;
+        }
+        html += ` >계산</button>
             <button type="button" style="width:120px;height:50px;font-size:1.5em;" class="btn-n" id="closePopup">닫기</button>
         </div>`;
         $("#collegeDiv").html(html);
+
         $('#popupBackground').fadeIn(); // 배경 표시
         $('#collegePopup').fadeIn(); // 팝업 표시
         $('#closePopup, #popupBackground').click(function() {
@@ -522,6 +562,51 @@ $query_string = http_build_query(array(
         });
     }
 
+    function calcSilgi(idx,type){
+        let datas = [];
+
+        document.querySelectorAll("#collegeDiv table tbody input[type='text']").forEach((el,i,arr)=>{
+            let recode = el.value;
+            let score = el.parentNode.nextElementSibling.textContent;
+            let subject = el.parentNode.previousElementSibling.textContent;
+            datas.push({
+                'subject':subject,
+                'recode':recode,
+                'score':score
+            });
+        });
+        
+        $.ajax({
+            url: "/bbs/collegeSilgi_update.php",
+            type: "POST",
+            data: {
+                datas : datas,
+                type : type,
+                subIdx : idx,
+                id : $("#selStudent option:selected").data('id'),
+            },
+            async: false,
+            error: function(data) {
+                alert('저장 실패! 관리자에게 문의하세요.');
+            },
+            success: function(data) {
+                if(data == 'success'){
+                    let msg = "";
+                    if(type == 'add'){
+                        msg = "실기점수가 등록되었습니다.";
+                    } else {
+                        msg = "실기점수가 수정되었습니다.";
+                    }
+                    swal('성공!',msg,'success');
+                    setTimeout(() => {
+                        swal.close();
+                        $("#closePopup").click();
+                        viewColleges($("#selStudent option:selected").data('id'),curpage);
+                    }, 1500);
+                }
+            }
+        });
+    }
 
     function addCollege(el,idx){
         let type = "";
