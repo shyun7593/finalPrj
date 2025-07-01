@@ -153,7 +153,7 @@ $query_string = http_build_query(array(
                                         <select name="selStudent" id="selStudent" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;text-align:center;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
                                             <option value="">선택하세요.</option>
                                             <?
-                                                $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}'");
+                                                $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}' AND mb_profile = 'C40000003'");
                                                 foreach($memsql as $mm => $me){
                                             ?>
                                                 <option value="<?=$me['mb_no']?>" data-id="<?=$me['mb_id']?>" <?if($_SESSION['mb_profile'] == 'C40000003' && $_SESSION['mb_no'] == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
