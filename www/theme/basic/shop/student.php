@@ -47,7 +47,15 @@ $query_string = http_build_query(array(
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.15.1/billboard.pkgd.min.js" integrity="sha512-GwtYypdyozwd45WXjO4AFMfkxFR5IT17obTr6AwMSujATru34eQLMBFrRflUEcCiphKSjkMAfzcVwsW73rYtqQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.15.1/billboard.min.css" integrity="sha512-KjxUmY9HDOVZGrvwhoVaZJuy0gJroHlsQVQQQhXqVBWkx1qZyESNtF88JQxhuOHqx5N++AB8P9CM6pzM1F6cog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+    .teacherColl{
+        font-weight: 800;
+        background-color: #e4e4e4;
+    }
+    .myColl{
 
+    }
+</style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
 
@@ -134,7 +142,7 @@ $query_string = http_build_query(array(
                                 }
                                 ?>
                                 
-                                    <tr style="text-align: center;" class="onaction" onclick="viewStudent('<?=$m['mb_no']?>',event),viewPractice('<?=$m['mb_id']?>')">
+                                    <tr style="text-align: center;" class="onaction" onclick="viewStudent('<?=$m['mb_no']?>',event),viewPractice('<?=$m['mb_id']?>'),viewCollege('<?=$m['mb_id']?>')">
                                         <td><?= $i?></td>
                                         <td><?= $m['branchName']?></td>
                                         <td><?= $m['mb_name']?></td>
@@ -194,20 +202,22 @@ $query_string = http_build_query(array(
             <h2>지원대학</h2>
 
             <div class="tbl_wrap border-tb">
-                <table class="tbl_head01">
-                    <colgroup width="*">
-                    <colgroup width="*">
-                    <colgroup width="*">
-                    <colgroup width="*">
+                <table class="tbl_head01 tbl_2n_color">
                     <colgroup width="10%">
+                    <colgroup width="25%">
+                    <colgroup width="15%">
+                    <colgroup width="25%">
+                    <colgroup width="25%">
                     <thead>
-                        <th>학교명</th>
-                        <th>본인점수</th>
-                        <th>지원가능여부</th>
-                        <th>저장시간</th>
-                        <th></th>
+                        <tr class="headd">
+                            <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;"></th>
+                            <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;">학교명</th>
+                            <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;">본인점수</th>
+                            <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid #d3d3d3;">지원가능여부</th>
+                            <th style="color:black;font-weight:800;letter-spacing: 1.2px;top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);">저장시간</th>
+                        </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="hopeCollege">
                         
                     </tbody>
                 </table>
@@ -550,6 +560,64 @@ $query_string = http_build_query(array(
 
     }
     
+    function viewCollege(id){
+        $.ajax({
+            url: "/bbs/searchHopeCollege.php",
+            type: "POST",
+            data: {
+                memberId: id,
+            },
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                json = eval("(" + data + ");");
+                console.log(json);
+                if(!Array.isArray(json)){
+                    let html = ``;
+                    for (const tag in json['data']) {
+                        let cls = "";
+                        let recommend = "";
+                        if(json['data'][tag]['memId'] == json['data'][tag]['regId']){
+                            cls = " class='myColl'";
+                            recommend = "";
+                        } else {
+                            cls = " class='teacherColl'";
+                            recommend = "선생님 추천";
+                        }
+                        html += `
+                            <tr${cls}>
+                                <td style="text-align:center;">${recommend}</td>
+                                <td style="text-align:center;">[${json['data'][tag]['gun']}] [${json['data'][tag]['area']}] ${json['data'][tag]['cName']} ${json['data'][tag]['sName']}</td>
+                                <td style="text-align:center;"></td>
+                                <td style="text-align:center;"></td>
+                                <td style="text-align:center;">${json['data'][tag]['regDate']}</td>
+                            </tr>
+                        `;
+                    }
+                   
+                    $("#hopeCollege").html(html);
+                } else {
+                    html = `
+                    <section id="smb_my_od">
+                    <h2>실기 정보</h2>
+                    <div class="tbl_wrap" >
+                        <table class="tbl_head01">
+                            <tr style="text-align: center;">
+                                <td>실기 정보가 없습니다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+                    `
+                    $("#hopeCollege").html(html);
+                }
+            }
+        });
+
+    }
 
 
     $("#bid").on("change",function(){
