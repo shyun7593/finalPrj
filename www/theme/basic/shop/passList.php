@@ -1,251 +1,67 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
-
-$g5['title'] = '실기기록';
+if($_SESSION['mb_profile'] != 'C40000001'){
+    goto_url('/index');
+}
+$g5['title'] = '합격자 명단';
 include_once('./_head.php');
 
 if(!$str_date){
-    $str_date = date('Y-01');
+    $str_date = date('Y');
 }
 
-if(!$end_date){
-    $end_date = date('Y-m');
+if(!$coltype){
+    $coltype = 'ju';
 }
 
-$add_sql = " 1=1 AND (DATE_FORMAT(sp.date,'%Y-%m') between '{$str_date}' AND '{$end_date}')";
-$branch_sql = " 1=1 ";
+if($coltype == 'ju'){
+    $tblNm = 'g5_pass_ju_list';
+} else {
+    $tblNm = 'g5_pass_su_list';
+}
+
+$sql_add = "";
 
 if($gender){
-    $add_sql .= " AND mb.mb_sex = '{$gender}' ";
+    $sql_add .= " AND Gender = '{$gender}' ";
 }
 
-if($branchIdx){
-    $add_sql .= " AND mb.mb_signature = '{$branchIdx}' ";
-}
-
-switch($_SESSION['mb_profile']){
-    case 'C40000001': case 'C40000002': // 관리자, 선생님
-        $add_sql .= " AND 1=1 ";
-        break;
-    case 'C40000003': // 학생
-        $add_sql .= " AND sp.memberIdx = '{$_SESSION['ss_mb_id']}' ";
-        $branch_sql .= " AND b.idx = '{$_SESSION['mb_signature']}' ";
-        $branchIdx = $_SESSION['mb_signature'];
-        break;
-}
-
-$sql = "SELECT 
-            sp.memberIdx ,
-            DATE_FORMAT(sp.`date`,'%Y-%m') as 'date' ,
-            sp.sRank ,
-            sp.grade ,
-            sp.core_Rank,
-            sp.core_score,
-            sp.10m_Rank,
-            sp.10m_score,
-            sp.medicine_Rank,
-            sp.medicine_score,
-            sp.left_Rank,
-            sp.left_score,
-            sp.stand_Rank,
-            sp.stand_score,
-            sp.20mBu_Rank,
-            sp.20mBu_score,
-            sp.situp_Rank,
-            sp.situp_score,
-            sp.surgent_Rank,
-            sp.surgent_score,
-            sp.total_Rank,
-            sp.total_Rev,
-            (SELECT branchName FROM g5_branch b WHERE mb.mb_signature = b.idx) as 'branchName', 
-            mb.mb_name, 
-            mb.mb_1,
-	        mb.mb_sex
-        FROM g5_student_Practice sp
-        JOIN g5_member mb on
-        sp.memberIdx = mb.mb_id
-        WHERE
-         {$add_sql}
-        ORDER BY `date`,grade
-";
-$scnt = sql_fetch("SELECT 
-            count(*) as 'cnt'
-        FROM g5_student_Practice sp
-        JOIN g5_member mb on
-        sp.memberIdx = mb.mb_id
-        WHERE
-         {$add_sql}
-        ORDER BY `date`,grade");
-$bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
+$sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$subject}' $sql_add";
 
 ?>
-
 <style>
-.tbl_wrap {
-  overflow-x: auto; /* 가로 스크롤 */
-  -webkit-overflow-scrolling: touch; /* 모바일에서 스크롤 부드럽게 */
-}
-
-.tbl_head01 {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-
-
-.tbl_head01 th, .tbl_head01 td {
-  text-align: center;
-}
-
-/* 첫 번째 열부터 여섯 번째 열까지 sticky 처리 */
-.tbl_head01 th:nth-child(1),
-.tbl_head01 td:nth-child(1) {
-  position: sticky;
-  left: 0;
-  background: #fff;
-  z-index: 12;
-}
-
-.tbl_head01 th:nth-child(2),
-.tbl_head01 td:nth-child(2) {
-  position: sticky;
-  left: 100px;
-  background: #fff;
-  z-index: 12;
-}
-
-.tbl_head01 th:nth-child(3),
-.tbl_head01 td:nth-child(3) {
-  position: sticky;
-  left: 150px;
-  background: #fff;
-  z-index: 2;
-}
-
-.tbl_head01 th:nth-child(4),
-.tbl_head01 td:nth-child(4) {
-  position: sticky;
-  left: 250px;
-  background: #fff;
-  z-index: 2;
-}
-
-.tbl_head01 th:nth-child(5),
-.tbl_head01 td:nth-child(5) {
-  position: sticky;
-  left: 300px;
-  background: #fff;
-  z-index: 2;
-}
-
-.tbl_head01 th:nth-child(6),
-.tbl_head01 td:nth-child(6) {
-  position: sticky;
-  left: 480px;
-  background: #fff;
-  z-index: 2;
-}
-
-/* 캠퍼스 열에 sticky 처리 */
-.tbl_head01 th:nth-child(7),
-.tbl_head01 td:nth-child(7) {
-  position: sticky;
-  left: 530px;
-  background: #fff;
-  z-index: 2;
-}
-
-
-.tbl_head01 .headd th:nth-child(1)::after,
-.tbl_head01 .headd th:nth-child(2)::after,
-.tbl_head01 .headd th:nth-child(3)::after,
-.tbl_head01 .headd th:nth-child(4)::after,
-.tbl_head01 .headd th:nth-child(5)::after,
-.tbl_head01 .headd th:nth-child(6)::after
-{
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 110%;
-    width: 2px;
-    background-color: white; /* 경계선 색 */
-}
-
-
-
-
-/* 캠퍼스 열의 오른쪽 경계선 추가 (가상 요소로 처리) */
-.tbl_head01 .headd th:nth-child(7)::after,
-.tbl_head01 .headd td:nth-child(7)::after,
-.tbl_head01 .connt th:nth-child(7)::after,
-.tbl_head01 .connt td:nth-child(7)::after 
-{
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 110%;
-  width: 3px;
-  background-color: #bdb8b8; /* 경계선 색 */
-}
-
-.sub-header th {
-  z-index: 0 !important;
-  background-color: #fff;
-  border-bottom: none !important;
-}
-
-.headd th{
-    border-bottom: none !important;
-}
-
-.headd th:nth-child(15){
-    border-right: 2px solid white;
-}
-
-/* 2번째~7번째 열까지 계속 추가... */
-
+    select{
+        height : auto !important;
+    }
+    tbody tr{
+        border-bottom:1px solid #d3d3d3;
+    }
+    .sub-Jongmok{
+        padding: 5px 0;
+    }
+    td div:not(:last-child){
+        border-bottom:1px solid #e4e4e4;
+    }
 </style>
-
 <!-- 등급관리 시작 { -->
 <div id="smb_my">
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od" style="margin:0;">
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                <input type="hidden" id="gender" name="gender" value="<?=$gender?>">
+                <input type="hidden" id="coltype" name="coltype" value="<?=$coltype?>">
+                <input type="hidden" id="college" name="college" value="<?=$college?>">
+                <input type="hidden" id="subject" name="subject" value="<?=$subject?>">
                 <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
-                    <input type="hidden" id="branchIdx" name="branchIdx" value="<?=$branchIdx?>">
-                    <input type="hidden" id="gender" name="gender" value="<?=$gender?>">
-                    <div style="display: flex;align-items:center;gap:10px;">
-                        <div style="font-weight:800;">날&nbsp;&nbsp;&nbsp;짜 : </div>
-                        <div>
-                            <input type="month" class="frm_input" value="<?=$str_date?>" style="height:35px;" id="str_date" name="str_date" >&nbsp;&nbsp;~&nbsp;&nbsp;
-                            <input type="month" class="frm_input" value="<?=$end_date?>" style="height:35px;" id="end_date" name="end_date" >
-                        </div>
-                        <div>
-                            <button class="btn-n active" type="submit" style="margin-right:10px;"><i class="xi-search"></i></button>
-                            <button class="btn-n active" type="button" onclick="chDate('year')">이번년도</button>
-                            <button class="btn-n active" type="button" onclick="chDate('now')">이번달</button>
-                            <button class="btn-n active" type="button" onclick="chDate('prev')">전월</button>
-                            <button class="btn-n active" type="button" onclick="chDate('next')">익월</button>
-                        </div>
-                    </div>
-                    <div style="display: flex;align-items:center;gap:10px;">
-                        <div style="font-weight:800;">캠퍼스 : </div>
-                        <div>
-                            <?if($_SESSION['mb_profile'] == 'C40000001' || $_SESSION['mb_profile'] == 'C40000002'){?>
-                            <button type="button" class="btn-n <?if($branchIdx ==  '') echo "active";?>" onclick="viewCampus('')">전체</button>
-                            <?}?>
-                            <?
-                                $bres=sql_query($bsql);
-                                foreach($bres as $bs => $b){?>
-                                <button type="button" class="btn-n <?if($branchIdx == $b['idx']) echo "active";?>" onclick="viewCampus('<?=$b['idx']?>')"><?=$b['branchName']?></button>
-                                <?}
-                            ?>
-                        </div>
-                    </div>
                     <?if($_SESSION['mb_profile'] != 'C40000003'){?>
+                    <div style="display: flex;align-items:center;gap:10px;">
+                        <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                        <div>
+                            <button type="button" class="btn-n <?if($coltype == 'ju') echo "active";?>" onclick="viewJuSu('ju')">정시</button>
+                            <button type="button" class="btn-n <?if($coltype == 'su') echo "active";?>" onclick="viewJuSu('su')">수시</button>
+                        </div>
+                    </div>
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div style="font-weight:800;">성&nbsp;&nbsp;&nbsp;별 : </div>
                         <div>
@@ -256,105 +72,258 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                     </div>
                     <?}?>
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div style="font-weight:800;">종&nbsp;&nbsp;&nbsp;목 : </div>
-                        
-                            <div>
-                                <button type="button" class="subje btn-n active" id="tall" onclick="viewTypeChange(event)">전체</button>
-                                <button type="button" class="subje btn-n" id="core" onclick="viewTypeChange(event)">배근력</button>
-                                <button type="button" class="subje btn-n" id="m10m" onclick="viewTypeChange(event)">10m왕복</button>
-                                <button type="button" class="subje btn-n" id="medicine" onclick="viewTypeChange(event)">메디신</button>
-                                <button type="button" class="subje btn-n" id="leftGul" onclick="viewTypeChange(event)">좌전굴</button>
-                                <button type="button" class="subje btn-n" id="stand" onclick="viewTypeChange(event)">제멀</button>
-                                <button type="button" class="subje btn-n" id="m20mBu" onclick="viewTypeChange(event)">20m부저</button>
-                                <button type="button" class="subje btn-n" id="situp" onclick="viewTypeChange(event)">윗몸</button>
-                                <button type="button" class="subje btn-n" id="sergent" onclick="viewTypeChange(event)">서전트</button>
-                            </div>
+                        <div style="font-weight:800;">학&nbsp;&nbsp;&nbsp;교 : </div>
+                        <div>
+                            <select name="selectcollege" id="selectcollege" class="frm_input">
+                                <option value="">선택하세요.</option>
+                                <?
+                                    $passRes = sql_query("SELECT College FROM $tblNm GROUP BY College");
+                                    foreach($passRes as $pr => $p){?>
+                                        <option value="<?=$p['College']?>" <?if($p['College'] == $college) echo 'selected';?>><?=$p['College']?></option>
+                                <? }
+                                ?>
+                            </select>
+                        </div>
+                        <div style="font-weight:800;">학&nbsp;&nbsp;&nbsp;과 : </div>
+                        <div>
+                            <select name="selectsubject" id="selectsubject" class="frm_input">
+                                <option value="">대학먼저 선택해 주세요.</option>
+                                <?if($college){
+                                    $subRes = sql_query("SELECT `Subject` FROM $tblNm WHERE College = '{$college}' GROUP BY `Subject`");
+                                    foreach($subRes as $sr => $s){?>
+                                        <option value="<?=$s['Subject']?>" <?if($s['Subject'] == $subject) echo 'selected';?>><?=$s['Subject']?></option>
+                                <?  }
+                                }?>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </form>
-            <?if($scnt['cnt'] > 0){?>
+            <?if($subject){?>
             <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:73vh;">
+                <?if($coltype == 'ju'){?>
                 <table class="tbl_head01" style="width: auto;">
                     <thead>
-
                         <tr class="headd">
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">날짜</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">순위</th>
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">이름</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">성</th>
-                            <th style="top:0;z-index:15;min-width:180px;width:180px;background:rgba(31, 119, 180,0.1);" rowspan="2">학교</th>
-                            <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(31, 119, 180,0.1);" rowspan="2">학년</th>
-                            <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">캠퍼스</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='core' colspan="2">배근력</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='m10m' colspan="2">10m왕복</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='medicine' colspan="2">메디신</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='leftGul' colspan="2">좌전굴</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='stand' colspan="2">제멀</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='m20mBu' colspan="2">20m부저</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='situp' colspan="2">윗몸</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" class='sergent' colspan="2">서전트</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);border-right:2px solid white;" rowspan="2">총점</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(31, 119, 180,0.1);" rowspan="2">평균</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">성별</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="5">국어</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="5">수학</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">영어</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="5">탐구1</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="5">탐구2</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">한국사</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">군</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">수능</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="3">종목</th>
                         </tr>
                     <tr class="sub-header">
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='core'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='core'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m10m'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m10m'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='medicine'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='medicine'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='stand'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='stand'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='situp'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='situp'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:1px solid white;border-top:1px solid white;" class='sergent'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(31, 119, 180,0.1);border-right:2px solid white;border-top:1px solid white;" class='sergent'>점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">과목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">표</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">백</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">과목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">표</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">백</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">과목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">표</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">백</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">과목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">표</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">백</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">원</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">등</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">최초</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">최종</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;">점수</th>
                     </tr>
                 </thead>
                     <tbody>
                     <?
                         $res = sql_query($sql);
                         foreach($res as $rs => $s){
-                            if($s['mb_sex'] == "M"){
+                            if($s['Gender'] == "M"){
                                 $g = "남";
                             } else {
                                 $g = "여";
                             }
+                            $silgiJong = "";
+                            $silgiScore = "";
+                            $silgiRecord = "";
+                            $silgi = explode('/',$s['ssSilgiText']);
+                            if($silgi[0] == '비실기'){
+                                $silgiJong = '비실기';
+                            } else if(!$silgi[0]){
+
+                            } else {
+                                foreach($silgi as $sil => $si){
+                                    $note = explode(',',$si);
+                                    $i = 0;
+                                    foreach($note as $nt => $n){
+                                        switch($i){
+                                            case 0 :
+                                                $silgiJong .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                            case 1 :
+                                                $silgiScore .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                            case 2 :
+                                                $silgiRecord .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                        }
+                                        $i++;
+                                    }
+                                    $i = 0;
+                                }
+                            }
                             ?>
                             <tr class="connt">
-                                <td style="max-width:100px;text-align:center;"><?=$s['date']?></td>
-                                <td style="max-width:50px;text-align:center;"><?=$s['sRank']?></td>
-                                <td style="max-width:100px;text-align:center;"><?=$s['mb_name']?></td>
                                 <td style="max-width:50px;text-align:center;"><?=$g?></td>
-                                <td style="max-width:180px;text-align:center;"><?=$s['mb_1']?></td>
-                                <td style="max-width:50px;text-align:center;"><?=$s['grade']?></td>
-                                <td style="max-width:100px;text-align:center;"><?=$s['branchName']?></td>
-                                <td style="width:150px;text-align:center;" class="core core_Rank"><?=$s['core_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="core core_score"><?=$s['core_score']?></td>
-                                <td style="width:150px;text-align:center;" class="m10m m10m_Rank"><?=$s['10m_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="m10m m10m_score"><?=$s['10m_score']?></td>
-                                <td style="width:150px;text-align:center;" class="medicine medicine_Rank"><?=$s['medicine_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="medicine medicine_score"><?=$s['medicine_score']?></td>
-                                <td style="width:150px;text-align:center;" class="leftGul leftGul_Rank"><?=$s['left_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="leftGul leftGul_score"><?=$s['left_score']?></td>
-                                <td style="width:150px;text-align:center;" class="stand stand_Rank"><?=$s['stand_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="stand stand_score"><?=$s['stand_score']?></td>
-                                <td style="width:150px;text-align:center;" class="m20mBu m20mBu_Rank"><?=$s['20mBu_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="m20mBu m20mBu_score"><?=$s['20mBu_score']?></td>
-                                <td style="width:150px;text-align:center;" class="situp situp_Rank"><?=$s['situp_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="situp situp_score"><?=$s['situp_score']?></td>
-                                <td style="width:150px;text-align:center;" class="sergent sergent_Rank"><?=$s['surgent_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="sergent sergent_score"><?=$s['surgent_score']?></td>
-                                <td style="width:150px;text-align:center;" class="totals"><?=$s['total_Rank']?></td>
-                                <td style="width:150px;text-align:center;" class="avg"><?=$s['total_Rev']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorSubject']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['ssKorOrigin']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorPscore']?></td>
+                                <td style="max-width:180px;text-align:center;"><?=$s['ssKorSscore']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorGrade']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['ssMathSubject']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssMathOrigin']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssMathPscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssMathSscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssMathGrade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssEngOrigin']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssEngGrade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Subject']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Origin']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Pscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Sscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Grade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Subject']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Origin']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Pscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Sscore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Grade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssHisOrigin']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssHisGrade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssGrade']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssGun']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssSuScore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssGradeScore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssSilgiScore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssTotalScore']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssResult1']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['ssResult2']?></td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiJong?>
+                                </td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiScore?>
+                                </td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiRecord?>
+                                </td>
                             </tr>
                         <?}?>
                     </tbody>
                 </table>
+                <?}else{?>
+                    <table class="tbl_head01" style="width: auto;">
+                    <thead>
+                        <tr class="headd">
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">성별</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:200px;width:200px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">전형명</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">등급</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">기타</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;width:100%;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="3">종목</th>
+                        </tr>
+                        <tr class="sub-header">
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최초</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최종</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        </tr>
+                </thead>
+                    <tbody>
+                    <?
+                        $res = sql_query($sql);
+                        foreach($res as $rs => $s){
+                            if($s['Gender'] == "M"){
+                                $g = "남";
+                            } else {
+                                $g = "여";
+                            }
+                            $silgiJong = "";
+                            $silgiScore = "";
+                            $silgiRecord = "";
+                            $silgi = explode('/',$s['psuSilgiText']);
+                            if($silgi[0] == '비실기'){
+                                $silgiJong = '비실기';
+                            } else if(!$silgi[0]){
+
+                            } else {
+                                foreach($silgi as $sil => $si){
+                                    $note = explode(',',$si);
+                                    $i = 0;
+                                    foreach($note as $nt => $n){
+                                        switch($i){
+                                            case 0 :
+                                                $silgiJong .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                            case 1 :
+                                                $silgiScore .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                            case 2 :
+                                                $silgiRecord .= '<div class="sub-Jongmok">'. $n . '</div>';
+                                                break;
+                                        }
+                                        $i++;
+                                    }
+                                    $i = 0;
+                                }
+                            }
+                            ?>
+                            <tr class="connt">
+                                <td style="max-width:50px;text-align:center;"><?=$g?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['psuPassType']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['psuGrade']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['psuNaesin']?></td>
+                                <td style="max-width:180px;text-align:center;"><?=$s['psuSilgi']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['psuOther']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['psuTotal']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['psuResult1']?></td>
+                                <td style="width:150px;text-align:center;"><?=$s['psuResult2']?></td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiJong?>
+                                </td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiScore?>
+                                </td>
+                                <td style="text-align:center;padding : 0px;">
+                                    <?=$silgiRecord?>
+                                </td>
+                            </tr>
+                        <?}?>
+                    </tbody>
+                </table>
+                <?}?>
         </div>
             <?} else {?>
                 <div class="tbl_wrap border-tb">
@@ -373,7 +342,6 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
 </div>
 
 <script>
-    
     function viewTypeChange(e){
         let id = e.currentTarget.id;
         let classes = e.currentTarget.classList;
@@ -483,38 +451,23 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
         $("#fsearch").submit();
     }
 
-    function viewCampus(e){
-        $("#branchIdx").val(e);
+    function viewJuSu(e){
+        $("#college").val('');
+        $("#subject").val('');
+        $("#coltype").val(e);
         $("#fsearch").submit();
     }
 
-    function chDate(type){
-        switch(type){
-            case 'year':
-                $("#str_date").val('<?=date('Y-01')?>');
-                $("#end_date").val('<?=date('Y-m')?>');
-                break;
-            case 'now':
-                $("#str_date").val('<?=date('Y-m')?>');
-                $("#end_date").val('<?=date('Y-m')?>');
-                break;
-            case 'prev':
-                currentDate = new Date($("#str_date").val());
-                FirstDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()-1, 2).toISOString().slice(0,7);
-                lastDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString().slice(0,7);
-                $("#str_date").val(FirstDayofMonth);
-                $("#end_date").val(lastDayofMonth);
-                break;
-            case 'next':
-                currentDate = new Date($("#str_date").val());
-                FirstDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()+1,2).toISOString().slice(0,7);
-                lastDayofMonth = new Date(currentDate.getFullYear(), currentDate.getMonth()+2,1).toISOString().slice(0,7);
-                $("#str_date").val(FirstDayofMonth);
-                $("#end_date").val(lastDayofMonth);
-                break;
-        }
+    $("#selectcollege").on('change',function(){
+        $("#college").val($(this).val());
+        $("#subject").val('');
         $("#fsearch").submit();
-    }
+    });
+
+    $("#selectsubject").on('change',function(){
+        $("#subject").val($(this).val());
+        $("#fsearch").submit();
+    });
 </script>
 <!-- } 마이페이지 끝 -->
 
