@@ -16,8 +16,10 @@ if(!$coltype){
 
 if($coltype == 'ju'){
     $tblNm = 'g5_pass_ju_list';
+    $order = " CASE WHEN ssResult2 = '합격' THEN 1 WHEN ssResult2 = '불합격' THEN 3 ELSE 2 END";
 } else {
     $tblNm = 'g5_pass_su_list';
+    $order = " CASE WHEN psuResult2 = '합격' THEN 1 WHEN psuResult2 = '불합격' THEN 3 ELSE 2 END";
 }
 
 $sql_add = "";
@@ -26,7 +28,7 @@ if($gender){
     $sql_add .= " AND Gender = '{$gender}' ";
 }
 
-$sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$subject}' $sql_add";
+$sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$subject}' $sql_add ORDER BY $order";
 
 ?>
 <style>
@@ -114,40 +116,40 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">한국사</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">군</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">수능</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">수능</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="3">종목</th>
                         </tr>
                     <tr class="sub-header">
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">과목</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">과목</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">과목</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">과목</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최종</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">표</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">백</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
+                        <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
+                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
+                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최종</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">종목</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">기록</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">점수</th>
@@ -182,38 +184,38 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             ?>
                             <tr class="connt">
                                 <td style="max-width:50px;text-align:center;"><?=$g?></td>
-                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorSubject']?></td>
-                                <td style="max-width:100px;text-align:center;"><?=$s['ssKorOrigin']?></td>
+                                <td style="max-width:100px;text-align:center;"><?=$s['ssKorSubject']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorOrigin']?></td>
                                 <td style="max-width:50px;text-align:center;"><?=$s['ssKorPscore']?></td>
-                                <td style="max-width:180px;text-align:center;"><?=$s['ssKorSscore']?></td>
+                                <td style="max-width:50px;text-align:center;"><?=$s['ssKorSscore']?></td>
                                 <td style="max-width:50px;text-align:center;"><?=$s['ssKorGrade']?></td>
                                 <td style="max-width:100px;text-align:center;"><?=$s['ssMathSubject']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssMathOrigin']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssMathPscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssMathSscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssMathGrade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssEngOrigin']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssEngGrade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Subject']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Origin']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Pscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Sscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam1Grade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Subject']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Origin']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Pscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Sscore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTam2Grade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssHisOrigin']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssHisGrade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssGrade']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssGun']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssSuScore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssGradeScore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssSilgiScore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssTotalScore']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssResult1']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['ssResult2']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssMathOrigin']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssMathPscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssMathSscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssMathGrade']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssEngOrigin']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssEngGrade']?></td>
+                                <td style="width:100px;text-align:center;"><?=$s['ssTam1Subject']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam1Origin']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam1Pscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam1Sscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam1Grade']?></td>
+                                <td style="width:100px;text-align:center;"><?=$s['ssTam2Subject']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam2Origin']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam2Pscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam2Sscore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTam2Grade']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssHisOrigin']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssHisGrade']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssGrade']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssGun']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssSuScore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssGradeScore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssSilgiScore']?></td>
+                                <td style="width:50px;text-align:center;"><?=$s['ssTotalScore']?></td>
+                                <td style="width:100px;text-align:center;"><?=$s['ssResult1']?></td>
+                                <td style="width:100px;text-align:center;"><?=$s['ssResult2']?></td>
                                 <td style="text-align:center;padding : 0px;">
                                     <?=$silgiJong?>
                                 </td>
