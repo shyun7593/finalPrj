@@ -515,6 +515,9 @@ $query_string = http_build_query(array(
         if(!val){
             setTimeout(() => {
                 swal("경고!","학생 먼저 선택해주세요.","info");
+                $("#viewhideOutput").removeClass('viewType');
+                $(".outputScore ").removeClass('viewType');
+
             }, 10);
             return false;
         }
