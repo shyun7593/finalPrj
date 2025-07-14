@@ -134,7 +134,7 @@ box-sizing:border-box;
     transition: transform 0.5s ease;
 }
 .outputScore.viewType{
-    transform: translateX(98%);
+    transform: translateX(100%);
 }
 
 #viewhideOutput{

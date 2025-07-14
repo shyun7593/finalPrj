@@ -80,7 +80,7 @@ $query_string = http_build_query(array(
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
                 <input type="hidden" id="his_Code" name="his_Code">
                 <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;<?if($_SESSION['mb_profile'] == 'C40000003') echo "display:none;";?>">
-                    <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-12px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
+                    <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
                     <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
                         <colgroup>
                             <col width="100px">
