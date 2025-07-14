@@ -263,6 +263,7 @@ $msql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice_read WHERE memIdx = '
 $nsql = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_notice");
 
 $_SESSION['mb_profile'] = $sql['mb_profile'];
+$_SESSION['mb_id'] = $sql['mb_id'];
 $_SESSION['mb_level'] = $sql['mb_level'];
 $_SESSION['mb_signature'] = $sql['mb_signature'];
 $_SESSION['mb_no'] = $sql['mb_no'];
