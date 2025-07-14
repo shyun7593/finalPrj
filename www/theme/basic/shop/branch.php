@@ -466,7 +466,6 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
-                console.log(json);
                 showMemoView(json,month);
                 const target = document.getElementById('fsearch');
                 if (target) {
@@ -586,8 +585,6 @@ $query_string = http_build_query(array(
                     el.classList.add('iswrite');
                 }
             });
-
-            console.log(memoText,editor);
         }, 0);
     }
 
