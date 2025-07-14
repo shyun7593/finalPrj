@@ -100,6 +100,12 @@ box-sizing:border-box;
     border: unset !important;
 }
 
+.btn-n.active2{
+    background-color: #0000ffad !important;
+    color: white;
+    border: unset !important;
+}
+
 .btn-n.btn-bold{
     font-weight: 800;
 }

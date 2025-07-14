@@ -17,6 +17,7 @@ if($type == 'save'){
                 title = '{$memoTitle}',
                 mbIdx = '{$mbIdx}',
                 tag = '{$memoMonth}',
+                regDate = '".G5_TIME_YMDHIS."',
                 regId = '{$_SESSION['ss_mb_id']}'
         ");
 

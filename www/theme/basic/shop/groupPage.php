@@ -217,7 +217,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                                     <td><?= $gender?></td>
                                     <td><?= hyphen_birth_number($m['mb_birth'])?></td>
                                     <td><?= hyphen_hp_number($m['mb_hp'])?></td>
-                                    <td><?= $m['codeName']?></td>
+                                    <td <?if($m['code'] == 'C40000004') echo 'style="color:red;"';?>><?= $m['codeName']?></td>
                                     <!-- <td><?= $level?></td> -->
                                 </tr>
                                 <?}

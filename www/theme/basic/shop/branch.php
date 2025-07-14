@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$g5['title'] = '학원관리';
+$g5['title'] = '상담관리';
 include_once('./_head.php');
 
 if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C40000004'){
@@ -161,7 +161,8 @@ $query_string = http_build_query(array(
                             }
                         ?>
                         <!-- <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemberInfo(event,'<?=$m['mb_no']?>'),viewStudent('<?=$m['mb_no']?>')"> -->
-                        <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemo(event,'<?=$m['mb_no']?>','<?=$m['mb_name']?>')">
+                        <!-- <tr style="text-align: center;" class="onaction memberRow" onclick="viewMemo(event,'<?=$m['mb_no']?>','<?=$m['mb_name']?>')"> -->
+                        <tr style="text-align: center;" class="onaction memberRow">
                             <td><?= $m['branchName'] ?></td>
                             <td><?= $m['mb_name'] ?></td>
                             <td><?= $m['mb_1'] ?></td>
@@ -169,13 +170,13 @@ $query_string = http_build_query(array(
                             <td><?= $gender ?></td>
                             <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
                             <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
-                            <td>
+                            <!-- <td>
                                 <?
                                     $meres = sql_fetch("SELECT * FROM g5_memo gm WHERE gm.memberIdx = {$m['mb_no']}");
                                 ?>
                                 <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx'] && $meres['memo']) echo 'iswrite';?>">상담내역</button>
-                            </td>
-                            <!-- <td>
+                            </td> -->
+                            <td>
                                 <?
                                     $meres = sql_query("WITH RECURSIVE dateMonth AS (
                                                 SELECT code,codeName
@@ -194,9 +195,9 @@ $query_string = http_build_query(array(
                                             $me['codeName'] = '등록상담';
                                         }
                                 ?>
-                                    <button type="button" class="btn-n <?if($me['idx']) echo 'iswrite';?>" value="<?=$me['code']?>"><?=$me['codeName']?></button>
+                                    <button type="button" class="btn-n <?if($me['idx']) echo 'iswrite';?>"  onclick="viewMemberInfo(event,'<?=$m['mb_no']?>','<?=$me['code']?>','<?=$m['mb_name']?>')" value="<?=$me['code']?>"><?=$me['codeName']?></button>
                                 <?}?>
-                            </td> -->
+                            </td>
                             <td>
                             <?
                                     $scres = sql_query("WITH RECURSIVE dateMonth AS (
@@ -282,6 +283,7 @@ $query_string = http_build_query(array(
 </script>
 
 <script>
+    let editor = [];
     let prevMemo = '';
     function fsearch_submit(e) {
     }
@@ -441,16 +443,16 @@ $query_string = http_build_query(array(
         );
     }
 
-    function viewMemberInfo(e,mbId){
-       
-        $("#showMemoMem").val(mbId);
+    function viewMemberInfo(e,mbId,month,memNm){
         document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
-            if(el == e.currentTarget){
+            if(el == e.currentTarget.parentNode.parentNode){
                 el.classList.add('isactive');
             } else {
                 el.classList.remove('isactive');
             }
         });
+        $("#showMemoMem").val(mbId);
+        $(".memberName").html(memNm + ' ');
         $.ajax({
             url: "/bbs/searchMemberDatas.php",
             type: "POST",
@@ -464,7 +466,8 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
-                showMemoView(json,$("#showMemoMonth").val());
+                console.log(json);
+                showMemoView(json,month);
                 const target = document.getElementById('fsearch');
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -479,6 +482,9 @@ $query_string = http_build_query(array(
         }
         const memoData = json.memoData;
         let memoMonn = [];
+        let memoText = [];
+        editor = [];
+        
         let html1 = `
             <div id="memoMonth" style="margin-bottom:15px;">
                 <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">등록상담</button>
@@ -488,65 +494,115 @@ $query_string = http_build_query(array(
                 <?}?>
             </div>
             <div style="display:flex;flex-direction:column;gap:15px;">`;
-            html1 += `
-                <h2 style="margin:unset !important;padding: 0 5px;">메모 작성</h2>
-                <div style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">
-                    <input type="hidden" value="">
-                    <input type="text" style="font-size:1.4em;font-weight:bold;border:1px solid #e4e4e4;padding:2px 5px;" value="" placeholder="제목">
-                    <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
-                    <textarea placeholder="상담내용 작성" style="border:1px solid #e4e4e4;border-radius:10px;height:200px;resize:none;padding:10px;font-size:1em;"></textarea>
-                    <div>
-                        <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'save')">저장</button>
-                    </div>
-                </div>
-                `;
+            
+                let viewty = "";
                 for (const tag in memoData) {
-                    const tagData = memoData[tag].data;
-                    memoMonn.push(tag);
-                    for (const idx in tagData) {
-                        const item = tagData[idx];
-                        if(tag != month){
-                            html1 += `<div class="${tag}" style="display:none;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
-                        } else{
-                            html1 += `<div class="${tag}" style="display:flex;flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">`;
+                    if(month == tag){
+                            viewty = "flex";
+                        } else {
+                            viewty = "none";
                         }
+                    const tagData = memoData[tag].data;
+                    if(tagData.gmIdx){
+                        memoText[tag] = tagData.memo;
+                        memoMonn.push(tag);
                         html1 += `
-                            <input type="hidden" value="${item.gmIdx}">
-                            <input type="text" onclick="updateMemo(event)" style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${item.title}">
+                        <div class="${tag}" style="display:${viewty};flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">
+                            <input type="hidden" value="${tagData.gmIdx}">
+                            <input type="text" onclick="updateMemo(event)" style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${tagData.title}">
                             <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
-                            <textarea style="pointer-events:none;border:1px solid #e4e4e4;border-radius:10px;height:200px;resize:none;padding:10px;font-size:1em;">${item.memo}</textarea>
-                            <p style="color:#b3b3b3;font-size:0.8em;">작성자 : ${item.regName} ${item.regDate}</p>`;
-
-                        if(item.updName){
+                            <div id="noticeHead" style="font-size: 1.2em;height:700px;max-width:550px;border:1px solid #e1e1e1;padding:5px 10px; border-radius:10px;">
+                                <div class="viewer${tag}" style="font-size: 1.1em;"></div>
+                                <div class="editor${tag}" style="display:none;"></div>
+                            </div>
+                            <p style="color:#b3b3b3;font-size:0.8em;">작성자 : ${tagData.regName} ${tagData.regDate}</p>
+                        `;
+                        if(tagData.updName){
                             html1+=`
-                            <p style="color:#b3b3b3;font-size:0.8em;">수정자 : ${item.updName} ${item.updDate}</p>
+                            <p style="color:#b3b3b3;font-size:0.8em;">수정자 : ${tagData.updName} ${tagData.updDate}</p>
                             `;
                         }
-
-                html1+=`
-                    <div style="display:none;">
-                        <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'update')">수정</button>
-                        <button type="button" class="btn-n btn-bold btn-large" onclick="cancleMemo(event)">취소</button>
+                        html1 += `
+                        <div class="updateArea${tag}">
+                            <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="updateInner(event,'${tag}')">수정</button>
+                        </div>
+                        <div class="savedArea${tag}" style="display:none;">
+                            <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'update')">저장</button>
+                            <button type="button" class="btn-n btn-bold btn-large" onclick="cancleMemo(event,'${tag}')">취소</button>
+                        </div>
                     </div>
-                </div>
-                `;
+                        `;
+                    } else {
+                        memoText[tag] = '';
+                        html1 += `
+                        <div class="${tag}" style="display:${viewty};flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">
+                            <input type="hidden" value="">
+                            <input type="text" style="font-size:1.4em;font-weight:bold;border:1px solid #e4e4e4;padding:2px 5px;" value="" placeholder="제목">
+                            <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
+                            <div id="noticeHead" style="font-size: 1.2em;height:700px;max-width:550px;border:1px solid #e1e1e1;padding:5px 10px; border-radius:10px;">
+                                <div class="viewer${tag}" style="display:none;"></div>
+                                <div class="editor${tag}" style=""></div>
+                            </div>
+                            <div>
+                                <button type="button" class="btn-n btn-green btn-bold btn-large" onclick="clickMemo(event,'save')">저장</button>
+                            </div>
+                        </div>
+                        `;
                     }
                 }                
-            
             html1 += `
             </div>
             `;
         $("#memoArea").html(html1);
+        
         setTimeout(() => {
             document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
+                // editor 설정 (기존 textarea 자리에 editor${tag}로 만들어야 함)
+                toastui.Editor.factory({
+                    el: document.querySelector(`.viewer${el.value}`),
+                    viewer: true,
+                    initialValue: memoText[el.value] || ''
+                });
+
+                editor[`${el.value}`] = new toastui.Editor({
+                    el: document.querySelector(`.editor${el.value}`),
+                    initialEditType: 'wysiwyg',
+                    previewStyle: 'vertical',
+                    height: '650px',
+                    initialValue: memoText[el.value] || '',
+                    toolbarItems: [
+                        ['heading', 'bold', 'italic', 'strike'],
+                        ['hr', 'quote'],
+                        ['ul', 'ol', 'task'],
+                        ['table'],
+                        ['link']
+                    ]
+                });
+
                 if(el.value == month){
-                    el.classList.add('active');
+                    el.classList.add('active2');
                 }
                 if(memoMonn.includes(el.value)){
                     el.classList.add('iswrite');
                 }
             });
+
+            console.log(memoText,editor);
         }, 0);
+    }
+
+    function cancleMemo(e,month){
+        $(`.updateArea${month}`).css('display','');
+        $(`.savedArea${month}`).css('display','none');
+        $(`.editor${month}`).css('display','none');
+        $(`.viewer${month}`).css('display','');
+    }
+
+    function updateInner(e,month){
+        $(`.updateArea${month}`).css('display','none');
+        $(`.savedArea${month}`).css('display','');
+        $(`.editor${month}`).css('display','');
+        $(`.viewer${month}`).css('display','none');
     }
 
     let memoCont = '';
@@ -564,21 +620,11 @@ $query_string = http_build_query(array(
         }
     }
 
-    function cancleMemo(e){
-        $(e.currentTarget).parent().css('display','none');
-        $(e.currentTarget).parent().parent().find('textarea').css('pointer-events','none');
-        $(e.currentTarget).parent().parent().find('textarea').val(memoCont);
-        $(e.currentTarget).parent().parent().find('input').eq(1).val(memoTitle);
-        memoCont = '';
-        memoTitle = '';
-        memoIdx = '';
-    }
-
     function clickMemo(e,type){
-        let memoMonth = $("#memoMonth > button.active").val();
+        let memoMonth = $("#memoMonth > button.active2").val();
         let memoIdx = $(e.currentTarget).parent().parent().find('input').eq(0).val();
         let message = '';
-        let memoContent = $(e.currentTarget).parent().parent().find('textarea').val();
+        let memoContent = editor[`${memoMonth}`].getHTML();
         let memoTitles = $(e.currentTarget).parent().parent().find('input').eq(1).val();
 
         if(type == 'update'){
@@ -638,10 +684,10 @@ $query_string = http_build_query(array(
         $("#showMemoMonth").val($(e.currentTarget).val());
         document.querySelectorAll("#memoMonth button").forEach((el,i,arr)=>{
             if(el == e.currentTarget){
-                el.classList.add('active');
+                el.classList.add('active2');
                 $(`.${el.value}`).css('display','flex');
             } else {
-                el.classList.remove('active');
+                el.classList.remove('active2');
                 $(`.${el.value}`).css('display','none');
             }
         });

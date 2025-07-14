@@ -246,6 +246,12 @@ function doAct(type){
                             swal.close();
                         }, 1200);
                         break;
+                    case 'wait':
+                        swal('','승인 대기중 입니다.','error');
+                        setTimeout(() => {
+                            swal.close();
+                        }, 1200);
+                        break;
                 }
             }
         }

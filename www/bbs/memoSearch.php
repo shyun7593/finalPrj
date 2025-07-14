@@ -12,19 +12,28 @@ function getMemberFullData($mb_no) {
 
     // 메모 데이터 가져오기
     $memNote = sql_query("
-        SELECT 
-            gm.regDate,
-            gm.updDate,
-            gm.memo,
-            gm.tag,
-            gm.title,
-            g1.mb_name AS regName,
-            g2.mb_name AS updName,
-            gm.idx
-        FROM g5_member_note gm
-        LEFT JOIN g5_member g1 ON g1.mb_id = gm.regId
-        LEFT JOIN g5_member g2 ON g2.mb_id = gm.updId
-        WHERE gm.mbIdx = '{$mb_no}'
+        SELECT
+	n.regDate,
+	n.updDate,
+	n.memo,
+	c.code as 'tag',
+	n.title,
+	g1.mb_name AS regName,
+	g2.mb_name AS updName,
+	n.idx
+FROM
+	g5_cmmn_code c
+LEFT JOIN 
+    g5_member_note n ON
+	c.code = n.tag
+	AND n.mbIdx = '{$mb_no}'
+LEFT JOIN g5_member g1 ON
+	g1.mb_id = n.regId
+LEFT JOIN g5_member g2 ON
+	g2.mb_id = n.updId
+WHERE
+	c.upperCode LIKE 'C6000%'
+	OR c.code LIKE 'C0000%'
     ");
 
     $memoData = [];
@@ -35,10 +44,11 @@ function getMemberFullData($mb_no) {
         if (!isset($memoData[$tag])) {
             $memoData[$tag] = [
                 'tag' => $tag,
+                'gmIdx' => $gmIdx,
                 'data' => []
             ];
         }
-        $memoData[$tag]['data'][$gmIdx] = [
+        $memoData[$tag]['data'] = [
             'gmIdx' => $gmIdx,
             'memo' => $v['memo'],
             'title' => $v['title'],
