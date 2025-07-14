@@ -666,7 +666,7 @@ $query_string = http_build_query(array(
                                 setTimeout(() => {
                                     swal.close();
                                 }, 1200);
-                                showMemoView(json,$("#showMemoMonth").val());
+                                showMemoView(json,memoMonth);
                                 
                             }
                     });
