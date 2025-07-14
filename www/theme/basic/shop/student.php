@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$g5['title'] = '학생관리';
+$g5['title'] = '학생별차트';
 include_once('./_head.php');
 
 if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C40000004'){
@@ -54,6 +54,9 @@ $query_string = http_build_query(array(
     }
     .myColl{
 
+    }
+    #radarChart{
+        min-width: 500px;
     }
 </style>
 <!-- 마이페이지 시작 { -->
@@ -417,7 +420,7 @@ $query_string = http_build_query(array(
                     <section id="smb_my_od" style="margin-bottom:20px;">
 	                <h2>실기 정보</h2>
                     <div style="display:grid;grid-template-columns:1fr 0.5fr 0.5fr;min-height:300px;">
-                        <div class="tbl_wrap border-tb" style="border-bottom:unset;width:50vw;">
+                        <div class="tbl_wrap border-tb" style="border-bottom:unset;">
                             <table class="tbl_head01 tbl_2n_color" style="width: auto;">
                                 <thead>
                                     <tr class="headd">
