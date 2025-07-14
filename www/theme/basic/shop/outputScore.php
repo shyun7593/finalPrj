@@ -8,13 +8,17 @@ include_once('./_head.php');
 switch($_SESSION['mb_profile']){
     case 'C40000001':
         break;
-    case 'C40000002': case 'C40000003':
+    case 'C40000002': 
         $bid = $_SESSION['mb_signature'];
+        break;
+    case 'C40000003':
+        $bid = $_SESSION['mb_signature'];
+        $selMonth = 'C60000005';
         break;
 }
 
 if(!$selMonth){
-    $selMonth = '3모';
+    $selMonth = 'C60000001';
 }
 
 
@@ -61,6 +65,9 @@ $query_string = http_build_query(array(
     .cutline.remove-view{
         display: none !important;
     }
+    #wrapper_title{
+        padding: 10px 0 !important;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -72,8 +79,9 @@ $query_string = http_build_query(array(
                 <input type="hidden" id="tam1_Code" name="tam1_Code">
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
                 <input type="hidden" id="his_Code" name="his_Code">
-                <div class="tbl_wrap outputScore border-tb" style="width:60vw;">
-                    <table class="tbl_head01 tbl_2n_color">
+                <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;<?if($_SESSION['mb_profile'] == 'C40000003') echo "display:none;";?>">
+                    <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-12px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
+                    <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
                         <colgroup>
                             <col width="100px">
                             <col width="100px">
@@ -122,7 +130,7 @@ $query_string = http_build_query(array(
                                                 $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
                                                 foreach($msql as $ms => $m){
                                             ?>
-                                                <option value="<?=$m['code']?>"><?=$m['codeName']?></option>
+                                                <option value="<?=$m['code']?>" <?if($selMonth == $m['code']) echo "selected";?>><?=$m['codeName']?></option>
                                             <?}?>
                                         </select>
                                     <?}else{?>
@@ -207,7 +215,7 @@ $query_string = http_build_query(array(
                         </tbody>
                     </table>
                 </div>
-                <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
+                <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 5px;">
                 <div style="display: flex;align-items:center;gap:10px;">
                     <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
                     <div>
@@ -240,7 +248,9 @@ $query_string = http_build_query(array(
                     </div>
                 </div>
                 <div>
-                    <h2 style="margin:10px 0 0px !important;">전체 : <span class="totalCnt"></span> / 현재 페이지 : <span class="now-page"></span></h2>
+                    <h2 style="margin:5px 0 0px !important;">전체 : <span class="totalCnt"></span>
+                     <!-- / 현재 페이지 : <span class="now-page"></span> -->
+                    </h2>
                 </div>
             </div>
             </form>
@@ -249,13 +259,13 @@ $query_string = http_build_query(array(
     </div>
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
-        <section id="smb_my_od">
+        <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
-            <div class="tbl_wrap collegeInfos border-tb">
+            <div class="tbl_wrap collegeInfos border-tb" style="height: 75vh;overflow-y:auto;">
                     <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;">
                         <colgroup>
                         </colgroup>
-                        <thead>
+                        <thead style="position: sticky;top:0;z-index:2;background:rgba(227, 244, 248) !important;">
                             <tr>
                                 <td style="width:60px;"></td>
                                 <td colspan="2">추천대학</td>
@@ -291,7 +301,7 @@ $query_string = http_build_query(array(
                 </div>
             </div>
         </section>
-        <div class="paging" style="text-align:center; margin:20px 0;"></div>
+        <!-- <div class="paging" style="text-align:center; margin:20px 0;"></div> -->
     </div>
 </div>
 <div id="collegePopup">
@@ -305,6 +315,10 @@ $query_string = http_build_query(array(
     let topRate = "";
     let curpage = 1;
     let areas = [];
+    $("#viewhideOutput").on('click',function(){
+        $(".outputScore").toggleClass('viewType');
+        $(this).toggleClass('viewType');
+    });
     $(document).ready(function(){
         $.ajax({
             url: "/bbs/searchTopRate.php",
@@ -528,8 +542,7 @@ $query_string = http_build_query(array(
                 coll = eval("(" + data + ");");
                 drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
                 $(".totalCnt").html(coll['paging'].total_count + '개');
-                $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
-                console.log(coll);
+                // $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
                 coll.data.forEach(function(row, idx){
                     let no = (coll['paging'].page - 1) * 20 + (idx + 1);
                     addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);

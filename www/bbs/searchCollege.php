@@ -138,8 +138,7 @@ JOIN g5_jungsi gj on
     gj.juIdx = gcs.jungsiIdx
 WHERE {$add_sql}
 ) as A
-ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName
-LIMIT {$offset}, {$rows}";
+ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName";
 
 $mres = sql_query($sql);
 $data = [];
