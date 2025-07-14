@@ -120,46 +120,11 @@ $res = sql_fetch($sql);
                 </div>
             <?}?>
         </section>
-        <?if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){?>
-        <!-- <div id="smb_my_list" style="overflow: hidden;">
-            <input type="hidden" id="showMemoMem">
-            <input type="hidden" id="showMemoMonth">
-            <section id="smb_my_od" style="height: 100%;">
-                <div id="wrapper_title">상담이력</div>
-                <div id="memoArea" style="height: 520px;">
-                    
-                </div>
-            </section>
-        </div> -->
-        <div id="smb_my_list" class="studentScore">
-            <!-- 성적 정보 시작 { -->
-        <section id="smb_my_od">
-            
-            <div class="tbl_wrap" >
-                <table class="tbl_head01">
-                    <tr style="text-align: center;">
-                        <td>검색할 학생을 눌러주세요.</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="tbl_wrap" >
-                
-            </div>
-        </section>
-        <!-- } 성적 정보 끝 -->
-    </div>
-        <?}?>
     </div>
 </div>
 
 <script>
-    $(document).ready(function(){
-        document.querySelectorAll("#wrapper_title")[0].setAttribute('style','display:none');
-        if('<?=$_SESSION['mb_profile']?>' == 'C40000004' || '<?=$_SESSION['mb_profile']?>' == 'C40000003'){
-            viewStudent();
-            // viewMemberInfo();
-        }
-    })
+
 const pattern = /[a-zA-Z0-9]/; // 영문자 또는 숫자
 document.getElementById("mb_birth").addEventListener("blur", function() {
   const val = this.value;
@@ -356,140 +321,7 @@ $(".updateGradeCut").on('click',function(){
     );
 });
 
-function viewStudent(){
-        // let html = "<div>hi</div>";
-        // $(".studentScore").html(html);
-        
-        $.ajax({
-            url: "/bbs/searchScore.php",
-            type: "POST",
-            data: {
-                mb_no : '<?=$member['mb_no']?>',
-            },
-            dataType: 'json',
-            async: false,
-            error: function(data) {
-                alert('에러가 발생하였습니다.');
-                return false;
-            },
-            success: function(data) {
-                const count = Object.keys(data['monthList']).length;
 
-                const getValue = (monthCode, subject, field) => {
-                    return data['scoreData'][monthCode]?.data?.[subject]?.[field] ?? '-';
-                };
-
-                let html = `
-                    <section id="smb_my_od">
-	        <div id="wrapper_title">성적 정보</div>
-            <div class="tbl_wrap border-tb" style="border-bottom:unset;">
-                <table class="tbl_head01 tbl_one_color">
-                    <tr style="text-align: center;">
-                        <th>소속</th>
-                        <td>${data['info']['branch']}</td>
-                        <th>이름</th>
-                        <td>${data['info']['memberName']}</td>
-                        <th>학교</th>
-                        <td>${data['info']['school']}</td>
-                        <th>학년</th>
-                        <td>${data['info']['layer']}</td>
-                        <th>성별</th>
-                        <td>${data['info']['gender']}</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="tbl_wrap border-tb">
-                <table class="tbl_head01 tbl_2n_color">
-                    <thead class="sc_border">
-                        <th>구분</th>
-                        <th colspan="5">국어</th>
-                        <th colspan="5">수학</th>
-                        <th colspan="2">영어</th>
-                        <th colspan="5">탐구Ⅰ</th>
-                        <th colspan="5">탐구Ⅱ</th>
-                        <th colspan="2">한국사</th>
-                        <th colspan="3">제2외국어</th>
-                    </thead>
-                    <tbody>
-                        <tr style="text-align: center; background-color:rgba(31, 119, 180,0.1);">
-                            <td>구분</td>
-                            <td>과목</td>
-                            <td>원</td>
-                            <td>표</td>
-                            <td>백</td>
-                            <td>등</td>
-                            <td>과목</td>
-                            <td>원</td>
-                            <td>표</td>
-                            <td>백</td>
-                            <td>등</td>
-                            <td>원</td>
-                            <td>등</td>
-                            <td>과목</td>
-                            <td>원</td>
-                            <td>표</td>
-                            <td>백</td>
-                            <td>등</td>
-                            <td>과목</td>
-                            <td>원</td>
-                            <td>표</td>
-                            <td>백</td>
-                            <td>등</td>
-                            <td>원</td>
-                            <td>등</td>
-                            <td>과목</td>
-                            <td>원</td>
-                            <td>등</td>
-                        </tr>`;
-                    for(let i = 0; i < count; i++){
-                        let monthArr = Object.values(data['monthList'])[i];
-                        const code = monthArr['code'];
-                        
-                            html +=`
-                            <tr style="text-align: center;">
-                                <td>${monthArr['codeName']}</td>
-                                <td>${getValue(code, '국어', 'subject')}</td>
-                                <td>${getValue(code, '국어', 'origin')}</td>
-                                <td>${getValue(code, '국어', 'pscore')}</td>
-                                <td>${getValue(code, '국어', 'sscore')}</td>
-                                <td>${getValue(code, '국어', 'grade')}</td>
-                                <td>${getValue(code, '수학', 'subject')}</td>
-                                <td>${getValue(code, '수학', 'origin')}</td>
-                                <td>${getValue(code, '수학', 'pscore')}</td>
-                                <td>${getValue(code, '수학', 'sscore')}</td>
-                                <td>${getValue(code, '수학', 'grade')}</td>
-                                <td>${getValue(code, '영어', 'origin')}</td>
-                                <td>${getValue(code, '영어', 'grade')}</td>
-                                <td>${getValue(code, '탐구영역1', 'subject')}</td>
-                                <td>${getValue(code, '탐구영역1', 'origin')}</td>
-                                <td>${getValue(code, '탐구영역1', 'pscore')}</td>
-                                <td>${getValue(code, '탐구영역1', 'sscore')}</td>
-                                <td>${getValue(code, '탐구영역1', 'grade')}</td>
-                                <td>${getValue(code, '탐구영역2', 'subject')}</td>
-                                <td>${getValue(code, '탐구영역2', 'origin')}</td>
-                                <td>${getValue(code, '탐구영역2', 'pscore')}</td>
-                                <td>${getValue(code, '탐구영역2', 'sscore')}</td>
-                                <td>${getValue(code, '탐구영역2', 'grade')}</td>
-                                <td>${getValue(code, '한국사', 'origin')}</td>
-                                <td>${getValue(code, '한국사', 'grade')}</td>
-                                <td>${getValue(code, '제2외국어/한문', 'subject')}</td>
-                                <td>${getValue(code, '제2외국어/한문', 'origin')}</td>
-                                <td>${getValue(code, '제2외국어/한문', 'grade')}</td>
-                            </tr>`;
-                        
-                    }
-                    
-                    html += `</tbody>
-                </table>
-            </div>
-	    </section>
-                `;
-            $(".studentScore").html(html);
-            }
-        });
-        // $("#student").val(id);
-        // $("#fsearch").submit();
-    }
 </script>
 <!-- } 마이페이지 끝 -->
 

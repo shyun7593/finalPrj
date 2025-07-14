@@ -93,7 +93,6 @@ $query_string = http_build_query(array(
     #collegePopup .inner_Cont{
         display:flex;
         gap:25px;
-        padding: 0 10px;
         margin:5px;
     }
 
@@ -341,49 +340,48 @@ $query_string = http_build_query(array(
                                 <colgroup width='*'>
                                 <colgroup width='*'>
                                 <colgroup width='*'>
+                                <colgroup width='*'>
                                 <thead>
                                     <tr>
                                         <th>과목</th>
-                                        <th>비율</th>
-                                        <th>선택여부</th>
-                                        <th>제외 과목</th>
-                                        <th>활용 지표</th>
+                                        <th>국어</th>
+                                        <th>수학</th>
+                                        <th>영어</th>
+                                        <th>탐구</th>
+                                        <th>한국사</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>국어</td>
+                                        <td style="background-color: #334d63;color: white;font-weight:bold;">비율</td>
                                         <td>${json['data']['jungsi']['Korrate'] ? json['data']['jungsi']['Korrate'].replace(/,/g, ', ') : '-'}</td>
-                                        <td>${json['data']['jungsi']['KorSelect'] ? json['data']['jungsi']['KorSelect'] : '-'}</td>
-                                        <td>${json['data']['jungsi']['KorSub'] ? json['data']['jungsi']['KorSub'] : '-'}</td>
-                                        <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>수학</td>
                                         <td>${json['data']['jungsi']['Mathrate'] ? json['data']['jungsi']['Mathrate'].replace(/,/g, ', ') : '-'}</td>
-                                        <td>${json['data']['jungsi']['MathSelect'] ? json['data']['jungsi']['MathSelect'] : '-'}</td>
-                                        <td>${json['data']['jungsi']['MathSub'] ? json['data']['jungsi']['MathSub'] : '-'}</td>
-                                        <td>${json['data']['jungsi']['Mathrate'] ? json['data']['jungsi']['Char'] : '-'}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>영어</td>
                                         <td>${json['data']['jungsi']['Engrate'] ? json['data']['jungsi']['Engrate'].replace(/,/g, ', ') : '-'}</td>
-                                        <td>${json['data']['jungsi']['EngSelect'] ? json['data']['jungsi']['EngSelect'] : '-'}</td>
-                                        <td>-</td>
-                                        <td>-</td>
-                                    </tr>
-                                    <tr>
-                                        <td>탐구</td>
                                         <td>${json['data']['jungsi']['Tamrate'] ? json['data']['jungsi']['Tamrate'].replace(/,/g, ', ') : '-'}</td>
-                                        <td>${json['data']['jungsi']['TamSelect'] ? json['data']['jungsi']['TamSelect'] : '-'}${json['data']['jungsi']['TamCnt'] > 0 ? '(' + json['data']['jungsi']['TamCnt'] + ')': ''}</td>
-                                        <td>${json['data']['jungsi']['TamSub'] ? json['data']['jungsi']['TamSub'] : '-'}</td>
-                                        <td>${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['HisAdd'] ? json['data']['jungsi']['HisAdd'] : '-'}</td>
                                     </tr>
                                     <tr>
-                                        <td>한국사</td>
-                                        <td>${json['data']['jungsi']['HisAdd'] ? json['data']['jungsi']['HisAdd'] : '-'}</td>
+                                        <td style="background-color: #334d63;color: white;font-weight:bold;">선택 여부</td>
+                                        <td>${json['data']['jungsi']['KorSelect'] ? json['data']['jungsi']['KorSelect'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['MathSelect'] ? json['data']['jungsi']['MathSelect'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['EngSelect'] ? json['data']['jungsi']['EngSelect'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['TamSelect'] ? json['data']['jungsi']['TamSelect'] : '-'}${json['data']['jungsi']['TamCnt'] > 0 ? '(' + json['data']['jungsi']['TamCnt'] + ')': ''}</td>
                                         <td>${json['data']['jungsi']['HisSelect'] ? json['data']['jungsi']['HisSelect'] : '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #334d63;color: white;font-weight:bold;">제외 과목</td>
+                                        <td>${json['data']['jungsi']['KorSub'] ? json['data']['jungsi']['KorSub'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['MathSub'] ? json['data']['jungsi']['MathSub'] : '-'}</td>
                                         <td>-</td>
+                                        <td>${json['data']['jungsi']['TamSub'] ? json['data']['jungsi']['TamSub'] : '-'}</td>
+                                        <td>-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: #334d63;color: white;font-weight:bold;">활용 지표</td>
+                                        <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
+                                        <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
+                                        <td>-</td>
+                                        <td>${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}</td>
                                         <td>-</td>
                                     </tr>
                                 </tbody>
@@ -476,18 +474,20 @@ $query_string = http_build_query(array(
                             //     </table>
                             // </div>`;
                             html += `<div style="text-align:center;">
-                                <p>영어</p>
                                 <table style="text-align:center;" border="1">
                                     <colgroup>
                                         <col width="50px">
                                         <col width="*">
                                     </colgroup>
+                                    <thead>
+                                        <th colspan="10" style="background-color: #334d63;color: white;">영어</th>
+                                    </thead>
                                     <tbody>
                             `;
                             html += `<tr>`;
                             for(let t = 1; t < 10; t++){
                                 if(t == 1){
-                                    html += `<td style="background-color: #334d63;color: white;">등급</td>`;
+                                    html += `<td style="background-color: #334d63;color: white;font-weight:bold;">등급</td>`;
                                 }
                                 html += `
                                             <td>
@@ -498,7 +498,7 @@ $query_string = http_build_query(array(
                             html += '</tr><tr>';
                             for(let t = 1; t < 10; t++){
                                 if(t == 1){
-                                    html += `<td style="background-color: #334d63;color: white;">점수</td>`;
+                                    html += `<td style="background-color: #334d63;color: white;font-weight:bold;">점수</td>`;
                                 }
                                 html += `
                                             <td>
@@ -541,18 +541,20 @@ $query_string = http_build_query(array(
                             //         </tbody>
                             //     </table>`;
                             html += `<div style="text-align:center;">
-                                <p>한국사</p>
                                 <table style="text-align:center;" border="1">
                                     <colgroup>
                                         <col width="50px">
                                         <col width="*">
                                     </colgroup>
+                                    <thead>
+                                        <th colspan="10" style="background-color: #334d63;color: white;">한국사</th>
+                                    </thead>
                                     <tbody>
                             `;
                             html += `<tr>`;
                             for(let t = 1; t < 10; t++){
                                 if(t == 1){
-                                    html += `<td style="background-color: #334d63;color: white;">등급</td>`;
+                                    html += `<td style="background-color: #334d63;color: white;font-weight:bold;">등급</td>`;
                                 }
                                 html += `
                                             <td>
@@ -563,7 +565,7 @@ $query_string = http_build_query(array(
                             html += '</tr><tr>';
                             for(let t = 1; t < 10; t++){
                                 if(t == 1){
-                                    html += `<td style="background-color: #334d63;color: white;">점수</td>`;
+                                    html += `<td style="background-color: #334d63;color: white;font-weight:bold;">점수</td>`;
                                 }
                                 html += `
                                             <td>
