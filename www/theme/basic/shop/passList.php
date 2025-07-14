@@ -39,11 +39,20 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
         border-bottom:1px solid #d3d3d3;
     }
     .sub-Jongmok{
-        padding: 5px 0;
+        padding: 5px 3px;
+        min-width: 80px;
     }
     td div:not(:last-child){
-        border-bottom:1px solid #e4e4e4;
+        border-right:1px solid #e4e4e4;
     }
+    .fSilgi{
+        border-left: 1px solid #e4e4e4;
+    }
+
+    td.tSilgi:not(:has(~ td.tSilgi)) {
+  border-right: 1px solid #e4e4e4; /* 원하는 테두리 스타일을 적용하세요 */
+}
+    
 </style>
 <!-- 등급관리 시작 { -->
 <div id="smb_my">
@@ -121,7 +130,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="3">종목</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="18">종목</th>
                         </tr>
                     <tr class="sub-header">
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">과목</th>
@@ -150,9 +159,24 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                         <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
                         <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
                         <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최종</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">종목</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
                     </tr>
                 </thead>
                     <tbody>
@@ -164,23 +188,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             } else {
                                 $g = "여";
                             }
-                            $silgiJong = "";
-                            $silgiScore = "";
-                            $silgiRecord = "";
                             $silgi = explode('/',$s['ssSilgiText']);
-                            if($silgi[0] == '비실기'){
-                                $silgiJong = '비실기';
-                            } else if(!$silgi[0]){
-
-                            } else {
-                                foreach($silgi as $sil => $si){
-                                    $note = explode(',',$si);
-                                    $silgiJong .= '<div class="sub-Jongmok">'. ($note[0] ? $note[0] : '-') . '</div>';
-                                    $silgiScore .= '<div class="sub-Jongmok">'. ($note[1] ? $note[1] : "-") . '</div>';
-                                    $silgiRecord .= '<div class="sub-Jongmok">'. ($note[2] ? $note[2] : '-') . '</div>';
-                                    
-                                }
-                            }
                             ?>
                             <tr class="connt">
                                 <td style="max-width:50px;text-align:center;"><?=$g?></td>
@@ -215,16 +223,30 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                                 <td style="width:100px;text-align:center;"><?=$s['ssSilgiScore']?></td>
                                 <td style="width:100px;text-align:center;"><?=$s['ssTotalScore']?></td>
                                 <td style="width:100px;text-align:center;"><?=$s['ssResult1']?></td>
-                                <td style="width:100px;text-align:center;"><?=$s['ssResult2']?></td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiJong?>
-                                </td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiScore?>
-                                </td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiRecord?>
-                                </td>
+                                <td style="width:100px;text-align:center;border-right:1px solid #e4e4e4"><?=$s['ssResult2']?></td>
+                                <?
+                                    $silgi = explode('/',$s['ssSilgiText']);
+                                    if($silgi[0] == '비실기'){?>
+                                        <td colspan="18" style="text-align:center;">비실기</td>
+                                    <?} else if(!$silgi[0]){?>
+                                        <td colspan="18" style="text-align:center;">-</td>
+                                    <?} else {
+                                        $nm = 18;
+                                        foreach($silgi as $sil => $si){
+                                            $note = explode(',',$si);?>
+                                            <td style="text-align:center;" class="fSilgi"><?=$note[0] ? $note[0] : '-'?></td>
+                                            <td style="text-align:center;"><?=$note[1] ? $note[1] : '-'?></td>
+                                            <td style="text-align:center;" class="tSilgi"><?=$note[2] ? $note[2] : '-'?></td>
+                                        <?
+                                            $nm = $nm-3;
+                                        }
+                                        if($nm > 0){
+                                            for($t=0; $t < $nm; $t++){?>
+                                            <td style="text-align:center;">-</td>
+                                        <?}
+                                        }
+                                    }
+                                ?>
                             </tr>
                         <?}?>
                     </tbody>
@@ -241,11 +263,26 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">기타</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
-                            <th style="position:sticky;top:0;z-index:13;width:100%;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="3">종목</th>
+                            <th style="position:sticky;top:0;z-index:13;width:100%;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="18">실기점수</th>
                         </tr>
                         <tr class="sub-header">
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최초</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최종</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
@@ -260,22 +297,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             } else {
                                 $g = "여";
                             }
-                            $silgiJong = "";
-                            $silgiScore = "";
-                            $silgiRecord = "";
-                            $silgi = explode('/',$s['psuSilgiText']);
-                            if($silgi[0] == '비실기'){
-                                $silgiJong = '비실기';
-                            } else if(!$silgi[0]){
-
-                            } else {
-                                foreach($silgi as $sil => $si){
-                                    $note = explode(',',$si);
-                                    $silgiJong .= '<div class="sub-Jongmok">'. ($note[0]? $note[0] : '-') . '</div>';
-                                    $silgiScore .= '<div class="sub-Jongmok">'. ($note[1]? $note[1] : '-') . '</div>';
-                                    $silgiRecord .= '<div class="sub-Jongmok">'. ($note[2]? $note[2] : '-') . '</div>';
-                                }
-                            }
+                            $silgis = "";
                             ?>
                             <tr class="connt">
                                 <td style="max-width:50px;text-align:center;"><?=$g?></td>
@@ -287,15 +309,29 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                                 <td style="max-width:100px;text-align:center;"><?=$s['psuTotal']?></td>
                                 <td style="width:150px;text-align:center;"><?=$s['psuResult1']?></td>
                                 <td style="width:150px;text-align:center;"><?=$s['psuResult2']?></td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiJong?>
-                                </td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiScore?>
-                                </td>
-                                <td style="text-align:center;padding : 0px;">
-                                    <?=$silgiRecord?>
-                                </td>
+                                <?
+                                    $silgi = explode('/',$s['psuSilgiText']);
+                                    if($silgi[0] == '비실기'){?>
+                                        <td colspan="18" style="text-align:center;">비실기</td>
+                                    <?} else if(!$silgi[0]){?>
+                                        <td colspan="18" style="text-align:center;">-</td>
+                                    <?} else {
+                                        $nm = 18;
+                                        foreach($silgi as $sil => $si){
+                                            $note = explode(',',$si);?>
+                                            <td style="text-align:center;" class="fSilgi"><?=$note[0] ? $note[0] : '-'?></td>
+                                            <td style="text-align:center;"><?=$note[1] ? $note[1] : '-'?></td>
+                                            <td style="text-align:center;" class="tSilgi"><?=$note[2] ? $note[2] : '-'?></td>
+                                        <?
+                                            $nm = $nm-3;
+                                        }
+                                        if($nm > 0){
+                                            for($t=0; $t < $nm; $t++){?>
+                                            <td style="text-align:center;">-</td>
+                                        <?}
+                                        }
+                                    }
+                                ?>
                             </tr>
                         <?}?>
                     </tbody>
