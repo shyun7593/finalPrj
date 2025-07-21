@@ -29,8 +29,14 @@ WHERE {$sql_add}");
 $res = sql_query("select 
                     gc.*,
                     gcs.*, 
-                    (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx) as 'su', 
-                    (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx) as 'ju',
+                    CASE
+                        WHEN gcs.susiIdx is null OR gcs.susiIdx = '' THEN 0
+                        ELSE 1
+                    END as 'su',
+                    CASE
+                        WHEN gcs.jungsiIdx is null OR gcs.jungsiIdx = '' THEN 0
+                        ELSE 1
+                    END as 'ju',
                     gac.idx as 'myIdx',
                     gcc.codeName as 'areaName'
                 from g5_college gc
@@ -163,9 +169,9 @@ $query_string = http_build_query(array(
                     foreach($res as $k => $v){
                 ?>
                     <div style="height:160px;border:2px solid #e4e4e480;border-radius:20px;box-shadow:0 5px 10px darkgray;max-width:400px;" class="college_hov colleges" data-area="<?=$v['areaName']?>" data-college="<?=$v['cName']?>" data-subject="<?=$v['sName']?>" data-susi="<?=$v['su']?>" data-jungsi="<?=$v['ju']?>">
-                        <div style="display: grid;grid-template-columns:1fr 2fr 0.5fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
+                        <div style="display: grid;grid-template-columns:1fr 2fr 0.2fr;height:100%;align-items:center;padding:10px 20px;gap:10px;">
                             <div onclick="viewDetail('<?=$v['sIdx']?>')">
-                                <img src="<?=$v['c_url']?>" style="max-width:110px;"/>
+                                <img src="<?=$v['c_url']?>" style="max-width:100px;"/>
                             </div>
                             <div style="height:100%;padding:10px;display: flex;flex-direction: column;justify-content: space-between;" onclick="viewDetail('<?=$v['sIdx']?>')">
                                 <div>
@@ -225,6 +231,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
+                console.log(json);
                 // <div style="font-size:1.5em;font-weight:800;padding:0 10px;">
                 //         ${json['data']['college']['subjectNm']}
                 //     </div>
@@ -275,9 +282,9 @@ $query_string = http_build_query(array(
                         html += `<div class="top_menu jInfo" style="pointer-events:none !important;color:#e4e4e4;" data-type="jInfo" data-rm="sInfo">정시</div>`;
                     }
                 
-                    if(!Array.isArray(json['data']['susi']) && !Array.isArray(json['data']['jungsi'])){
+                    if(json['data']['susi'].length > 0 && !Array.isArray(json['data']['jungsi'])){
                         html += `<div class="top_menu sInfo" data-type="sInfo" data-rm="jInfo">수시</div>`;
-                    } else if(!Array.isArray(json['data']['susi'])){
+                    } else if(json['data']['susi'].length > 0){
                         html += `<div class="top_menu sInfo active" data-type="sInfo" data-rm="jInfo">수시</div>`;
                     } else{
                         html += `<div class="top_menu sInfo" style="pointer-events:none !important;color:#e4e4e4;"  data-type="sInfo" data-rm="jInfo">수시</div>`;
@@ -651,16 +658,216 @@ $query_string = http_build_query(array(
                     </div>`;
                     
                 }
-                if(!Array.isArray(json['data']['susi'])){
-                    html += `
-                        <div id="sInfo" class="info-Content">
-                            수시 정보 :
+
+                // 수시영역
+                if(json['data']['susi'] != null){
+                    html += `<div id="sInfo" class="info-Content cnt${json['data']['susi'].length}">`;
+                    for(let j = 0; j<json['data']['susi'].length; j++){
+                        html += `
+                        <div class="susi-Order" data-idx="${j}" style="text-align:center;padding:15px;cursor:pointer;">
+                            ${json['data']['susi'][j]['suOrder']}
                         </div>
                     `;
-                    
+                    }
+                    html += `
+                        </div>
+                    `;
+                    for(let k = 0; k < json['data']['susi'].length; k++){
+                        let stag = "";
+                        if(parseInt(json['data']['susi'][k]['suPerson'])){
+                            stag = " 명";
+                        }
+                        let spro = "";
+                        if(json['data']['susi'][k]['suPro']){
+                            spro = " / 교직이수 : " + json['data']['susi'][k]['suPro'];
+                        }
+
+                        html += `<div class="susi-Content">
+                                    <div>
+                                        <p class="p_title">모집 인원 : <span style="font-weight:normal;">${json['data']['susi'][k]['suPerson']}${stag}${spro}</span></p>
+                                        <p class="p_title">전형/상세 : <span style="font-weight:normal;">${json['data']['susi'][k]['suType']} - ${json['data']['susi'][k]['suDetail']}</span></p>
+                                        <p class="p_title">접수/마감일<span style="font-weight:normal;font-size:0.8em;">(학생부 기준일 : ${json['data']['susi'][k]['suSchool'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')})</span></p>
+                                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                                            <table style="text-align:center;" border="1">
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="2">원서</th>
+                                                        <th colspan="2">실기</th>
+                                                        <th rowspan="2">합격</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>접수</th>
+                                                        <th>마감</th>
+                                                        <th>시작</th>
+                                                        <th>마감</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suAppStart'] ? json['data']['susi'][k]['suAppStart'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suAppEnd'] ? json['data']['susi'][k]['suAppEnd'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSilStart'] ? json['data']['susi'][k]['suSilStart'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSilEnd'] ? json['data']['susi'][k]['suSilEnd'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suPsDate'] ? json['data']['susi'][k]['suPsDate'].toString().replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3') : '-'}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>`;
+                                    if(json['data']['susi'][k]['suGraduDate'] && json['data']['susi'][k]['suSchoolType']){
+                                        html += `<p class="p_title">졸업/고등학교<span style="font-weight:normal;">${json['data']['susi'][k]['suGraduDate']} - ${json['data']['susi'][k]['suSchoolType']}</span></p>`;
+                                    }
+                                    html+=`
+                                        <p class="p_title">내신반/영구분</p>
+                                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                                            <table style="text-align:center;" border="1">
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>내신</th>
+                                                        <th>영구분</th>
+                                                        <th colspan="2">1단계</th>
+                                                        <th colspan="4">2단계</th>
+                                                        <th rowspan="2">총점</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>교과</th>
+                                                        <th>비교과</th>
+                                                        <th>적용</th>
+                                                        <th>배수</th>
+                                                        <th>내신</th>
+                                                        <th>실기</th>
+                                                        <th>면접</th>
+                                                        <th>기타</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaeSinType'].split(",")[0] ? json['data']['susi'][k]['suNaeSinType'].split(",")[0] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaeSinType'].split(",")[1] ? json['data']['susi'][k]['suNaeSinType'].split(",")[1] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suFirst'].split(",")[0] ? json['data']['susi'][k]['suFirst'].split(",")[0] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suFirst'].split(",")[1] ? json['data']['susi'][k]['suFirst'].split(",")[1] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSecond'].split(",")[0] ? json['data']['susi'][k]['suSecond'].split(",")[0] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSecond'].split(",")[1] ? json['data']['susi'][k]['suSecond'].split(",")[1] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSecond'].split(",")[2] ? json['data']['susi'][k]['suSecond'].split(",")[2] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suSecond'].split(",")[3] ? json['data']['susi'][k]['suSecond'].split(",")[3] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suTotalScore'] ? json['data']['susi'][k]['suTotalScore'] : '-'}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <p class="p_title">학년별 내신반영비율</p>
+                                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                                            <table style="text-align:center;" border="1">
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <colgroup width='*'>
+                                                <thead>
+                                                    <tr>
+                                                        <th>1</th>
+                                                        <th>2</th>
+                                                        <th>3</th>
+                                                        <th>전학년</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suGradeScore'].split(",")[0] ? json['data']['susi'][k]['suGradeScore'].split(",")[0] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suGradeScore'].split(",")[1] ? json['data']['susi'][k]['suGradeScore'].split(",")[1] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suGradeScore'].split(",")[2] ? json['data']['susi'][k]['suGradeScore'].split(",")[2] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suGradeScore'].split(",")[3] ? json['data']['susi'][k]['suGradeScore'].split(",")[3] : '-'}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                <div>`;
+                                let sNormal = "";
+                                let sNF = "";
+                                let sFutuer = "";
+                                if(json['data']['susi'][k]['suNaesinNormal']){
+                                    sNormal = `일반<span style="font-weight:normal;font-size:0.8em;"> - ${json['data']['susi'][k]['suNaesinNormal']}</span>`;
+                                    sNF = " / ";
+                                }
+                                if(json['data']['susi'][k]['suNaesinFutuer'] != '-' && json['data']['susi'][k]['suNaesinFutuer'] != ''){
+                                    sFutuer = `진로<span style="font-weight:normal;font-size:0.8em;"> - ${json['data']['susi'][k]['suNaesinFutuer']}</span>`;
+                                } else {
+                                    sNF = "";
+                                }
+                                if(sNormal || sFutuer){
+                                    html += `<p class="p_title">${sNormal}${sNF}${sFutuer}</p>`;
+                                }
+                                    
+                                html += `
+                                        <p class="p_title">내신적용<span style="font-weight:normal;font-size:0.8em;">${json['data']['susi'][k]['suNaesinOther'] ? ' - ' + json['data']['susi'][k]['suNaesinOther'] : ''}</span></p>
+                                        <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:1em;">
+                                            <table style="text-align:center;" border="1">
+                                                <colgroup width='60px'>
+                                                <colgroup width='50px'>
+                                                <colgroup width='50px'>
+                                                <colgroup width='50px'>
+                                                <colgroup width='50px'>
+                                                <colgroup width='50px'>
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="6">교과반영과목</th>
+                                                        <th rowspan="2">활용<br>지표</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>전과목</th>
+                                                        <th>국어</th>
+                                                        <th>수학</th>
+                                                        <th>영어</th>
+                                                        <th>사회</th>
+                                                        <th>과학</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[0] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[0] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[1] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[1] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[2] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[2] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[3] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[3] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[4] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[4] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinSubject'].split(",")[5] ? json['data']['susi'][k]['suNaesinSubject'].split(",")[5] : '-'}</td>
+                                                        <td style="padding:4px 3px;">${json['data']['susi'][k]['suNaesinGuide'] ? json['data']['susi'][k]['suNaesinGuide'] : '-'}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>`;
+                                        if(json['data']['susi'][k]['suNaesinOther'] != '-' && json['data']['susi'][k]['suNaesinOther'] != ''){
+                                            html += `<p class="p_title">수능최저<span style="font-weight:normal;font-size:0.8em;"> - ${json['data']['susi'][k]['suNaesinOther']}</span></p>`;
+                                        }
+                                        if(json['data']['susi'][k]['suSilgiGap'] != '' && json['data']['susi'][k]['suSilgiGap'] != '-'){
+                                            html += `<p class="p_title">실기 급감<span style="font-weight:normal;font-size:0.8em;"> - ${json['data']['susi'][k]['suSilgiGap']} 점</span></p>`;
+                                        }
+                                        if(json['data']['susi'][k]['suSilgi'].split(",")[0]){
+                                            html+=`
+                                            <div style="padding: 0 10px;margin:0 5px;font-size:1.1em;">`;
+                                            let Psub = json['data']['susi'][k]['suSilgi'].split(",");
+                                            for(let j=0;j<Psub.length;j++){
+                                                html += `<div class="lis">${Psub[j]}</div>`;
+                                            }
+                                            html+=`</div>`;
+                                        }
+                                        html += `
+                                </div>
+                            </div>
+                        `;
+                    }
                 }
                $("#collegeDiv").html(html);
                setTimeout(() => {
+
                     $(".top_menu").on('click',function(){
                         let wView =$(this).data('type');
                         let rView =$(this).data('rm');
@@ -669,12 +876,47 @@ $query_string = http_build_query(array(
                         $(`.${wView}`).addClass('active');
                         $(`#${rView}`).removeClass('view');
                         $(`.${rView}`).removeClass('active');
-                        
+                        if(wView == 'sInfo'){
+                            document.querySelectorAll(".susi-Order")[0].click();
+                        } else {
+                            document.querySelectorAll(".susi-Order").forEach((el,i,arr)=>{
+                                el.classList.remove('view');
+                                el.classList.remove('active');
+                                document.querySelectorAll(".susi-Content")[i].classList.remove('view');
+                            });
+                        }
                     });
+
+                    $(".susi-Order").on('click',function(){
+                        let idx = $(this).data('idx');
+                        document.querySelectorAll(".susi-Order").forEach((el,i,arr)=>{
+                            if(i == idx){
+                                el.classList.add('view');
+                                el.classList.add('active');
+                                document.querySelectorAll(".susi-Content")[i].classList.add('view');
+                            } else {
+                                el.classList.remove('view');
+                                el.classList.remove('active');
+                                document.querySelectorAll(".susi-Content")[i].classList.remove('view');
+                            }
+                        });
+                    });
+                    if($(".sInfo").hasClass('active')){
+                        $("#sInfo").addClass('view');
+                        $("#sInfo").addClass('active');
+                        console.log(document.querySelectorAll(".susi-Order")[0]);
+                        document.querySelectorAll(".susi-Order")[0].click();
+                    }
+                    if($(".ctype.active").data('value') == '수시'){
+                        let wView = $(".top_menu.sInfo").data('type');
+                        let rView = $(".top_menu.sInfo").data('rm');
+                        $(`#${wView}`).addClass('view');
+                        $(`.${wView}`).addClass('active');
+                        $(`#${rView}`).removeClass('view');
+                        $(`.${rView}`).removeClass('active');
+                        document.querySelectorAll(".susi-Order")[0].click();
+                    }
                }, 0);
-                // console.log(json['data']['college']);
-                // console.log(json['data']['susi']);
-                // console.log(json['data']['jungsi']);
             }
         });
         $('#popupBackground').fadeIn(); // 배경 표시

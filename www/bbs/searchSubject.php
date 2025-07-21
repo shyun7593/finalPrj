@@ -57,7 +57,6 @@ switch($stype){
 $sql = "SELECT 
             gcs.*,
             gj.*,
-            gs.*,
             gc.*,
             gcc.codeName as 'gun',
             gcc2.codeName as 'areaName',
@@ -69,12 +68,10 @@ $sql = "SELECT
             gcc.code = gcs.cmmn1
         JOIN g5_cmmn_code gcc2 on
             gcc2.code = gcs.areaCode
-        LEFT JOIN g5_susi gs on
-            gs.suIdx = gcs.susiIdx
         LEFT JOIN g5_jungsi gj on
             gj.juIdx = gcs.jungsiIdx
         LEFT JOIN g5_add_college gac on
-            gac.subIdx = gcs.sIdx AND memId = '{$_SESSION['ss_mb_id']}'
+            gac.subIdx = gcs.sIdx AND memId = '{$_SESSION['ss_mb_id']}' AND gac.memId = gac.regId 
         WHERE {$add_sql}";
 
 $mres = sql_query($sql);
@@ -99,13 +96,42 @@ foreach ($mres as $k => $v) {
         'addYn' => $v['addC']
     ];
 
-    if($v['suIdx']){
-        $sh = sql_query("SELECT * FROM g5_history_score WHERE hSubIdx = {$v['sIdx']}");
-        $sl = sql_query("SELECT * FROM g5_lang_score WHERE lSubIdx = {$v['sIdx']}");
-        $se = sql_query("SELECT * FROM g5_english_score WHERE eSubIdx = {$v['sIdx']}");
-        $data['susi'] = [
-            'person' => $v['suPerson'] // 모집인원
-        ];
+    if($v['susiIdx']){
+        $sures = sql_query("SELECT * FROM g5_susi WHERE FIND_IN_SET(suIdx,'{$v['susiIdx']}')");
+        $sucnt = 0;
+        foreach($sures as $sr => $s){
+            
+            $data['susi'][$sucnt] = [
+                'suOrder'=> $s['suOrder'], // 실기/종합/논술 등등
+                'suPerson'=> $s['suPerson'], // 모집인원
+                'suPro'=> $s['suPro'], // 교직여부
+                'suType'=> $s['suType'], // 전형 
+                'suDetail'=> $s['suDetail'], // 상세
+                'suSchool'=> $s['suSchool'], // 학생부 기준일
+                'suAppStart'=> $s['suAppStart'], // 원서 시작일
+                'suAppEnd'=> $s['suAppEnd'], // 원서 마감일
+                'suSilStart'=> $s['suSilStart'], // 실기 시작일
+                'suSilEnd'=> $s['suSilEnd'], // 실기 마감일
+                'suPsDate'=> $s['suPsDate'], // 합격자 발표
+                'suGraduDate'=> $s['suGraduDate'], // 졸업년도
+                'suSchoolType'=> $s['suSchoolType'], // 지원 고등학교
+                'suNaeSinType'=> $s['suNaeSinType'], // 내신반영구분 교과/비교과
+                'suFirst'=> $s['suFirst'], // 1단계 적용/배수
+                'suSecond'=> $s['suSecond'], // 내신/실기/면접/기타
+                'suTotalScore'=> $s['suTotalScore'], // 총점
+                'suGradeScore'=> $s['suGradeScore'], // 학년별 내신 반영 비율 1/2/3/전학년
+                'suNaesinNormal'=> $s['suNaesinNormal'], // 일반
+                'suNaesinFutuer'=> $s['suNaesinFutuer'], // 진로
+                'suNaesinSubject'=> $s['suNaesinSubject'], // 전과목 국/영/수/사/과
+                'suNaesinOther'=> $s['suNaesinOther'], // 기타
+                'suNaesinGuide'=> $s['suNaesinGuide'], // 활용지표
+                'suNaesinGrade'=> $s['suNaesinGrade'], // 내신성적 등급표
+                'suSuneungCut'=> $s['suSuneungCut'], // 수능 최저
+                'suSilgiGap'=> $s['suSilgiGap'], // 실기 구간별 점수차
+                'suSilgi'=> $s['suSilgi'] // 실기 종목
+            ];
+            $sucnt++;
+        }
     } else {
         $data['susi'] = [];
     }

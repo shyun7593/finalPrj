@@ -804,3 +804,29 @@ $(function() {
         return true;
     });
 });
+
+// TopPs - 최고표점, Ps - 표점, Ss - 백분위, Gr - 등급
+// tamCnt - 1 : 둘 중 높은점수로, 2 : 두 과목 평균점수로
+function calcJuScore(){
+    let science = ['물리1','화학1','생명과학1','지구과학1','물리2','화학2','생명과학2','지구과학2']; // 과탐
+    let social = ['생활과윤리','윤리와사상','한국지리','세계지리','동아시아사','세계사','정치와법','경제','사회문화']; // 사탐
+
+    let korTopPs = "";
+    let korPs = "";
+    let korSs = "";
+    let korGr = "";
+    let mathTopPs = "";
+    let mathPs = "";
+    let mathSs = "";
+    let mathGr = "";
+    let tam1TopPs = "";
+    let tam1Ps = "";
+    let tam1Ss = "";
+    let tam1Gr = "";
+    let tam2TopPs = "";
+    let tam2Ps = "";
+    let tam2Ss = "";
+    let tam2Gr = "";
+    let engGr = "";
+    let hisGr = "";
+}

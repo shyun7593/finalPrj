@@ -86,32 +86,25 @@ $sql = "SELECT
     collegeType,
 	addS,
 	addT,
-    silgi
+    silgi,
+    hisList,
+    langList,
+    engList,
+    juTotal,
+    juSrate,
+    juKorrate,
+    juKorSelect,
+    juMathrate,
+    juMathSelect,
+    juEngrate,
+    juEngSelect,
+    juTamrate,
+    juTamSelect,
+    juTamCnt,
+    juHisAdd,
+    juHisSelect
 FROM
 (
--- SELECT 
---     gcs.sName as 'subName',
---     gcs.sIdx as 'subIdx',
---     gcc.codeName as 'gun',
---     gcc2.codeName as 'areaName',
---     gs.suPerson as 'person',
---     '' as 'pSub',
---     gc.cName as 'collegeName',
---     gcs.collegeType as 'collegeType',
---     (SELECT
---         COUNT(*) FROM g5_add_college gac WHERE gac.subIdx = gcs.sIdx AND gac.memId = '{$mb_id['mb_id']}' AND gac.regId = '{$mb_id['mb_id']}') as 'addS',
---     (SELECT
---         COUNT(*) FROM g5_add_college gac2 WHERE gac2.subIdx = gcs.sIdx AND gac2.memId = '{$mb_id['mb_id']}' AND gac2.regId != '{$mb_id['mb_id']}') as 'addT'
--- FROM g5_college_subject gcs 
--- JOIN g5_college gc on
---     gc.cIdx = gcs.collegeIdx
--- JOIN g5_cmmn_code gcc on
---     gcc.code = gcs.cmmn1
--- JOIN g5_cmmn_code gcc2 on
---     gcc2.code = gcs.areaCode
--- LEFT JOIN g5_susi gs on
---     gs.suIdx = gcs.susiIdx
--- UNION ALL
 SELECT 
     gcs.sName as 'subName',
     gcs.sIdx as 'subIdx',
@@ -126,19 +119,57 @@ SELECT
     (SELECT
         COUNT(*) FROM g5_add_college gac2 WHERE gac2.subIdx = gcs.sIdx AND gac2.memId = '{$mb_id['mb_id']}' AND gac2.regId != '{$mb_id['mb_id']}') as 'addT',
     (SELECT
-        COUNT(*) FROM g5_college_silgi ggs WHERE ggs.csubIdx = gcs.sIdx AND ggs.memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0) as 'silgi'
+        COUNT(*) FROM g5_college_silgi ggs WHERE ggs.csubIdx = gcs.sIdx AND ggs.memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0) as 'silgi',
+    hist.hisList,
+    lang.langList,
+    eng.engList,
+    gj.juTotal, -- 총점
+    gj.juSrate, -- 수능 반영비율
+    gj.juKorrate, -- 국어 반영비율
+    gj.juKorSelect, -- 국어 필선
+    gj.juMathrate, -- 수학 반영비율
+    gj.juMathSelect, -- 수학 필선
+    gj.juEngrate, -- 영어 반영비율
+    gj.juEngSelect, -- 영어 필선
+    gj.juTamrate, -- 탐구 반영비율
+    gj.juTamSelect, -- 탐구 필선
+    gj.juTamCnt, -- 탐구 과목수
+    gj.juHisAdd, -- 한국사 가산/감점
+    gj.juHisSelect -- 한국사 필선
 FROM g5_college_subject gcs 
-JOIN g5_college gc on
+JOIN g5_college gc ON
     gc.cIdx = gcs.collegeIdx
-JOIN g5_cmmn_code gcc on
+JOIN g5_cmmn_code gcc ON
     gcc.code = gcs.cmmn1
-JOIN g5_cmmn_code gcc2 on
+JOIN g5_cmmn_code gcc2 ON
     gcc2.code = gcs.areaCode
-JOIN g5_jungsi gj on
+JOIN g5_jungsi gj ON
     gj.juIdx = gcs.jungsiIdx
+LEFT JOIN (
+    SELECT
+    	hSubIdx,
+        GROUP_CONCAT(hScore ORDER BY hGrade SEPARATOR ',') AS hisList
+    FROM g5_history_score
+    GROUP BY hSubIdx
+) hist ON hist.hSubIdx = gcs.sIdx
+LEFT JOIN (
+    SELECT
+    	lSubIdx,
+        GROUP_CONCAT(LScore ORDER BY lGrade SEPARATOR ',') AS langList
+    FROM g5_lang_score
+    GROUP BY lSubIdx
+) lang ON lang.lSubIdx = gcs.sIdx
+LEFT JOIN (
+    SELECT
+    	eSubIdx,
+        GROUP_CONCAT(eScore ORDER BY eGrade SEPARATOR ',') AS engList
+    FROM g5_english_score
+    GROUP BY eSubIdx
+) eng ON eng.eSubIdx = gcs.sIdx
 WHERE {$add_sql}
-) as A
-ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName";
+) AS A
+ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName
+";
 
 $mres = sql_query($sql);
 $data = [];
@@ -167,7 +198,23 @@ foreach ($mres as $k => $v) {
         'cCut' => $v['collegeType'], // 실기커트
         'dCut' => $v['collegeType'], // 기타커트
         'pSub' => $v['pSub'], // 실기과목
-        'silgi' => $v['silgi'] // 실기 작성여부
+        'silgi' => $v['silgi'], // 실기 작성여부
+        'engList' => $v['engList'], // 영어 등급표
+        'langList' => $v['langList'], // 제2외국어 등급표
+        'histList' => $v['histList'], // 한국사 등급표
+        'juTotal' => $v['juTotal'], //  -- 총점
+        'juSrate' => getReturnRes($v['juSrate']), //  -- 수능 반영비율
+        'juKorrate' => getReturnRes($v['juKorrate']), //  -- 국어 반영비율
+        'juKorSelect' => $v['juKorSelect'], //  -- 국어 필선
+        'juMathrate' => getReturnRes($v['juMathrate']), //  -- 수학 반영비율
+        'juMathSelect' => $v['juMathSelect'], //  -- 수학 필선
+        'juEngrate' => getReturnRes($v['juEngrate']), //  -- 영어 반영비율
+        'juEngSelect' => $v['juEngSelect'], //  -- 영어 필선
+        'juTamrate' => getReturnRes($v['juTamrate']), //  -- 탐구 반영비율
+        'juTamSelect' => $v['juTamSelect'], //  -- 탐구 필선
+        'juTamCnt' => $v['juTamCnt'], //  -- 탐구 과목수
+        'juHisAdd' => $v['juHisAdd'], //  -- 한국사 가산/감점
+        'juHisSelect' => $v['juHisSelect'] // -- 한국사 필선
     ];
 }
 

@@ -39,7 +39,6 @@ for($k=0; $cp=sql_fetch_array($res); $k++) {
         $cp_count++;
 }
 ?>
-
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
 

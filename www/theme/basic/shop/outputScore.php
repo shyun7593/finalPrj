@@ -27,11 +27,15 @@ $query_string = http_build_query(array(
 ));
 
 ?>
-
 <style>
+    .collegeInfos tbody td{
+        border-bottom: 1px solid #e4e4e4;
+    }
     .outputScore table tr th{
         background-color: rgba(31, 119, 180,0.1) !important;
+        border-bottom: 1px solid #e4e4e4;
     }
+    
     .outputScore th, .outputScore td{
         border: 1px solid white !important;   
         padding:8px 5px !important;
@@ -262,11 +266,11 @@ $query_string = http_build_query(array(
         <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
             <div class="tbl_wrap collegeInfos border-tb" style="height: 75vh;overflow-y:auto;">
-                    <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;">
+                    <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;border-collapse: separate !important;border-spacing: 0 !important;">
                         <colgroup>
                         </colgroup>
                         <thead style="position: sticky;top:0;z-index:2;background:rgba(227, 244, 248) !important;">
-                            <tr>
+                            <tr style="border-bottom:1px solid #e4e4e4 !important;">
                                 <td style="width:60px;"></td>
                                 <td colspan="2">추천대학</td>
                                 <td colspan="6">대학정보</td>
@@ -315,6 +319,7 @@ $query_string = http_build_query(array(
     let topRate = "";
     let curpage = 1;
     let areas = [];
+    let coll;
     $("#viewhideOutput").on('click',function(){
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
@@ -543,6 +548,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 coll = eval("(" + data + ");");
+                console.log(coll);
                 drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
                 $(".totalCnt").html(coll['paging'].total_count + '개');
                 // $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
@@ -606,6 +612,7 @@ $query_string = http_build_query(array(
             </tr>
         `;
         $(".collegeInfos table tbody").append(html);
+        calcJuScore();
         if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
             $(".cutline").addClass('remove-view');
         }
