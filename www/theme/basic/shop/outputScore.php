@@ -661,9 +661,9 @@ $query_string = http_build_query(array(
             for(let j = 0; j < count; j++){
                 html += `
                     <tr style="font-size:1.2em;">
-                        <td style="border:1px solid #e4e4e4;">${json['data'][j]['subject']}</td>
-                        <td style="border:1px solid #e4e4e4;"><input name="${json['data'][j]['subject']}" type="text" class="frm_input" value="${json['data'][j]['recode']}"></td>
-                        <td style="border:1px solid #e4e4e4;">${json['data'][j]['score']}</td>
+                        <td style="border:1px solid #e4e4e4;">${silg['data'][j]['subject']}</td>
+                        <td style="border:1px solid #e4e4e4;"><input name="${silg['data'][j]['subject']}" type="text" class="frm_input" value="${silg['data'][j]['recode']}"></td>
+                        <td style="border:1px solid #e4e4e4;">${silg['data'][j]['score']}</td>
                     </tr>
                 `;
             }
@@ -741,7 +741,7 @@ $query_string = http_build_query(array(
                     setTimeout(() => {
                         swal.close();
                         $("#closePopup").click();
-                        viewColleges($("#selStudent option:selected").data('id'),curpage);
+                        viewColleges($("#selStudent option:selected").val(),curpage);
                     }, 1500);
                 }
             }
