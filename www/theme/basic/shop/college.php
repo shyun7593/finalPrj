@@ -231,7 +231,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
-                console.log(json);
+                // console.log(json);
                 // <div style="font-size:1.5em;font-weight:800;padding:0 10px;">
                 //         ${json['data']['college']['subjectNm']}
                 //     </div>
@@ -904,7 +904,6 @@ $query_string = http_build_query(array(
                     if($(".sInfo").hasClass('active')){
                         $("#sInfo").addClass('view');
                         $("#sInfo").addClass('active');
-                        console.log(document.querySelectorAll(".susi-Order")[0]);
                         document.querySelectorAll(".susi-Order")[0].click();
                     }
                     if($(".ctype.active").data('value') == '수시'){
