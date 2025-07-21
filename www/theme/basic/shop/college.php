@@ -820,7 +820,7 @@ $query_string = http_build_query(array(
                                                 <thead>
                                                     <tr>
                                                         <th colspan="6">교과반영과목</th>
-                                                        <th rowspan="2">활용<br>지표</th>
+                                                        <th rowspan="2">활용 지표</th>
                                                     </tr>
                                                     <tr>
                                                         <th>전과목</th>
