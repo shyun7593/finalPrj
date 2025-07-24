@@ -62,7 +62,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
-            <div class="tbl_wrap border-tb" style="height: 80vh;overflow-y:scroll;">
+            <div class="tbl_wrap border-tb" style="height: 80vh;overflow-y:auto;">
                 <table class="tbl_head01">
                     <colgroup width="15%">
                     <colgroup width="25%">
@@ -151,7 +151,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb" style="height: 73vh;overflow-y:scroll;">
+            <div class="tbl_wrap border-tb" style="height: 73vh;overflow-y:auto;">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">

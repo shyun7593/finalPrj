@@ -97,7 +97,7 @@ $query_string = http_build_query(array(
                         </tbody>
                     </table>
                 </div>
-                <div class="tbl_wrap border-tb" style="height: 250px;overflow-y:scroll;">
+                <div class="tbl_wrap border-tb" style="height: 250px;overflow-y:auto;">
                     <table class="tbl_head01">
                         <colgroup width="5%">
                         <colgroup width="12.5%">

@@ -119,7 +119,7 @@ $query_string = http_build_query(array(
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb" style="height:78vh;overflow-y:scroll;">
+            <div class="tbl_wrap border-tb" style="height:78vh;overflow-y:auto;">
                 <table class="tbl_head01">
                     <colgroup width="*">
                     <thead class="top-Fix">

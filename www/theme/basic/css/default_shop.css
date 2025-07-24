@@ -811,7 +811,7 @@ a.btn_admin,.btn_admin {display:inline-block;color:#d13f4a;text-decoration:none;
 .tbl_wrap.border-tb {border-top:2px solid #828282;border-bottom: 2px solid #828282;background-color: white;}
 .tbl_wrap.border-tb tbody th{background-color: rgba(31, 119, 180,0.1);}
 .tbl_wrap table {width:100%;border-collapse:collapse;border-spacing:0;}
-.tbl_wrap.scroll-y {max-height:400px;overflow-y:scroll;}
+.tbl_wrap.scroll-y {max-height:400px;overflow-y:auto;}
 .tbl_wrap caption {padding:10px 0;font-weight:bold;text-align:left}
 
 .top-Fix::after{
