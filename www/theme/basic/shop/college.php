@@ -836,6 +836,11 @@ $query_string = http_build_query(array(
                                                 html += `<div class="lis">${Psub[j]}</div>`;
                                             }
                                             html+=`</div>`;
+                                        }else {
+                                            html += `<div style="padding: 0 10px;margin:0 5px;font-size:1em;">
+                                                        <div class="lis">없음</div>
+                                                    </div>
+                                            `;
                                         }
                                         html += `
                                 </div>
