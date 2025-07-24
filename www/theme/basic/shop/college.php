@@ -824,8 +824,9 @@ $query_string = http_build_query(array(
                                         if(json['data']['susi'][k]['suSuneungCut'] != '-' && json['data']['susi'][k]['suSuneungCut'] != ''){
                                             html += `<p class="p_title">수능최저<span style="font-weight:normal;font-size:0.9em;"> - </span><span style="font-weight:normal;font-size:0.9em;width:80%;">${json['data']['susi'][k]['suSuneungCut']}</span></p>`;
                                         }
+
+                                        html += `<p class="p_title">실기 ${json['data']['susi'][k]['suSilgiGap'] != '' && json['data']['susi'][k]['suSilgiGap'] != '-' ? ' 급감<span style="font-weight:normal;font-size:0.9em;"> - ' + json['data']['susi'][k]['suSilgiGap'] + '점</span>' : ''}</p>`;
                                         if(json['data']['susi'][k]['suSilgiGap'] != '' && json['data']['susi'][k]['suSilgiGap'] != '-'){
-                                            html += `<p class="p_title">실기 급감<span style="font-weight:normal;font-size:0.9em;"> - ${json['data']['susi'][k]['suSilgiGap']} 점</span></p>`;
                                         }
                                         if(json['data']['susi'][k]['suSilgi'].split(",")[0]){
                                             html+=`
