@@ -328,6 +328,7 @@ $query_string = http_build_query(array(
     let curpage = 1;
     let areas = [];
     let coll;
+    let json ="";
     $("#viewhideOutput").on('click',function(){
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
@@ -404,8 +405,6 @@ $query_string = http_build_query(array(
     function fsearch_submit(e){
         
     }
-
-    let json ="";
 
     $("#bid").on('change',function(){
         $("#fsearch").submit();
@@ -875,7 +874,7 @@ $query_string = http_build_query(array(
     }
 
     function rePage(){
-        $("#kor_Code").val('');
+            $("#kor_Code").val('');
             $("#math_Code").val('');
             $("#eng_Code").val('');
             $("#tam1_Code").val('');
@@ -929,10 +928,6 @@ $query_string = http_build_query(array(
             $("input[name='tam1_Grade']").val('');
             $("input[name='tam2_Grade']").val('');
             $("input[name='his_Grade']").val('');
-
-            $(".school").text('');
-            $(".layer").text('');
-            $(".gender").text('');
     }
 
     const cache = {};

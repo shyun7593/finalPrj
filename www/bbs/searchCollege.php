@@ -33,7 +33,11 @@ if($textSub){
 }
 
 
-$mb_id = sql_fetch("SELECT mb_id FROM g5_member WHERE mb_no = '{$mb_no}'");
+$mb_id = sql_fetch("SELECT mb_id,mb_sex FROM g5_member WHERE mb_no = '{$mb_no}'");
+
+if($mb_id['mb_sex'] == 'M'){
+    $add_sql .= " AND gc.cName not like '%여자%' ";
+}
 
 function getReturnRes($val) {
     $val = trim((string)$val);
