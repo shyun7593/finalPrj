@@ -150,6 +150,8 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
             } else {
                 $("#collegePopup").css('left','58%');
             }
+        } else {
+            $("#collegePopup").css('left','50%');
         }
     });
 </script>
