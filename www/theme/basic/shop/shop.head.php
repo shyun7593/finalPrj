@@ -144,7 +144,13 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
         $("#hd_menu").toggleClass("hidden");
         $("#wrapper").toggleClass("full");
         $this.toggleClass("hidden");
-
+        if($("#collegePopup") && window.innerWidth < 1750){
+            if($("#wrapper").hasClass('full')){
+                $("#collegePopup").css('left','50%');
+            } else {
+                $("#collegePopup").css('left','58%');
+            }
+        }
     });
 </script>
 <!-- 전체 콘텐츠 시작 { -->

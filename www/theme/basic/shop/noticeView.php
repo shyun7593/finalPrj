@@ -66,6 +66,11 @@ if($res['idx']){
         viewer: true,
         initialValue: <?= json_encode($res['contents']) ?>
     });
+
+    document.querySelectorAll('.toastui-editor-contents p>a').forEach((el,i,arr)=>{
+        el.setAttribute("target","_blank");
+    });
+    
     function goBack(){
         location.href = './notice?stype=<?=$stype?>&text=<?=$text?>&page=<?=$page?>';
     }

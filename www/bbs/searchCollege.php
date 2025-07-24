@@ -24,8 +24,12 @@ if($code){
     $add_sql .= " AND gcs.cmmn1 = '{$code}' ";
 }
 
-if($texts){
-    $add_sql .= " AND (gcs.sName like '%{$texts}%' OR gc.cName like '%{$texts}%') ";
+if($textCol){
+    $add_sql .= " AND gc.cName like '%{$textCol}%' ";
+}
+
+if($textSub){
+    $add_sql .= " AND gcs.sName like '%{$textSub}%' ";
 }
 
 
@@ -102,7 +106,11 @@ $sql = "SELECT
     juTamSelect,
     juTamCnt,
     juHisAdd,
-    juHisSelect
+    juHisSelect,
+    juChar,
+    juTamChar,
+    juLanSelect,
+    juPrate
 FROM
 (
 SELECT 
@@ -114,12 +122,9 @@ SELECT
     gj.juPsub as 'pSub',
     gc.cName as 'collegeName',
     gcs.collegeType as 'collegeType',
-    (SELECT
-        COUNT(*) FROM g5_add_college gac WHERE gac.subIdx = gcs.sIdx AND gac.memId = '{$mb_id['mb_id']}' AND gac.regId = '{$mb_id['mb_id']}') as 'addS',
-    (SELECT
-        COUNT(*) FROM g5_add_college gac2 WHERE gac2.subIdx = gcs.sIdx AND gac2.memId = '{$mb_id['mb_id']}' AND gac2.regId != '{$mb_id['mb_id']}') as 'addT',
-    (SELECT
-        COUNT(*) FROM g5_college_silgi ggs WHERE ggs.csubIdx = gcs.sIdx AND ggs.memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0) as 'silgi',
+    IFNULL(addc.addS, 0) AS addS,
+    IFNULL(addc.addT, 0) AS addT,
+    IFNULL(silgiTbl.silgi, 0) AS silgi,
     hist.hisList,
     lang.langList,
     eng.engList,
@@ -135,7 +140,11 @@ SELECT
     gj.juTamSelect, -- 탐구 필선
     gj.juTamCnt, -- 탐구 과목수
     gj.juHisAdd, -- 한국사 가산/감점
-    gj.juHisSelect -- 한국사 필선
+    gj.juHisSelect, -- 한국사 필선
+    gj.juChar, -- 국/수 표백등최
+    gj.juTamChar, -- 탐구 표백등최
+    gj.juLanSelect, -- 제2외국어 필선
+    gj.juPrate -- // 실기 반영비율
 FROM g5_college_subject gcs 
 JOIN g5_college gc ON
     gc.cIdx = gcs.collegeIdx
@@ -166,6 +175,22 @@ LEFT JOIN (
     FROM g5_english_score
     GROUP BY eSubIdx
 ) eng ON eng.eSubIdx = gcs.sIdx
+LEFT JOIN (
+  SELECT 
+    subIdx,
+    COUNT(CASE WHEN memId = '{$mb_id['mb_id']}' AND regId = '{$mb_id['mb_id']}' THEN 1 END) AS addS,
+    COUNT(CASE WHEN memId = '{$mb_id['mb_id']}' AND regId != '{$mb_id['mb_id']}' THEN 1 END) AS addT
+  FROM g5_add_college
+  GROUP BY subIdx
+) addc ON addc.subIdx = gcs.sIdx
+LEFT JOIN (
+  SELECT 
+    csubIdx,
+    COUNT(*) AS silgi
+  FROM g5_college_silgi
+  WHERE memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0
+  GROUP BY csubIdx
+) silgiTbl ON silgiTbl.csubIdx = gcs.sIdx
 WHERE {$add_sql}
 ) AS A
 ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName
@@ -201,7 +226,7 @@ foreach ($mres as $k => $v) {
         'silgi' => $v['silgi'], // 실기 작성여부
         'engList' => $v['engList'], // 영어 등급표
         'langList' => $v['langList'], // 제2외국어 등급표
-        'histList' => $v['histList'], // 한국사 등급표
+        'histList' => $v['hisList'], // 한국사 등급표
         'juTotal' => $v['juTotal'], //  -- 총점
         'juSrate' => getReturnRes($v['juSrate']), //  -- 수능 반영비율
         'juKorrate' => getReturnRes($v['juKorrate']), //  -- 국어 반영비율
@@ -214,7 +239,11 @@ foreach ($mres as $k => $v) {
         'juTamSelect' => $v['juTamSelect'], //  -- 탐구 필선
         'juTamCnt' => $v['juTamCnt'], //  -- 탐구 과목수
         'juHisAdd' => $v['juHisAdd'], //  -- 한국사 가산/감점
-        'juHisSelect' => $v['juHisSelect'] // -- 한국사 필선
+        'juHisSelect' => $v['juHisSelect'], // -- 한국사 필선
+        'juChar' => $v['juChar'], // -- 국/수 변표최등
+        'juTamChar' => $v['juTamChar'], // 탐구 변표최등
+        'juLanSelect' => $v['juLanSelect'], // 제2외국어 필선
+        'juPrate' => $v['juPrate'] // 실기 반영비율
     ];
 }
 

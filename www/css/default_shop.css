@@ -401,7 +401,7 @@ a.btn_admin,.btn_admin {display:inline-block;color:#d13f4a;text-decoration:none;
 -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075);
 box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075)}
 .tbl_frm01 textarea {padding:2px 2px 3px}
-.frm_input {height:45px}
+.frm_input {height:40px}
 
 .full_input, .frm_address {width:100%}
 .half_input {width:49.5%}

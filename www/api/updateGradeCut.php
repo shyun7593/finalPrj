@@ -47,6 +47,17 @@ function delPrevDate($gradeYear,$gType){
     sql_query("DELETE FROM g5_gradeCut WHERE gradeYear = '{$gradeYear}' AND gradeType = '{$gType}'");
 }
 
+function roundNumber($nm) {
+    // 문자열로 변환한 뒤 소수점 아래가 .0인지 확인
+    if (fmod($nm, 1) == 0.0) {
+        return (int)$nm;  // 정수로 반환
+    } else {
+        return $nm;       // 그대로 반환 (소수 포함)
+    }
+}
+
+
+
 switch($gradeMonth){
     case 'C60000001': // 3모
         $range = '표백등!B3:F'; // 3월        
@@ -81,12 +92,13 @@ if (empty($values)) {
     delPrevDate($gradeYear,$gradeMonth);
     foreach ($values as $row) {
         $subCode = subjectCode($row[0]);
+        $sscore = roundNumber($row[3]);
         sql_query("INSERT INTO g5_gradeCut set
             gradeYear = '{$gradeYear}',
             gradeCode = '{$subCode}',
             gradeScore = '{$row[1]}',
             gradePscore = '{$row[2]}',
-            gradeSscore = '{$row[3]}',
+            gradeSscore = '{$sscore}',
             gGrade = '{$row[4]}',
             regId = '{$regId}',
             gradeType = '{$gradeMonth}'
@@ -98,7 +110,7 @@ if (empty($values)) {
                 gradeCode = '{$subCode2}',
                 gradeScore = '{$row[1]}',
                 gradePscore = '{$row[2]}',
-                gradeSscore = '{$row[3]}',
+                gradeSscore = '{$sscore}',
                 gGrade = '{$row[4]}',
                 regId = '{$regId}',
                 gradeType = '{$gradeMonth}'

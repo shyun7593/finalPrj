@@ -67,7 +67,12 @@ $res = sql_fetch($sql);
                             </td>
                             <th>학년</th>
                             <td>
-                                <input type="text" name="mb_2" style="width: 100%;" id="mb_2"  value="<?=$res['mb_2']?>" class="frm_input">
+                                <select class="frm_input" style="width: 100%;" id="mb_2" name="mb_2">
+                                    <option value="" <?if(!$res['mb_2']) echo "selected";?>>선택하세요.</option>
+                                    <option value="1" <?if($res['mb_2']== "1") echo "selected";?>>1학년</option>
+                                    <option value="2" <?if($res['mb_2']== "2") echo "selected";?>>2학년</option>
+                                    <option value="3" <?if($res['mb_2']== "3") echo "selected";?>>3학년</option>
+                                </select>
                             </td>
                         </tr>
                         <?}?>

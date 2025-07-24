@@ -41,7 +41,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
                         foreach($m_cmmn as $mcm => $m){
                             $cnt = sql_fetch("SELECT COUNT(*) as cnt FROM g5_member_score WHERE memId = '{$membId}' AND scoreMonth = '{$m['code']}'");
                             ?>
-                        <button class="btn-n <?if($month == $m['code']) echo "active";?> <?if($cnt['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="<?=$m['code']?>" onclick="viewMonth(event)" type="buttton"><?=$m['codeName']?></button>
+                        <button class="btn-n <?if($month == $m['code']) echo "active2";?> <?if($cnt['cnt'] > 0) {echo "iswrite";}else{echo "btn-gray";}?>" id="<?=$m['code']?>" onclick="viewMonth(event)" type="buttton"><?=$m['codeName']?></button>
                     <?}?>
                 </div>
                 <div style="position:absolute;right:0;">

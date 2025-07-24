@@ -64,7 +64,7 @@ $sql = "SELECT
         FROM g5_college_subject gcs 
         JOIN g5_college gc on
             gc.cIdx = gcs.collegeIdx
-        JOIN g5_cmmn_code gcc on
+        LEFT JOIN g5_cmmn_code gcc on
             gcc.code = gcs.cmmn1
         JOIN g5_cmmn_code gcc2 on
             gcc2.code = gcs.areaCode

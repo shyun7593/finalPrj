@@ -805,28 +805,275 @@ $(function() {
     });
 });
 
+function getTopNScores(arr, n) {
+    return arr
+        .slice() // 원본 배열 보호
+        .sort((a, b) => b.score - a.score) // 점수 내림차순 정렬
+        .slice(0, n); // 상위 n개만 추출
+}
+
+function formatScore(value,rate) {
+    const rounded = Math.round((value*(rate/100)) * 100) / 100; // 소수 둘째 자리에서 반올림
+    const final = Math.round(rounded * 10) / 10;   // 소수 첫째 자리에서 다시 반올림
+  
+    // 정수면 소수점 없이, 아니면 소수 첫째 자리까지
+    return Number.isInteger(final) ? String(final) : final.toFixed(1);
+  }
+  
+  
+  
+
+// subArr[] 
+//  0 - 국
+//  1 - 수
+//  2 - 탐1
+//  3 - 탐2
+//  4 - 영어
+//  5 - 한국사
+
+// 
+//  TopRate - 최고표점
+//  Pscore - 표점
+//  Sscore - 백분위
+//  Grade - 등급
+//  Rate - 반영 비율
+//  Score - type에 따른 변환 점수
+//  TransScore - 최종 변환점수
+
 // TopPs - 최고표점, Ps - 표점, Ss - 백분위, Gr - 등급
 // tamCnt - 1 : 둘 중 높은점수로, 2 : 두 과목 평균점수로
-function calcJuScore(){
+// sPercent - 수능 비율 , nPercent - 내신 비율, pPercent - 실기 비율, oPercent - 기타 비율
+// total - 전형 총점
+// korType - 국어 백,표,최, mathType - 수학 백,표,최, tamType - 탐구 백,표,최
+// hisPM - 한국사 가감점
+// korRate - 국어 반영비율, mathRate - 수학 반영비율, engRate - 영어 반영비율, tamRate - 탐구 반영비율
+// TransScore - 최종 변환 점수, Score - type에 따른 변환 점수
+
+function calcJuScore(json){
     let science = ['물리1','화학1','생명과학1','지구과학1','물리2','화학2','생명과학2','지구과학2']; // 과탐
     let social = ['생활과윤리','윤리와사상','한국지리','세계지리','동아시아사','세계사','정치와법','경제','사회문화']; // 사탐
 
-    let korTopPs = "";
-    let korPs = "";
-    let korSs = "";
-    let korGr = "";
-    let mathTopPs = "";
-    let mathPs = "";
-    let mathSs = "";
-    let mathGr = "";
-    let tam1TopPs = "";
-    let tam1Ps = "";
-    let tam1Ss = "";
-    let tam1Gr = "";
-    let tam2TopPs = "";
-    let tam2Ps = "";
-    let tam2Ss = "";
-    let tam2Gr = "";
-    let engGr = "";
-    let hisGr = "";
+    let subArr = [];
+    let subNm = ['kor','math','tam1','tam2','eng','his'];
+    for(let u = 0; u < subNm.length; u++){
+        subArr.push({
+            'TopRate' : $(`input[name='${subNm[u]}_TopRate']`).val(),
+            'Pscore' : $(`input[name='${subNm[u]}_Pscore']`).val(),
+            'Sscore' : $(`input[name='${subNm[u]}_Sscore']`).val(),
+            'Grade' : $(`input[name='${subNm[u]}_Grade']`).val() - 1,
+            'Rate': 0,
+            'Score' : 0,
+            'TransScore' : 0
+        });
+    }
+    // console.log(json);
+    let changeScore = 0;
+    for(let i = 0; i < json.length; i++){
+        changeScore = 0;
+        subArr[0]['Score'] = 0;
+        subArr[1]['Score'] = 0;
+        subArr[2]['Score'] = 0;
+        subArr[3]['Score'] = 0;
+        subArr[4]['Score'] = 0;
+        subArr[5]['Score'] = 0;
+
+        subArr[0]['TransScore'] = 0;
+        subArr[1]['TransScore'] = 0;
+        subArr[2]['TransScore'] = 0;
+        subArr[3]['TransScore'] = 0;
+        subArr[4]['TransScore'] = 0;
+        subArr[5]['TransScore'] = 0;
+
+        subArr[0]['Rate'] = json[i]['juKorrate'];
+        subArr[1]['Rate'] = json[i]['juMathrate'];
+        subArr[2]['Rate'] = json[i]['juTamrate'];
+        subArr[3]['Rate'] = json[i]['juTamrate'];
+        subArr[4]['Rate'] = json[i]['juEngrate'];
+        
+        switch(json[i]['juChar']){
+            case '표최':
+                subArr[0]['Score'] = (subArr[0]['Pscore']/subArr[0]['TopRate'])*json[i]['juTotal'];
+                subArr[1]['Score'] = (subArr[1]['Pscore']/subArr[1]['TopRate'])*json[i]['juTotal'];
+                break;
+            case '표':
+                subArr[0]['Score'] = (subArr[0]['Pscore']/subArr[0]['TopRate'])*json[i]['juTotal'];
+                subArr[1]['Score'] = (subArr[1]['Pscore']/subArr[1]['TopRate'])*json[i]['juTotal'];
+                break;
+            case '표200':
+                subArr[0]['Score'] = (subArr[0]['Pscore']/200)*json[i]['juTotal'];
+                subArr[1]['Score'] = (subArr[1]['Pscore']/200)*json[i]['juTotal'];
+                break;
+            case '백':
+                subArr[0]['Score'] = (subArr[0]['Sscore']/100)*json[i]['juTotal'];
+                subArr[1]['Score'] = (subArr[1]['Sscore']/100)*json[i]['juTotal'];
+                break;
+            case '등급':
+                subArr[0]['Score'] = subArr[0]['Grade']*json[i]['juTotal'];
+                subArr[1]['Score'] = subArr[1]['Grade']*json[i]['juTotal'];
+                break;
+            case '변표최':
+                subArr[0]['Score'] = "";
+                subArr[1]['Score'] = "";
+                break;
+            case '변표200':
+                subArr[0]['Score'] = "";
+                subArr[1]['Score'] = "";
+                break;
+            default:
+                subArr[0]['Score'] = "";
+                subArr[1]['Score'] = "";
+                break;
+        }
+        
+        switch(json[i]['juTamChar']){
+            case '표최':
+                subArr[2]['Score'] = (subArr[2]['Pscore']/subArr[2]['TopRate'])*json[i]['juTotal'];
+                subArr[3]['Score'] = (subArr[3]['Pscore']/subArr[3]['TopRate'])*json[i]['juTotal'];
+                break;
+            case '표':
+                subArr[2]['Score'] = (subArr[2]['Pscore']/subArr[2]['TopRate'])*json[i]['juTotal'];
+                subArr[3]['Score'] = (subArr[3]['Pscore']/subArr[3]['TopRate'])*json[i]['juTotal'];
+                break;
+            case '표200':
+                subArr[2]['Score'] = (subArr[2]['Pscore']/200)*json[i]['juTotal'];
+                subArr[3]['Score'] = (subArr[3]['Pscore']/200)*json[i]['juTotal'];
+                break;
+            case '백':
+                subArr[2]['Score'] = (subArr[2]['Sscore']/100)*json[i]['juTotal'];
+                subArr[3]['Score'] = (subArr[3]['Sscore']/100)*json[i]['juTotal'];
+                break;
+            case '등급':
+                subArr[2]['Score'] = subArr[2]['Grade']*json[i]['juTotal'];
+                subArr[3]['Score'] = subArr[3]['Grade']*json[i]['juTotal'];
+                break;
+            case '변표최':
+                subArr[2]['Score'] = "";
+                subArr[3]['Score'] = "";
+                break;
+            case '변표200':
+                subArr[2]['Score'] = "";
+                subArr[3]['Score'] = "";
+                break;
+            default:
+                subArr[2]['Score'] = "";
+                subArr[3]['Score'] = "";
+                break;
+        }
+        if(json[i]['engList']){
+            if(subArr[4]['Rate'].includes('점')){
+                subArr[4]['Score'] = Number(json[i]['engList'].split(",")[subArr[4]['Grade']]);
+            } else {
+                subArr[4]['Score'] = json[i]['engList'].split(",")[subArr[4]['Grade']]*(json[i]['juTotal']/json[i]['engList'].split(",")[0]);
+            }
+        }
+
+        if(json[i]['hisList']){
+            subArr[5]['Score'] = json[i]['hisList'].split(",")[subArr[5]['Grade']];
+        }
+        
+    
+        let selPil = [];
+    
+        switch(json[i]['juKorSelect']){
+            case '필수':
+                subArr[0]['TransScore'] = subArr[0]['Score'] * (subArr[0]['Rate'].split("%")[0]/100);
+                break;
+            case '선택':
+                selPil.push(0);
+                break;
+        }
+    
+        switch(json[i]['juMathSelect']){
+            case '필수':
+                subArr[1]['TransScore'] = subArr[1]['Score'] * (subArr[1]['Rate'].split("%")[0]/100);
+                break;
+            case '선택':
+                selPil.push(1);
+                break;
+        }
+    
+        switch(json[i]['juEngSelect']){
+            case '필수':
+                if(subArr[4]['Rate'].includes('점')){
+                    subArr[4]['TransScore'] = subArr[4]['Score'];
+                } else {
+                    subArr[4]['TransScore'] = subArr[4]['Score'] * (subArr[4]['Rate'].split("%")[0]/100);
+                }
+                break;
+            case '선택':
+                selPil.push(4);
+                break;
+        }
+    
+        switch(json[i]['juTamSelect']){
+            case '필수':
+                if(json[i]['juTamCnt'] == 1){
+                    if(subArr[2]['Score'] >= subArr[3]['Score']){
+                        subArr[2]['TransScore'] = subArr[2]['Score'] * (subArr[2]['Rate'].split("%")[0]/100);
+                    } else {
+                        subArr[3]['TransScore'] = subArr[3]['Score'] * (subArr[3]['Rate'].split("%")[0]/100);
+                    }                
+                } else if(json[i]['juTamCnt'] == 2){
+                    subArr[2]['TransScore'] = ((subArr[2]['Score'] + subArr[3]['Score']) / 2) * (subArr[3]['Rate'].split("%")[0]/100);
+                }
+                break;
+            case '선택':
+                selPil.push(2);
+                break;
+        }
+        switch(json[i]['juHisSelect']){
+            case '필수':
+                subArr[5]['TransScore'] = subArr[5]['Score'];
+                break;
+            case '선택':
+                selPil.push(5);
+                break;
+        }
+        
+        if(selPil.length > 0){
+            let selCnt = ""; // 선택할 과목 수
+            let selSubScores = [];
+            if(subArr[selPil[0]]['Rate'].includes(',')){
+                selCnt = subArr[selPil[0]]['Rate'].split(',').length;
+            } else {
+                selCnt = Math.ceil(selPil.length * (subArr[selPil[0]]['Rate'].split("%")[0]/100));
+            }
+            for(let j = 0; j < selPil.length ;j++){
+                let score = subArr[selPil[j]]['Score'];
+                if(selPil[j] == 3){
+                    if(data['juTamCnt'] == 1){
+                        if(subArr[2]['Score']>=subArr[3]['Score']){
+                            score = subArr[2]['Score'];
+                        } else {
+                            score = subArr[3]['Score'];
+                        }
+                    } else {
+                        score = (subArr[2]['Score'] + subArr[3]['Score'])/2;
+                    }
+                }
+                selSubScores.push({
+                   'score' : score,
+                   'idx' : selPil[j]
+                }); // 선택 과목들 변환 점수
+            }
+            let rSubs = getTopNScores(selSubScores,selCnt);
+            if(subArr[selPil[0]]['Rate'].includes(',')){
+                for(let t = 0; t < subArr[selPil[0]]['Rate'].split(',').length; t++){
+                    subArr[rSubs[t]['idx']]['TransScore'] = rSubs[t]['score'] * (subArr[selPil[0]]['Rate'].split(',')[t].split("%")[0]/100);
+                }
+            } else {
+                for(let t = 0; t < rSubs.length; t++){
+                    subArr[rSubs[t]['idx']]['TransScore'] = rSubs[t]['score'] * (subArr[selPil[0]]['Rate'].split("%")[0]/100);
+                }
+            }
+        }
+        for(let o = 0; o < 6; o++){
+            changeScore += subArr[o]['TransScore'];
+            subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
+        }
+        // console.log(subArr);
+        // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
+
+        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
+    }
 }

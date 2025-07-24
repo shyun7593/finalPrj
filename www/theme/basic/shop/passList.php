@@ -28,6 +28,10 @@ if($gender){
     $sql_add .= " AND Gender = '{$gender}' ";
 }
 
+if(!$subject){
+    $subject = sql_fetch("SELECT `Subject` FROM $tblNm WHERE College = '{$college}' GROUP BY Subject limit 1")['Subject'];
+}
+
 $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$subject}' $sql_add ORDER BY $order";
 
 ?>
@@ -35,7 +39,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
     select{
         height : auto !important;
     }
-    tbody tr{
+    tbody .connt td{
         border-bottom:1px solid #d3d3d3;
     }
     .sub-Jongmok{
@@ -50,8 +54,8 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
     }
 
     td.tSilgi:not(:has(~ td.tSilgi)) {
-  border-right: 1px solid #e4e4e4; /* 원하는 테두리 스타일을 적용하세요 */
-}
+    border-right: 1px solid #e4e4e4; /* 원하는 테두리 스타일을 적용하세요 */
+    }
     
 </style>
 <!-- 등급관리 시작 { -->
@@ -98,13 +102,15 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                         <div style="font-weight:800;">학&nbsp;&nbsp;&nbsp;과 : </div>
                         <div>
                             <select name="selectsubject" id="selectsubject" class="frm_input">
-                                <option value="">대학먼저 선택해 주세요.</option>
                                 <?if($college){
                                     $subRes = sql_query("SELECT `Subject` FROM $tblNm WHERE College = '{$college}' GROUP BY `Subject`");
+                                    $cnt = 1;
                                     foreach($subRes as $sr => $s){?>
-                                        <option value="<?=$s['Subject']?>" <?if($s['Subject'] == $subject) echo 'selected';?>><?=$s['Subject']?></option>
+                                        <option value="<?=$s['Subject']?>" <?if($s['Subject'] == $subject) {echo 'selected';}?>><?=$s['Subject']?></option>
                                 <?  }
-                                }?>
+                                }else {?>
+                                    <option>대학을 먼저 선택해주세요.</option>
+                                <?}?>
                             </select>
                         </div>
                     </div>
@@ -113,7 +119,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
             <?if($subject){?>
             <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:73vh;">
                 <?if($coltype == 'ju'){?>
-                <table class="tbl_head01" style="width: auto;">
+                <table class="tbl_head01" style="width: auto;border-collapse: separate !important;border-spacing: 0 !important;">
                     <thead>
                         <tr class="headd">
                             <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">성별</th>
@@ -129,7 +135,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">내신</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;" colspan="2">합격</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="18">종목</th>
                         </tr>
                     <tr class="sub-header">
@@ -157,8 +163,8 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                         <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
                         <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">원</th>
                         <th style="position:sticky;top:45px;min-width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등</th>
-                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
-                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최종</th>
+                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;border-bottom:1px solid #d3d3d3;">최초</th>
+                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;border-bottom:1px solid #d3d3d3;">최종</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
@@ -262,12 +268,12 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">실기</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">기타</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">총점</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;" colspan="2">합격</th>
                             <th style="position:sticky;top:0;z-index:13;width:100%;background:rgba(227, 244, 248);border-right:1px solid white;" colspan="18">실기점수</th>
                         </tr>
                         <tr class="sub-header">
-                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최초</th>
-                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">최종</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;border-bottom: 1px solid #d3d3d3;">최초</th>
+                            <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid #e4e4e4;border-bottom: 1px solid #d3d3d3;">최종</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
                             <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">점수</th>
@@ -308,7 +314,7 @@ $sql = "SELECT * FROM $tblNm WHERE College = '{$college}' AND `Subject` = '{$sub
                                 <td style="max-width:50px;text-align:center;"><?=$s['psuOther']?></td>
                                 <td style="max-width:100px;text-align:center;"><?=$s['psuTotal']?></td>
                                 <td style="width:150px;text-align:center;"><?=$s['psuResult1']?></td>
-                                <td style="width:150px;text-align:center;"><?=$s['psuResult2']?></td>
+                                <td style="width:150px;text-align:center;border-right:1px solid #e4e4e4"><?=$s['psuResult2']?></td>
                                 <?
                                     $silgi = explode('/',$s['psuSilgiText']);
                                     if($silgi[0] == '비실기'){?>

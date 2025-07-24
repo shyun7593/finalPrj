@@ -17,9 +17,9 @@ if($memb['mb_sex'] == 'M'){
 }
 $data3 = [
     'memberName' => $memb['mb_name'],
-    'gender' => $gender,
-    'school' => $memb['mb_1'],
-    'layer' => $memb['mb_2'],
+    'gender' => $gender ? $gender : '',
+    'school' => $memb['mb_1'] ? $memb['mb_1'] : '',
+    'layer' => $memb['mb_2'] ? $memb['mb_2'] : '',
     'branch' => $memb['branchName']
 ];
 

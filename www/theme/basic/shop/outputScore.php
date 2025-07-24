@@ -72,6 +72,12 @@ $query_string = http_build_query(array(
     #wrapper_title{
         padding: 10px 0 !important;
     }
+    .subDetail:hover{
+        color:blue;
+        text-decoration: underline;
+        font-weight: 800;
+        cursor:pointer;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -83,7 +89,7 @@ $query_string = http_build_query(array(
                 <input type="hidden" id="tam1_Code" name="tam1_Code">
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
                 <input type="hidden" id="his_Code" name="his_Code">
-                <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;<?if($_SESSION['mb_profile'] == 'C40000003') echo "display:none;";?>">
+                <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;">
                     <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
                     <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
                         <colgroup>
@@ -247,8 +253,9 @@ $query_string = http_build_query(array(
                 <div style="display: flex;align-items:center;gap:10px;">
                     <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
                     <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
-                        <td style="padding:10px;"><input type="text" name="text" id="text" placeholder="대학명, 학과명" class="frm_input" style="width: 100%;padding:0 10px;" value="<?=$text?>"></td>
-                        <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" onclick="viewColleges('',1)"></td>
+                        <td style="padding:10px;"><input type="text" name="textCol" id="textCol" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textCol?>"></td>
+                        <td style="padding:10px;"><input type="text" name="textSub" id="textSub" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textSub?>"></td>
+                        <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" style="width:50px !important;" onclick="viewColleges('',1)"></td>
                     </div>
                 </div>
                 <div>
@@ -308,12 +315,13 @@ $query_string = http_build_query(array(
         <!-- <div class="paging" style="text-align:center; margin:20px 0;"></div> -->
     </div>
 </div>
+<div id="custom-tooltip" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; padding:8px; font-size:13px; z-index:9999; box-shadow:0 2px 8px rgba(0,0,0,0.2);"></div>
+
 <div id="collegePopup">
     <div class="mb20" id="collegeDiv">
         
     </div>
 </div>
-
 
 <script>
     let topRate = "";
@@ -353,6 +361,10 @@ $query_string = http_build_query(array(
                 el.classList.remove('active');
             }
         });
+        if($("#selStudent").val()){
+            viewScores($("#selStudent").val());
+            viewColleges($("#selStudent").val());
+        }
     }
 
     function viewArea(e,area){
@@ -475,8 +487,9 @@ $query_string = http_build_query(array(
             $("input[name='tam1_Grade']").val(data['scoreData'][month]['data']['탐구영역1']['grade']);
             $("input[name='tam2_Grade']").val(data['scoreData'][month]['data']['탐구영역2']['grade']);
             $("input[name='his_Grade']").val(data['scoreData'][month]['data']['한국사']['grade']);
-
-
+            if(coll){
+                calcJuScore(coll.data);
+            }
         } else {
             rePage();
         }
@@ -501,7 +514,7 @@ $query_string = http_build_query(array(
         });
     }
 
-    $("#text").on('keydown',function(e){
+    $(".textSearch").on('keydown',function(e){
         if(e.keyCode == 13){
             $("#searchEnter").click();
         }
@@ -539,7 +552,8 @@ $query_string = http_build_query(array(
                 rows : 20,
                 area: areas,
                 code : $(".ctype.active").data('value'),
-                texts : $("#text").val(),
+                textCol : $("#textCol").val(),
+                textSub : $("#textSub").val(),
             },
             async: false,
             error: function(data) {
@@ -549,13 +563,16 @@ $query_string = http_build_query(array(
             success: function(data) {
                 coll = eval("(" + data + ");");
                 console.log(coll);
-                drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
+                // drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
                 $(".totalCnt").html(coll['paging'].total_count + '개');
                 // $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
                 coll.data.forEach(function(row, idx){
                     let no = (coll['paging'].page - 1) * 20 + (idx + 1);
                     addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);
                 });
+                if(coll.data.length>0){
+                    calcJuScore(coll.data);
+                }
             }
         });
     }
@@ -564,6 +581,7 @@ $query_string = http_build_query(array(
         if(!person){
             person = '-';
         }
+
         let html = `
             <tr>
                 <td style="width:60px;">${no}</td>
@@ -590,10 +608,10 @@ $query_string = http_build_query(array(
                 <td>${area}</td>
                 <td>${type}</td>
                 <td>${gun}</td>
-                <td>${college}</td>
+                <td class="subDetail" data-tooltip='${no-1}'>${college}</td>
                 <td>${subject}</td>
                 <td>${person}</td>
-                <td></td>
+                <td class="changeScore${no}"></td>
                 <td class="cutline"></td>
                 <td class="cutline"></td>
                 <td class="cutline"></td>
@@ -612,11 +630,83 @@ $query_string = http_build_query(array(
             </tr>
         `;
         $(".collegeInfos table tbody").append(html);
-        calcJuScore();
         if('<?=$_SESSION['mb_profile']?>' == 'C40000003'){
             $(".cutline").addClass('remove-view');
         }
     }
+
+    $(document).on("mouseenter", ".subDetail", function (e) {
+        let thData = coll.data[$(this).data("tooltip")];
+        
+        let html = `
+        <h2 style="margin-bottom:5px;">${thData['collegeNm']} - ${thData['subjectNm']}</h2>
+        <table style="border-collapse: collapse;text-align:center;min-width:300px;">
+            <tr>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;"></th>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;">국어</th>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;">수학</th>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;">영어</th>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;">과탐/사탐</th>
+                <th style="border:1px solid #ccc;padding:5px;min-width:50px;">한국사</th>
+            </tr>
+            <tr>
+                <td style="border:1px solid #ccc;padding:5px;">비율</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juKorrate'] ? thData['juKorrate'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juMathrate'] ? thData['juMathrate'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juEngrate'] ? thData['juEngrate'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamrate'] ? thData['juTamrate'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juHisAdd'] ? thData['juHisAdd'] : '-'}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #ccc;padding:5px;">선/필</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juKorSelect'] ? thData['juKorSelect'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juMathSelect'] ? thData['juMathSelect'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juEngSelect'] ? thData['juEngSelect'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamSelect'] ? thData['juTamSelect'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juHisSelect'] ? thData['juHisSelect'] : '-'}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #ccc;padding:5px;">기준</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juChar'] ? thData['juChar'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juChar'] ? thData['juChar'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['engList'] ? '상세확인' : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamChar'] ? thData['juTamChar'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['histList'] ? '상세확인' : '-'}</td>
+            </tr>
+            <tr style="background-color:#eee;font-weight:bold;">
+                <td style="border:1px solid #ccc;padding:5px;" colspan="6">총점 : ${thData['juTotal'] ? thData['juTotal'] : '-'} / 수능 : ${thData['juSrate'] ? thData['juSrate'] : '-'} / 실기 : ${thData['juPrate'] ? thData['juPrate'] : '-'}</td>
+            </tr>
+        </table>`;
+
+        $("#custom-tooltip").html(html).show();
+    }).on("mousemove", ".subDetail", function (e) {
+        const tooltip = $("#custom-tooltip");
+        const tooltipWidth = tooltip.outerWidth();
+        const tooltipHeight = tooltip.outerHeight();
+        const winWidth = $(window).width();
+        const winHeight = $(window).height();
+
+        let left;
+        if($("#wrapper").hasClass('full')){
+            left = e.pageX - 50;
+        } else {
+            left = e.pageX - 250;
+        }
+        
+        let top = e.pageY - 20;
+
+        if (e.clientX + tooltipWidth + 20 > winWidth) {
+            left = e.pageX - tooltipWidth - 10;
+        }
+        if (e.clientY + tooltipHeight + 40 > winHeight) {
+            top = e.pageY - tooltipHeight - 20;
+        }
+
+        tooltip.css({ left, top });
+    }).on("mouseleave", ".subDetail", function () {
+        $("#custom-tooltip").hide();
+    });
+
 
     function showSilgi(subIdx,area,gun,college,subject,sub){
         let silg = ""
@@ -864,6 +954,7 @@ $query_string = http_build_query(array(
                     $(`input[name='${prefix}_Sscore']`).val(cache[key].sscore);
                 }
                 $(`input[name='${prefix}_Grade']`).val(cache[key].gGrade);
+                calcJuScore(coll.data);
             return;
         }
 
@@ -879,6 +970,7 @@ $query_string = http_build_query(array(
                     $(`input[name='${prefix}_Sscore']`).val(data.sscore);
                 }
                 $(`input[name='${prefix}_Grade']`).val(data.gGrade);
+                calcJuScore(coll.data);
             }
         });
         

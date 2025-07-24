@@ -176,7 +176,7 @@ $query_string = http_build_query(array(
                                 ?>
                                 <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx'] && $meres['memo']) echo 'iswrite';?>">상담내역</button>
                             </td> -->
-                            <td>
+                            <td class="memosArea">
                                 <?
                                     $meres = sql_query("WITH RECURSIVE dateMonth AS (
                                                 SELECT code,codeName
@@ -284,7 +284,6 @@ $query_string = http_build_query(array(
 
 <script>
     let editor = [];
-    let prevMemo = '';
     function fsearch_submit(e) {
     }
 
@@ -293,155 +292,6 @@ $query_string = http_build_query(array(
         $("#fsearch").submit();
     });
 
-    function viewMemo(e,memberIdx,memberName){
-        document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
-            if(el == e.currentTarget){
-                el.classList.add('isactive');
-            } else {
-                el.classList.remove('isactive');
-            }
-        });
-        $(".memberName").html(memberName + ' - ');
-        showMemoView2(memberIdx);
-    }
-
-    function showMemoView2(memberIdx){
-        $.ajax({
-            url: "/bbs/searchMemberMemo.php",
-            type: "POST",
-            data: {
-                memberIdx : memberIdx,
-            },
-            async: false,
-            error: function(data) {
-                alert('에러가 발생하였습니다.');
-                return false;
-            },
-            success: function(data) {
-                json = eval("(" + data + ");");
-                
-                if((!Array.isArray(json))){
-                    $("#memoType").val('update');
-                    $("#memoIdx").val(json['data'].idx);
-                    $("#memberIdx").val(memberIdx);
-                    prevMemo = json['data'].memo;
-                    let html = `
-                        <div class="memoPlace">
-                            <textarea id="memberMemo" placeholder="상담내역을 작성해주세요.">${json['data'].memo}</textarea>
-                        </div>
-                        <div class="memoWrite">
-                            작성자 : ${json['data'].regName} ${json['data'].regDate}
-                        </div>`;
-                    if(json['data'].updName){
-                        html += `
-                        <div class="memoWrite">
-                            수정자 : ${json['data'].updName} ${json['data'].updDate}
-                        </div>`;
-                    }
-                    html += `
-                        <div class="memoBtn">
-                            <button type="button" class="btn-n active no-hover" onclick="saveMemo()">저장</button>
-                            <button type="button" class="btn-n no-hover" onclick="cancelMemo()">취소</button>
-                        </div>
-                    `;
-                    $("#memoArea").html(html);
-                } else {
-                    $("#memoType").val('add');
-                    $("#memoIdx").val('');
-                    $("#memberIdx").val(memberIdx);
-                    prevMemo = '';
-                    let html = `
-                        <div class="memoPlace">
-                            <textarea id="memberMemo" placeholder="상담내역을 작성해주세요."></textarea>
-                        </div>
-                        <div class="memoBtn">
-                            <button type="button" class="btn-n active no-hover" onclick="saveMemo()">저장</button>
-                            <button type="button" class="btn-n no-hover" onclick="cancelMemo()">취소</button>
-                        </div>
-                    `;
-                    $("#memoArea").html(html);
-                }
-            }
-        });
-    }
-
-    function saveMemo(){
-        let type = $("#memoType").val();
-        let idx = $("#memoIdx").val();
-        let memberIdx = $("#memberIdx").val();
-        let text = '';
-        let msg = '';
-        if(type == 'update'){
-            text = '상담내역을 수정 하시겠습니까?';
-            msg = '수정';
-        } else{
-            text = '상담내역을 저장 하시겠습니까?';
-            msg = '저장';
-        }
-        swal({
-            title : '',
-            text : text,
-            type : "info",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $.ajax({
-                        url: "/bbs/updateMemberMemo.php",
-                        type: "POST",
-                        data: {
-                            memoIdx : idx,
-                            memo : $("#memberMemo").val(),
-                            memberIdx : memberIdx,
-                            type : type,
-                        },
-                        async: false,
-                        error: function(data) {
-                            alert('에러가 발생하였습니다.');
-                            return false;
-                        },
-                        success: function(data) {
-                            if(data == 'success'){
-                                swal('성공',msg + ' 되었습니다.','success');
-                                setTimeout(() => {
-                                    showMemoView2(memberIdx);
-                                    swal.close();
-                                }, 1500);
-                            }
-                        }
-                    })                    
-                }
-            }
-        );
-    }
-    
-    
-
-    function cancelMemo(){
-        swal({
-            title : '',
-            text : '이전 메모로 돌리시겠습니까?',
-            type : "info",
-            showCancelButton : true,
-            confirmButtonClass : "btn-danger",
-            cancelButtonText : "아니오",
-            confirmButtonText : "예",
-            closeOnConfirm : false,
-            closeOnCancel : true
-            },
-            function(isConfirm){
-                if(isConfirm){
-                    $("#memberMemo").val(prevMemo);
-                    swal.close();
-                }
-            }
-        );
-    }
 
     function viewMemberInfo(e,mbId,month,memNm){
         document.querySelectorAll(".memberRow").forEach((el,i,arr)=>{
@@ -508,7 +358,7 @@ $query_string = http_build_query(array(
                         html1 += `
                         <div class="${tag}" style="display:${viewty};flex-direction:column;background-color:white;border-radius:15px;padding:20px;gap:10px;border:1px solid #e4e4e4;">
                             <input type="hidden" value="${tagData.gmIdx}">
-                            <input type="text" onclick="updateMemo(event)" style="border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${tagData.title}">
+                            <input type="text" class="memo-title" style="pointer-events:none;border:unset;font-size:1.4em;font-weight:bold;padding:2px 5px;" value="${tagData.title}">
                             <div style="height:1px;border-top:1px solid #e4e4e4;"></div>
                             <div id="noticeHead" style="font-size: 1.2em;height:700px;max-width:550px;border:1px solid #e1e1e1;padding:5px 10px; border-radius:10px;">
                                 <div class="viewer${tag}" style="font-size: 1.1em;"></div>
@@ -585,14 +435,19 @@ $query_string = http_build_query(array(
                     el.classList.add('iswrite');
                 }
             });
+
+            document.querySelectorAll('.toastui-editor-contents p>a').forEach((el,i,arr)=>{
+                el.setAttribute("target","_blank");
+            });
         }, 0);
     }
 
     function cancleMemo(e,month){
-        $(`.updateArea${month}`).css('display','');
-        $(`.savedArea${month}`).css('display','none');
-        $(`.editor${month}`).css('display','none');
-        $(`.viewer${month}`).css('display','');
+        document.querySelectorAll('.memberRow.isactive .memosArea button').forEach((el,i,arr)=>{
+            if(el.value == month){
+                el.click();
+            }
+        })
     }
 
     function updateInner(e,month){
@@ -600,6 +455,7 @@ $query_string = http_build_query(array(
         $(`.savedArea${month}`).css('display','');
         $(`.editor${month}`).css('display','');
         $(`.viewer${month}`).css('display','none');
+        $(`.${month} .memo-title`).css('pointer-events','all');
     }
 
     let memoCont = '';
@@ -667,7 +523,6 @@ $query_string = http_build_query(array(
                                     swal.close();
                                 }, 1200);
                                 showMemoView(json,memoMonth);
-                                
                             }
                     });
                 }

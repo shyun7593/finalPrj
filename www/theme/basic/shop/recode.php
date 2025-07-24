@@ -273,10 +273,9 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                 </div>
             </form>
             <?if($scnt['cnt'] > 0){?>
-            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:73vh;">
+            <div class="tbl_wrap border-tb scroll-y" style="overflow-x: auto;max-height:73vh;border-collapse: separate !important;border-spacing: 0 !important;">
                 <table class="tbl_head01" style="width: auto;">
-                    <thead>
-
+                    <thead >
                         <tr class="headd">
                             <th style="top:0;z-index:15;min-width:100px;width:100px;background:rgba(227, 244, 248);" rowspan="2">날짜</th>
                             <th style="top:0;z-index:15;min-width:50px;width:50px;background:rgba(227, 244, 248);" rowspan="2">순위</th>
@@ -296,25 +295,25 @@ $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:2px solid white;" rowspan="2">총점</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" rowspan="2">평균</th>
                         </tr>
-                    <tr class="sub-header">
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='core'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='core'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='m10m'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='m10m'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='medicine'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='medicine'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='leftGul'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='stand'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='stand'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='m20mBu'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='situp'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='situp'>점수</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid white;" class='sergent'>기록</th>
-                        <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:2px solid white;border-top:1px solid white;" class='sergent'>점수</th>
-                    </tr>
-                </thead>
+                        <tr class="sub-header">
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='core'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='core'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='m10m'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='m10m'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='medicine'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='medicine'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='leftGul'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='leftGul'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='stand'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='stand'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='m20mBu'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='m20mBu'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='situp'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='situp'>점수</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-top:1px solid #eee;" class='sergent'>기록</th>
+                            <th style="position:sticky;top:45.5px;z-index:13;min-width:100px;background:rgba(227, 244, 248);border-right:2px solid white;border-top:1px solid #eee;" class='sergent'>점수</th>
+                        </tr>
+                    </thead>
                     <tbody>
                     <?
                         $res = sql_query($sql);

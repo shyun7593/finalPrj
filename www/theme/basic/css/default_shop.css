@@ -118,7 +118,6 @@ box-sizing:border-box;
 
 .iswrite{
     background-color: #0c2233;
-    border: unset !important;
     color:white;
 }
 
@@ -252,6 +251,7 @@ box-sizing:border-box;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     /* 그림자 */
     z-index: 1001;
+    transition: left 0.5s ease, width 0.5s ease;
     .top_menu{
         padding: 10px 0;
         font-size: 1.3em;
