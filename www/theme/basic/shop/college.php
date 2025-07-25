@@ -132,6 +132,10 @@ $query_string = http_build_query(array(
     .no-view{
         display: none;
     }
+    .under_line:hover{
+        text-decoration: underline;
+        cursor: pointer;
+    }
 </style>
 
 <!-- 등급관리 시작 { -->
@@ -408,7 +412,13 @@ $query_string = http_build_query(array(
                                         <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
                                         <td>${json['data']['jungsi']['Char'] ? json['data']['jungsi']['Char'] : '-'}</td>
                                         <td>-</td>
-                                        <td>${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}</td>
+                                        <td>`;
+                                if(json['data']['jungsi']['TamChar'].includes('변')){
+                                    html += `<span class="under_line" style="color:blue;font-weight:800;" onclick="transPopup(${subIdx})">${json['data']['jungsi']['TamChar']}</span>`;
+                                } else {
+                                    html += `${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}`;
+                                }
+                                html += `</td>
                                         <td>-</td>
                                     </tr>
                                 </tbody>
@@ -907,6 +917,9 @@ $query_string = http_build_query(array(
     $('#closePopup, #popupBackground').click(function() {
         $('#popupBackground').fadeOut(); // 배경 숨기기
         $('#collegePopup').fadeOut(); // 팝업 숨기기
+        if (popupWin && !popupWin.closed) {
+            popupWin.close();
+        }
     });
     
     function addCollege(e,type,idx){
@@ -1102,6 +1115,15 @@ $query_string = http_build_query(array(
             $(".yes-college").css('display','grid');
             $(".no-college").css('display','none');
         }
+    }
+    let popupWin = "";
+    function transPopup(subIdx){
+        var name = "변환 표준점수";
+        var option = "width = 850, height = 600, location = no, toolbars = no, status = no";
+        var url = "/shop/popupTransScore?subIdx=" + subIdx;
+        
+        
+        popupWin = window.open(url, name, option);
     }
 </script>
 <!-- } 마이페이지 끝 -->
