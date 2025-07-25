@@ -329,6 +329,7 @@ $query_string = http_build_query(array(
     let areas = [];
     let coll;
     let json ="";
+    let transDatas = [];
     $("#viewhideOutput").on('click',function(){
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
@@ -345,6 +346,21 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 topRate = eval("(" + data + ");");
+            }
+        });
+
+        $.ajax({
+            url: "/bbs/searchTransScores.php",
+            type: "POST",
+            data: {},
+            async: false,
+            error: function(data) {
+                alert('에러가 발생하였습니다.');
+                return false;
+            },
+            success: function(data) {
+                console.log(eval("(" + data + ");"));
+                transDatas = eval("(" + data + ");");
             }
         });
 

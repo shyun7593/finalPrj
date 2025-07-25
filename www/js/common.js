@@ -853,6 +853,25 @@ function calcJuScore(json){
     let science = ['물리1','화학1','생명과학1','지구과학1','물리2','화학2','생명과학2','지구과학2']; // 과탐
     let social = ['생활과윤리','윤리와사상','한국지리','세계지리','동아시아사','세계사','정치와법','경제','사회문화']; // 사탐
 
+    let tam1 = $("input[name='tamSub1']").val();
+    let tam2 = $("input[name='tamSub2']").val();
+
+    if(science.includes(tam1)){
+        tam1 = "과탐";
+    } else if(social.includes(tam1)){
+        tam1 = "사탐";
+    } else {
+        tam1 = "직탐";
+    }
+
+    if(science.includes(tam2)){
+        tam2 = "과탐";
+    } else if(social.includes(tam2)){
+        tam2 = "사탐";
+    } else {
+        tam2 = "직탐";
+    }
+
     let subArr = [];
     let subNm = ['kor','math','tam1','tam2','eng','his'];
     for(let u = 0; u < subNm.length; u++){
@@ -866,7 +885,7 @@ function calcJuScore(json){
             'TransScore' : 0
         });
     }
-    // console.log(json);
+    
     let changeScore = 0;
     for(let i = 0; i < json.length; i++){
         changeScore = 0;
@@ -946,13 +965,13 @@ function calcJuScore(json){
                 subArr[2]['Score'] = subArr[2]['Grade']*json[i]['juTotal'];
                 subArr[3]['Score'] = subArr[3]['Grade']*json[i]['juTotal'];
                 break;
-            case '변표최':
-                subArr[2]['Score'] = "";
-                subArr[3]['Score'] = "";
+            case '변표최': 
+                subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][100]['transScore'])*json[i]['juTotal'];
+                subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][100]['transScore'])*json[i]['juTotal'];
                 break;
             case '변표200':
-                subArr[2]['Score'] = "";
-                subArr[3]['Score'] = "";
+                subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
+                subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
                 break;
             default:
                 subArr[2]['Score'] = "";
@@ -1071,6 +1090,7 @@ function calcJuScore(json){
             changeScore += subArr[o]['TransScore'];
             subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
         }
+        // console.log(changeScore);
         // console.log(subArr);
         // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
 
