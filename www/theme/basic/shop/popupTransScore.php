@@ -17,23 +17,11 @@ foreach($sql as $tp => $v){
     $data[$psubIdx][$subCode][$Sscore] = [
         'transScore' => $transScore
     ];
-    // if (!isset($data[$psubIdx])) {
-    //     $data[$psubIdx] = [
-    //         $subCode => []
-    //     ];
-    // }
-    // if (!isset($data[$psubIdx][$subCode])) {
-    //     $data[$psubIdx][$subCode] = [
-    //         $Sscore => []
-    //     ];
-    // }
-
-    // if (!isset($data[$psubIdx][$subCode][$Sscore])) {
-    //     $data[$psubIdx][$subCode][$Sscore] = [
-    //         'transScore' => $transScore
-    //     ];
-    // }
 }
+
+// echo "<pre>";
+// print_r($data);
+// echo "</pre>";
 ?>
 <style>
     #wrapper {
@@ -67,6 +55,9 @@ foreach($sql as $tp => $v){
         background-color: #334d63;
         color:white;
     }
+    table thead th:not(:last-child){
+        border-right:1px solid white;
+    }
     table tbody td:not(:last-child){
         border-right: 1px solid #eee;
     }
@@ -80,20 +71,15 @@ foreach($sql as $tp => $v){
     <div id="smb_my_list">
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od" style="margin:0;">
-            <!-- <?php
-                echo "<pre>";
-                print_r($data);
-                echo "</pre>";
-            ?> -->
         <div style="height:75vh;overflow-y:auto">
             <table style="text-align:center;">
                 <colgroup>
-                    <col width="50px">
+                    <col width="80px">
                     <col width="*">
                 </colgroup>
                 <thead style="position: sticky;top:0px;z-index:5;">
                     <tr>
-                    <th></th> 
+                    <th>백분위</th> 
                     <th>과탐</th> 
                     <th>사탐</th> 
                     <th>직탐</th> 
