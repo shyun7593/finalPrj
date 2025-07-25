@@ -4,7 +4,7 @@ if($_SESSION['mb_profile'] == 'C40000004' || !$subIdx){
     exit;
 }
 
-$g5['title'] = '변환표준 점수';
+$g5['title'] = $colleageNm.' - 변환표준 점수';
 include_once('./_head.php');
 
 $sql = sql_query("SELECT * FROM g5_trans_pscore WHERE pSubIdx = '{$subIdx}' ORDER BY pCmmn, pSscore+0 desc");

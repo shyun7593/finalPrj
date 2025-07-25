@@ -414,7 +414,7 @@ $query_string = http_build_query(array(
                                         <td>-</td>
                                         <td>`;
                                 if(json['data']['jungsi']['TamChar'].includes('변')){
-                                    html += `<span class="under_line" style="color:blue;font-weight:800;" onclick="transPopup(${subIdx})">${json['data']['jungsi']['TamChar']}</span>`;
+                                    html += `<span class="under_line" style="color:blue;font-weight:800;" onclick="transPopup('${json['data']['college']['collegeNm']}',${subIdx})">${json['data']['jungsi']['TamChar']}</span>`;
                                 } else {
                                     html += `${json['data']['jungsi']['TamChar'] ? json['data']['jungsi']['TamChar'] : '-'}`;
                                 }
@@ -1117,10 +1117,10 @@ $query_string = http_build_query(array(
         }
     }
     let popupWin = "";
-    function transPopup(subIdx){
+    function transPopup(collNm,subIdx){
         var name = "변환 표준점수";
         var option = "width = 850, height = 600, location = no, toolbars = no, status = no";
-        var url = "/shop/popupTransScore?subIdx=" + subIdx;
+        var url = "/shop/popupTransScore?subIdx=" + subIdx + "&colleageNm=" + collNm;
         
         
         popupWin = window.open(url, name, option);
