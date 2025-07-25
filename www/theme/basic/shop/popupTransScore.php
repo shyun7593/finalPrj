@@ -51,10 +51,6 @@ foreach($sql as $tp => $v){
     }
     #wrapper_title{
         padding: 0 0 10px 0!important;
-        position: sticky;
-        top: 0px;
-        z-index: 5;
-        background: white;
     }
     
     table{
@@ -89,34 +85,36 @@ foreach($sql as $tp => $v){
                 print_r($data);
                 echo "</pre>";
             ?> -->
-        <table style="text-align:center;">
-            <colgroup>
-                <col width="50px">
-                <col width="*">
-            </colgroup>
-            <thead style="position: sticky;top:50px;z-index:5;">
-                <tr>
-                   <th></th> 
-                   <th>과탐</th> 
-                   <th>사탐</th> 
-                   <th>직탐</th> 
-                </tr>
-            </thead>
-            <tbody style="border:1px solid #eee;">
-                <?
-                    for($i = 100 ; $i >= 0; $i--){?>
-                        <tr>
-                            <td><?=$i?></td>
-                            <td><?=$data[$subIdx]['과탐'][$i]['transScore']?></td>
-                            <td><?=$data[$subIdx]['사탐'][$i]['transScore']?></td>
-                            <td><?=$data[$subIdx]['직탐'][$i]['transScore']?></td>
-                        </tr>
-                    <?}
-                ?>
-                <tr>
-                </tr>
-            </tbody>
-        </table>
+        <div style="height:75vh;overflow-y:auto">
+            <table style="text-align:center;">
+                <colgroup>
+                    <col width="50px">
+                    <col width="*">
+                </colgroup>
+                <thead style="position: sticky;top:0px;z-index:5;">
+                    <tr>
+                    <th></th> 
+                    <th>과탐</th> 
+                    <th>사탐</th> 
+                    <th>직탐</th> 
+                    </tr>
+                </thead>
+                <tbody style="border:1px solid #eee;">
+                    <?
+                        for($i = 100 ; $i >= 0; $i--){?>
+                            <tr>
+                                <td><?=$i?></td>
+                                <td><?=$data[$subIdx]['과탐'][$i]['transScore']?></td>
+                                <td><?=$data[$subIdx]['사탐'][$i]['transScore']?></td>
+                                <td><?=$data[$subIdx]['직탐'][$i]['transScore']?></td>
+                            </tr>
+                        <?}
+                    ?>
+                    <tr>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         </section>
         <!-- } 최근 주문내역 끝 -->
     </div>
