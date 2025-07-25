@@ -339,9 +339,11 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
     });
 
     function applyScore($row, data) {
-        $row.find('input[name="sscore"]').val(data.sscore);
-        $row.find('input[name="pscore"]').val(data.pscore);
-        $row.find('input[name="grade"]').val(data.gGrade);
+        if(data){
+            $row.find('input[name="sscore"]').val(data.sscore);
+            $row.find('input[name="pscore"]').val(data.pscore);
+            $row.find('input[name="grade"]').val(data.gGrade);
+        }
     }
 
 </script>

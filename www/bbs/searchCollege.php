@@ -114,7 +114,8 @@ $sql = "SELECT
     juChar,
     juTamChar,
     juLanSelect,
-    juPrate
+    juPrate,
+    juTamSub
 FROM
 (
 SELECT 
@@ -148,7 +149,8 @@ SELECT
     gj.juChar, -- 국/수 표백등최
     gj.juTamChar, -- 탐구 표백등최
     gj.juLanSelect, -- 제2외국어 필선
-    gj.juPrate -- // 실기 반영비율
+    gj.juPrate, -- // 실기 반영비율
+    gj.juTamSub -- // 과탐 제외과목
 FROM g5_college_subject gcs 
 JOIN g5_college gc ON
     gc.cIdx = gcs.collegeIdx
@@ -247,7 +249,8 @@ foreach ($mres as $k => $v) {
         'juChar' => $v['juChar'], // -- 국/수 변표최등
         'juTamChar' => $v['juTamChar'], // 탐구 변표최등
         'juLanSelect' => $v['juLanSelect'], // 제2외국어 필선
-        'juPrate' => $v['juPrate'] // 실기 반영비율
+        'juPrate' => $v['juPrate'], // 실기 반영비율
+        'juTamSub' => $v['juTamSub'] // 탐구 제외과목
     ];
 }
 

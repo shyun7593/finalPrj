@@ -480,8 +480,17 @@ $query_string = http_build_query(array(
             // 최고표점
             $("input[name='kor_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['국어']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['국어']['subject']]['topRate'] : 0);
             $("input[name='math_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['수학']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['수학']['subject']]['topRate'] : 0);
-            $("input[name='tam1_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] : 0);
-            $("input[name='tam2_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] : 0);
+            if(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]){
+                $("input[name='tam1_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]['topRate'] : 0);
+            } else {
+                $("input[name='tam1_TopRate']").val(0);
+            }
+
+            if(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역1']['subject']]){
+                $("input[name='tam2_TopRate']").val(topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] ? topRate['topRateData'][month]['data'][data['scoreData'][month]['data']['탐구영역2']['subject']]['topRate'] : 0);
+            }else {
+                $("input[name='tam2_TopRate']").val(0);
+            }
 
             // 표점
             $("input[name='kor_Pscore']").val(data['scoreData'][month]['data']['국어']['pscore']);
@@ -687,6 +696,14 @@ $query_string = http_build_query(array(
                 <td style="border:1px solid #ccc;padding:5px;">${thData['engList'] ? '상세확인' : '-'}</td>
                 <td style="border:1px solid #ccc;padding:5px;">${thData['juTamChar'] ? thData['juTamChar'] : '-'}</td>
                 <td style="border:1px solid #ccc;padding:5px;">${thData['histList'] ? '상세확인' : '-'}</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #ccc;padding:5px;">제외</td>
+                <td style="border:1px solid #ccc;padding:5px;">-</td>
+                <td style="border:1px solid #ccc;padding:5px;">-</td>
+                <td style="border:1px solid #ccc;padding:5px;">-</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamSub'] ? thData['juTamSub'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">-</td>
             </tr>
             <tr style="background-color:#eee;font-weight:bold;">
                 <td style="border:1px solid #ccc;padding:5px;" colspan="6">총점 : ${thData['juTotal'] ? thData['juTotal'] : '-'} / 수능 : ${thData['juSrate'] ? thData['juSrate'] : '-'} / 실기 : ${thData['juPrate'] ? thData['juPrate'] : '-'}</td>

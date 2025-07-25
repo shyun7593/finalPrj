@@ -871,7 +871,7 @@ function calcJuScore(json){
     } else {
         tam2 = "직탐";
     }
-
+    
     let subArr = [];
     let subNm = ['kor','math','tam1','tam2','eng','his'];
     for(let u = 0; u < subNm.length; u++){
@@ -910,11 +910,7 @@ function calcJuScore(json){
         subArr[4]['Rate'] = json[i]['juEngrate'];
         
         switch(json[i]['juChar']){
-            case '표최':
-                subArr[0]['Score'] = (subArr[0]['Pscore']/subArr[0]['TopRate'])*json[i]['juTotal'];
-                subArr[1]['Score'] = (subArr[1]['Pscore']/subArr[1]['TopRate'])*json[i]['juTotal'];
-                break;
-            case '표':
+            case '표최': case '표':
                 subArr[0]['Score'] = (subArr[0]['Pscore']/subArr[0]['TopRate'])*json[i]['juTotal'];
                 subArr[1]['Score'] = (subArr[1]['Pscore']/subArr[1]['TopRate'])*json[i]['juTotal'];
                 break;
@@ -943,35 +939,79 @@ function calcJuScore(json){
                 subArr[1]['Score'] = "";
                 break;
         }
-        
+
         switch(json[i]['juTamChar']){
-            case '표최':
-                subArr[2]['Score'] = (subArr[2]['Pscore']/subArr[2]['TopRate'])*json[i]['juTotal'];
-                subArr[3]['Score'] = (subArr[3]['Pscore']/subArr[3]['TopRate'])*json[i]['juTotal'];
-                break;
-            case '표':
-                subArr[2]['Score'] = (subArr[2]['Pscore']/subArr[2]['TopRate'])*json[i]['juTotal'];
-                subArr[3]['Score'] = (subArr[3]['Pscore']/subArr[3]['TopRate'])*json[i]['juTotal'];
+            case '표최': case '표':
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = (subArr[2]['Pscore']/subArr[2]['TopRate'])*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = (subArr[3]['Pscore']/subArr[3]['TopRate'])*json[i]['juTotal'];
+                }
                 break;
             case '표200':
-                subArr[2]['Score'] = (subArr[2]['Pscore']/200)*json[i]['juTotal'];
-                subArr[3]['Score'] = (subArr[3]['Pscore']/200)*json[i]['juTotal'];
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = (subArr[2]['Pscore']/200)*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = (subArr[3]['Pscore']/200)*json[i]['juTotal'];
+                }
                 break;
             case '백':
-                subArr[2]['Score'] = (subArr[2]['Sscore']/100)*json[i]['juTotal'];
-                subArr[3]['Score'] = (subArr[3]['Sscore']/100)*json[i]['juTotal'];
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = (subArr[2]['Sscore']/100)*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = (subArr[3]['Sscore']/100)*json[i]['juTotal'];
+                }
                 break;
             case '등급':
-                subArr[2]['Score'] = subArr[2]['Grade']*json[i]['juTotal'];
-                subArr[3]['Score'] = subArr[3]['Grade']*json[i]['juTotal'];
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = subArr[2]['Grade']*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = subArr[3]['Grade']*json[i]['juTotal'];
+                }
                 break;
-            case '변표최': 
-                subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][100]['transScore'])*json[i]['juTotal'];
-                subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][100]['transScore'])*json[i]['juTotal'];
+            case '변표최':
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][100]['transScore'])*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][100]['transScore'])*json[i]['juTotal'];
+                }
                 break;
             case '변표200':
-                subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
-                subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
+                if(json[i]['juTamSub'] == tam1){
+                    subArr[2]['Score'] = 0;
+                } else {
+                    subArr[2]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam1]['data'][Math.round(subArr[2]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
+                }
+                if(json[i]['juTamSub'] == tam2){
+                    subArr[3]['Score'] = 0;
+                }else {
+                    subArr[3]['Score'] = (transDatas['transData'][json[i]['subIdx']]['data'][tam2]['data'][Math.round(subArr[3]['Sscore'])]['transScore']/200)*json[i]['juTotal'];
+                }
                 break;
             default:
                 subArr[2]['Score'] = "";
