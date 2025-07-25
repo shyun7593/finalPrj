@@ -988,7 +988,6 @@ function calcJuScore(json){
 
         if(json[i]['histList']){
             subArr[5]['Score'] = Number(json[i]['histList'].split(",")[subArr[5]['Grade']]);
-            console.log(json[i]['histList'].split(",")[subArr[5]['Grade']]);
         }
         
     
