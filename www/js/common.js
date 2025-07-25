@@ -986,8 +986,9 @@ function calcJuScore(json){
             }
         }
 
-        if(json[i]['hisList']){
-            subArr[5]['Score'] = json[i]['hisList'].split(",")[subArr[5]['Grade']];
+        if(json[i]['histList']){
+            subArr[5]['Score'] = Number(json[i]['histList'].split(",")[subArr[5]['Grade']]);
+            console.log(json[i]['histList'].split(",")[subArr[5]['Grade']]);
         }
         
     
@@ -1093,6 +1094,6 @@ function calcJuScore(json){
         // console.log(changeScore);
         console.log(subArr);
         // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
-        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*json[i]['juSrate'].split("%")[0] ? json[i]['juTotal']*json[i]['juSrate'].split("%")[0] : formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
+        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) ? json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) : formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
     }
 }
