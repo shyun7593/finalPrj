@@ -982,7 +982,7 @@ function calcJuScore(json){
             if(subArr[4]['Rate'].includes('점')){
                 subArr[4]['Score'] = Number(json[i]['engList'].split(",")[subArr[4]['Grade']]);
             } else {
-                subArr[4]['Score'] = json[i]['engList'].split(",")[subArr[4]['Grade']]*(json[i]['juTotal']/json[i]['engList'].split(",")[0]);
+                subArr[4]['Score'] = Number(json[i]['engList'].split(",")[subArr[4]['Grade']])*(json[i]['juTotal']/json[i]['engList'].split(",")[0]);
             }
         }
 
@@ -1088,10 +1088,10 @@ function calcJuScore(json){
         }
         for(let o = 0; o < 6; o++){
             changeScore += subArr[o]['TransScore'];
-            subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
+            // subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
         }
         // console.log(changeScore);
-        // console.log(subArr);
+        console.log(subArr);
         // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
 
         $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
