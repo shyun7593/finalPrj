@@ -1093,7 +1093,6 @@ function calcJuScore(json){
         // console.log(changeScore);
         console.log(subArr);
         // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
-
-        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
+        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*json[i]['juSrate'].split("%")[0] ? json[i]['juTotal']*json[i]['juSrate'].split("%")[0] : formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
     }
 }
