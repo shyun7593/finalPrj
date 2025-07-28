@@ -21,7 +21,6 @@ if(!$selMonth){
     $selMonth = 'C60000001';
 }
 
-
 $query_string = http_build_query(array(
     'bid' => $_GET['bid'],
 ));
@@ -78,6 +77,9 @@ $query_string = http_build_query(array(
         font-weight: 800;
         cursor:pointer;
     }
+    .tbl_head01 td{
+        padding : 10px 5px;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -85,10 +87,10 @@ $query_string = http_build_query(array(
         <section id="smb_my_od" style="margin:unset;">
                 <input type="hidden" id="kor_Code" name="kor_Code">
                 <input type="hidden" id="math_Code" name="math_Code">
-                <input type="hidden" id="eng_Code" name="eng_Code">
+                <input type="hidden" id="eng_Code" name="eng_Code" value="C20030001">
                 <input type="hidden" id="tam1_Code" name="tam1_Code">
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
-                <input type="hidden" id="his_Code" name="his_Code">
+                <input type="hidden" id="his_Code" name="his_Code" value="C20060001">
                 <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;">
                     <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
                     <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
@@ -123,7 +125,7 @@ $query_string = http_build_query(array(
                                 <th colspan="7">성적표</th>
                             </tr>
                             <tr>
-                                <th></th>
+                                <th><button class="btn-n active" onclick="resetScore()">점수 초기화</button></th>
                                 <th>국어</th>
                                 <th>수학</th>
                                 <th>영어</th>
@@ -136,6 +138,7 @@ $query_string = http_build_query(array(
                                 <td rowspan="2" class="selMonth">
                                     <?if($bid){?>
                                         <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                                            <option value="">선택해주세요</option>
                                             <?
                                                 $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
                                                 foreach($msql as $ms => $m){
@@ -148,21 +151,61 @@ $query_string = http_build_query(array(
                                     <?}?>
                                 </td>
                                 <th>과목</th>
-                                <td><input type="text" class="frm_input isauto" name="korSub"></td>
-                                <td><input type="text" class="frm_input isauto" name="mathSub"></td>
-                                <td><input type="text" class="frm_input isauto" name="engSub"></td>
-                                <td><input type="text" class="frm_input isauto" name="tamSub1"></td>
-                                <td><input type="text" class="frm_input isauto" name="tamSub2"></td>
-                                <td><input type="text" class="frm_input isauto" name="hisSub"></td>
+                                <td>
+                                    <select class="frm_input" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
+                                        <option value="">선택해주세요</option>
+                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20010000' AND useYN = 1");
+                                        foreach($korsub as $ks => $k){?>
+                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                        <?}?>
+                                    </select>
+                                    <input type="hidden" class="frm_input isauto" name="korSub">
+                                </td>
+                                <td>
+                                    <select class="frm_input" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
+                                        <option value="">선택해주세요</option>
+                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20020000' AND useYN = 1");
+                                        foreach($korsub as $ks => $k){?>
+                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                        <?}?>
+                                    </select>
+                                    <input type="hidden" class="frm_input isauto" name="mathSub">
+                                </td>
+                                <td>
+                                    <input type="text" class="frm_input isauto" name="engSub">
+                                </td>
+                                <td>
+                                    <select class="frm_input" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
+                                        <option value="">선택해주세요</option>
+                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20040000' AND useYN = 1");
+                                        foreach($korsub as $ks => $k){?>
+                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                        <?}?>
+                                    </select>
+                                    <input type="hidden" class="frm_input isauto" name="tam1Sub"> 
+                                </td>
+                                <td>
+                                    <select class="frm_input" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
+                                        <option value="">선택해주세요</option>
+                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20050000' AND useYN = 1");
+                                        foreach($korsub as $ks => $k){?>
+                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                        <?}?>
+                                    </select>
+                                    <input type="hidden" class="frm_input isauto" name="tam2Sub"> 
+                                </td>
+                                <td>
+                                    <input type="text" class="frm_input isauto" name="hisSub">
+                                </td>
                             </tr>
                             <tr>
                                 <th>원점수</th>
-                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input" type="number"></td>
+                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input" type="number"></td>
+                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input" type="number"></td>
+                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input" type="number"></td>
+                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input" type="number"></td>
+                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input" type="number"></td>
                             </tr>
                             <tr>
                                 <th>이름</th>
@@ -182,33 +225,33 @@ $query_string = http_build_query(array(
                                     <?}?>
                                 </td>
                                 <th>최고표점</th>
-                                <td class="kor"><input type="number" class="frm_input isauto" name="kor_TopRate"></td>
-                                <td class="math"><input type="number" class="frm_input isauto" name="math_TopRate"></td>
+                                <td class="kor"><input type="number" class="frm_input chScore" name="kor_TopRate"></td>
+                                <td class="math"><input type="number" class="frm_input chScore" name="math_TopRate"></td>
                                 <td></td>
-                                <td class="tam1"><input type="number" class="frm_input isauto" name="tam1_TopRate"></td>
-                                <td class="tam2"><input type="number" class="frm_input isauto" name="tam2_TopRate"></td>
+                                <td class="tam1"><input type="number" class="frm_input chScore" name="tam1_TopRate"></td>
+                                <td class="tam2"><input type="number" class="frm_input chScore" name="tam2_TopRate"></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>학교</th>
                                 <td class="school"></td>
                                 <th>표준점수</th>
-                                <td><input type="number" name="kor_Pscore" class="frm_input isauto"></td>
-                                <td><input type="number" name="math_Pscore" class="frm_input isauto"></td>
+                                <td><input type="number" name="kor_Pscore" class="frm_input chScore"></td>
+                                <td><input type="number" name="math_Pscore" class="frm_input chScore"></td>
                                 <td></td>
-                                <td><input type="number" name="tam1_Pscore" class="frm_input isauto"></td>
-                                <td><input type="number" name="tam2_Pscore" class="frm_input isauto"></td>
+                                <td><input type="number" name="tam1_Pscore" class="frm_input chScore"></td>
+                                <td><input type="number" name="tam2_Pscore" class="frm_input chScore"></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>학년</th>
                                 <td class="layer"></td>
                                 <th>백분위</th>
-                                <td><input type="text" name="kor_Sscore" class="frm_input isauto"></td>
-                                <td><input type="text" name="math_Sscore" class="frm_input isauto"></td>
+                                <td><input type="text" name="kor_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="math_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
                                 <td></td>
-                                <td><input type="text" name="tam1_Sscore" class="frm_input isauto"></td>
-                                <td><input type="text" name="tam2_Sscore" class="frm_input isauto"></td>
+                                <td><input type="text" name="tam1_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="tam2_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -272,7 +315,7 @@ $query_string = http_build_query(array(
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
-            <div class="tbl_wrap collegeInfos border-tb" style="height: 75vh;overflow-y:auto;">
+            <div class="tbl_wrap collegeInfos border-tb" style="height: 74vh;overflow-y:auto;">
                     <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;border-collapse: separate !important;border-spacing: 0 !important;">
                         <colgroup>
                         </colgroup>
@@ -345,6 +388,7 @@ $query_string = http_build_query(array(
                 return false;
             },
             success: function(data) {
+                console.log(eval("(" + data + ");"));
                 topRate = eval("(" + data + ");");
             }
         });
@@ -359,7 +403,6 @@ $query_string = http_build_query(array(
                 return false;
             },
             success: function(data) {
-                console.log(eval("(" + data + ");"));
                 transDatas = eval("(" + data + ");");
             }
         });
@@ -449,12 +492,13 @@ $query_string = http_build_query(array(
         $(".gender").text(data['info']['gender'] ? data['info']['gender'] : '');
         
         if(data['scoreData'][month]){
+            
             $("#kor_Code").val(data['scoreData'][month]['data']['국어']['subCode'] ? data['scoreData'][month]['data']['국어']['subCode']  : '');
             $("#math_Code").val(data['scoreData'][month]['data']['수학']['subCode'] ? data['scoreData'][month]['data']['수학']['subCode']  : '');
-            $("#eng_Code").val(data['scoreData'][month]['data']['영어']['subCode'] ? data['scoreData'][month]['data']['영어']['subCode']  : '');
+            
             $("#tam1_Code").val(data['scoreData'][month]['data']['탐구영역1']['subCode'] ? data['scoreData'][month]['data']['탐구영역1']['subCode']  : '');
             $("#tam2_Code").val(data['scoreData'][month]['data']['탐구영역2']['subCode'] ? data['scoreData'][month]['data']['탐구영역2']['subCode']  : '');
-            $("#his_Code").val(data['scoreData'][month]['data']['한국사']['subCode'] ? data['scoreData'][month]['data']['한국사']['subCode']  : '');
+            
             $("input[name='kor_Origin']").removeClass('isauto');
             $("input[name='math_Origin']").removeClass('isauto');
             $("input[name='eng_Origin']").removeClass('isauto');
@@ -462,12 +506,18 @@ $query_string = http_build_query(array(
             $("input[name='tam2_Origin']").removeClass('isauto');
             $("input[name='his_Origin']").removeClass('isauto');
 
+
+            $("#korSelect").val(data['scoreData'][month]['data']['국어']['subject'] ? data['scoreData'][month]['data']['국어']['subject'] : '');
+            $("#mathSelect").val(data['scoreData'][month]['data']['수학']['subject'] ? data['scoreData'][month]['data']['수학']['subject'] : '');
+            $("#tam1Select").val(data['scoreData'][month]['data']['탐구영역1']['subject'] ? data['scoreData'][month]['data']['탐구영역1']['subject'] : '');
+            $("#tam2Select").val(data['scoreData'][month]['data']['탐구영역2']['subject'] ? data['scoreData'][month]['data']['탐구영역2']['subject'] : '');
+
+            
             $("input[name='korSub']").val(data['scoreData'][month]['data']['국어']['subject'] ? data['scoreData'][month]['data']['국어']['subject'] : '');
             $("input[name='mathSub']").val(data['scoreData'][month]['data']['수학']['subject'] ? data['scoreData'][month]['data']['수학']['subject'] : '');
-            $("input[name='engSub']").val('');
-            $("input[name='tamSub1']").val(data['scoreData'][month]['data']['탐구영역1']['subject'] ? data['scoreData'][month]['data']['탐구영역1']['subject'] : '');
-            $("input[name='tamSub2']").val(data['scoreData'][month]['data']['탐구영역2']['subject'] ? data['scoreData'][month]['data']['탐구영역2']['subject'] : '');
-            $("input[name='hisSub']").val('');
+            $("input[name='tam1Sub']").val(data['scoreData'][month]['data']['탐구영역1']['subject'] ? data['scoreData'][month]['data']['탐구영역1']['subject'] : '');
+            $("input[name='tam2Sub']").val(data['scoreData'][month]['data']['탐구영역2']['subject'] ? data['scoreData'][month]['data']['탐구영역2']['subject'] : '');
+            
 
             // 원점수
             $("input[name='kor_Origin']").val(data['scoreData'][month]['data']['국어']['origin']);
@@ -533,6 +583,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 json = eval("(" + data + ");");
+                console.log(json);
                 showView(json);
             }
         });
@@ -907,25 +958,23 @@ $query_string = http_build_query(array(
     }
 
     function rePage(){
+            $("#korSelect").val('');
+            $("#mathSelect").val('');
+            $("#tam1Select").val('');
+            $("#tam2Select").val('');
+
             $("#kor_Code").val('');
             $("#math_Code").val('');
-            $("#eng_Code").val('');
+            
             $("#tam1_Code").val('');
             $("#tam2_Code").val('');
-            $("#his_Code").val('');
-
-            $("input[name='kor_Origin']").addClass('isauto');
-            $("input[name='math_Origin']").addClass('isauto');
-            $("input[name='eng_Origin']").addClass('isauto');
-            $("input[name='tam1_Origin']").addClass('isauto');
-            $("input[name='tam2_Origin']").addClass('isauto');
-            $("input[name='his_Origin']").addClass('isauto');
+            
 
             $("input[name='korSub']").val('');
             $("input[name='mathSub']").val('');
             $("input[name='engSub']").val('');
-            $("input[name='tamSub1']").val('');
-            $("input[name='tamSub2']").val('');
+            $("input[name='tam1Sub']").val('');
+            $("input[name='tam2Sub']").val('');
             $("input[name='hisSub']").val('');
 
             // 원점수
@@ -970,16 +1019,24 @@ $query_string = http_build_query(array(
         const subjectCode = $(`#${prefix}_Code`).val();
         const month = $("#selMonth").val();
         const score = $(this).val();
-       
+        if(prefix == 'kor' || prefix == 'math' || prefix == 'tam1' || prefix == 'tam2'){
+            if(!$(`#${prefix}Select`).val()){
+                swal("","과목을 먼저 선택해주세요.","warning");
+                $(this).val('');
+                return false;
+            }
+            $(`input[name='${prefix}_TopRate']`).val(topRate['topRateData'][month]['data'][$(`#${prefix}Select`).val()]['topRate']);
+        }
 
         // const month = "<?=$month?>";
         
         const key = `${subjectCode}-${month}-${score}`; // origin 값 포함!
-        
         if (cache[key]) {
             if(prefix != 'eng' && prefix != 'his'){
-                    $(`input[name='${prefix}_Pscore']`).val(cache[key].pscore);
-                    $(`input[name='${prefix}_Sscore']`).val(cache[key].sscore);
+                    if(cache[key].pscore){
+                        $(`input[name='${prefix}_Pscore']`).val(cache[key].pscore);
+                        $(`input[name='${prefix}_Sscore']`).val(cache[key].sscore);
+                    }
                 }
                 $(`input[name='${prefix}_Grade']`).val(cache[key].gGrade);
                 calcJuScore(coll.data);
@@ -1003,6 +1060,32 @@ $query_string = http_build_query(array(
         });
         
     });
+
+    $(".chScore").on('change',function(){
+        if(coll.data.length>0){
+            calcJuScore(coll.data);
+        }
+    });
+
+    function reselect(e,type){
+        let selectedOption = e.currentTarget.options[e.currentTarget.selectedIndex];
+    
+        let value = selectedOption.value;
+        let dataValue = selectedOption.dataset.value;
+        
+        $(`input[name='${type}Sub']`).val(value);
+        $(`input[name*='${type}_'`).val(0);
+        $(`#${type}_Code`).val(dataValue);
+        $(`#${type}_Grade`).val('');
+    }
+
+    function resetScore(){
+        let monthSel = $("#selMonth").val();
+        $("#selMonth").val(monthSel);
+        if($("#selMonth").val()){
+            showView(json);
+        }
+    }
 
 </script>
 <!-- } 마이페이지 끝 -->

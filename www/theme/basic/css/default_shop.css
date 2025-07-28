@@ -241,7 +241,8 @@ box-sizing:border-box;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1000px;
-    height: 900px;
+    height: 90vh;
+    overflow: auto;
     /* 팝업 너비 */
     background-color: #fff;
     /* 팝업 배경 */

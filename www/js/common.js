@@ -853,8 +853,8 @@ function calcJuScore(json){
     let science = ['물리1','화학1','생명과학1','지구과학1','물리2','화학2','생명과학2','지구과학2']; // 과탐
     let social = ['생활과윤리','윤리와사상','한국지리','세계지리','동아시아사','세계사','정치와법','경제','사회문화']; // 사탐
 
-    let tam1 = $("input[name='tamSub1']").val();
-    let tam2 = $("input[name='tamSub2']").val();
+    let tam1 = $("input[name='tam1Sub']").val();
+    let tam2 = $("input[name='tam2Sub']").val();
 
     if(science.includes(tam1)){
         tam1 = "과탐";
@@ -1131,8 +1131,12 @@ function calcJuScore(json){
             // subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
         }
         // console.log(changeScore);
-        console.log(subArr);
+        // console.log(subArr);
+        let popTam = "";
+        if(json[i]['juTamSub'] == tam1 || json[i]['juTamSub'] == tam2){
+            popTam = "<br><span style='color:red;'>(" + (tam1 ? tam1 : tam2) + "제외)</span>";
+        }
         // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
-        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) ? json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) : formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
+        $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) ? json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) : formatScore(changeScore,json[i]['juSrate'].split("%")[0]) + popTam);
     }
 }

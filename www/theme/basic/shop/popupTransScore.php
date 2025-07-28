@@ -32,7 +32,6 @@ foreach($sql as $tp => $v){
         min-width: 0px !important;
         padding: 20px 50px 0 50px;
         margin-left: 0px !important;
-        transition: margin-left 0.5s ease, width 0.5s ease;
     }
     #hd_menu{
         display: none !important;
