@@ -5,7 +5,7 @@ if( function_exists('social_check_login_before') ){
     $social_login_html = social_check_login_before();
 }
 
-$g5['title'] = '로그인';
+$g5['title'] = '파이널체대입시';
 include_once('./_head.sub.php');
 
 $od_id = isset($_POST['od_id']) ? safe_replace_regex($_POST['od_id'], 'od_id') : '';

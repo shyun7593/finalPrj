@@ -3,7 +3,7 @@ include_once('./_common.php');
 
 if (!$is_member)
     goto_url(G5_BBS_URL."/login.php?url=".urlencode(G5_SHOP_URL."/myInfo.php"));
-
+$g5['title'] = '마이페이지';
 // 읽지 않은 쪽지수
 $memo_not_read = isset($member['mb_memo_cnt']) ? (int) $member['mb_memo_cnt'] : 0;
 
@@ -22,7 +22,6 @@ if(defined('G5_THEME_SHOP_PATH')) {
     }
 }
 
-$g5['title'] = '마이페이지';
 include_once('./_head.php');
 
 // 쿠폰

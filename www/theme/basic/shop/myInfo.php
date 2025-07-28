@@ -1,7 +1,7 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-$g5['title'] = '';
+$g5['title'] = '내 정보';
 include_once('./_head.php');
 
 $sql = " select *
