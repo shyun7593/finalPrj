@@ -138,7 +138,6 @@ $query_string = http_build_query(array(
                                 <td rowspan="2" class="selMonth">
                                     <?if($bid){?>
                                         <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
-                                            <option value="">선택해주세요</option>
                                             <?
                                                 $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
                                                 foreach($msql as $ms => $m){
@@ -152,7 +151,7 @@ $query_string = http_build_query(array(
                                 </td>
                                 <th>과목</th>
                                 <td>
-                                    <select class="frm_input" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
+                                    <select class="frm_input isauto" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
                                         <option value="">선택해주세요</option>
                                         <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20010000' AND useYN = 1");
                                         foreach($korsub as $ks => $k){?>
@@ -162,7 +161,7 @@ $query_string = http_build_query(array(
                                     <input type="hidden" class="frm_input isauto" name="korSub">
                                 </td>
                                 <td>
-                                    <select class="frm_input" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
+                                    <select class="frm_input isauto" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
                                         <option value="">선택해주세요</option>
                                         <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20020000' AND useYN = 1");
                                         foreach($korsub as $ks => $k){?>
@@ -175,7 +174,7 @@ $query_string = http_build_query(array(
                                     <input type="text" class="frm_input isauto" name="engSub">
                                 </td>
                                 <td>
-                                    <select class="frm_input" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
+                                    <select class="frm_input isauto" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
                                         <option value="">선택해주세요</option>
                                         <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20040000' AND useYN = 1");
                                         foreach($korsub as $ks => $k){?>
@@ -185,7 +184,7 @@ $query_string = http_build_query(array(
                                     <input type="hidden" class="frm_input isauto" name="tam1Sub"> 
                                 </td>
                                 <td>
-                                    <select class="frm_input" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
+                                    <select class="frm_input isauto" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
                                         <option value="">선택해주세요</option>
                                         <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20050000' AND useYN = 1");
                                         foreach($korsub as $ks => $k){?>
@@ -200,12 +199,12 @@ $query_string = http_build_query(array(
                             </tr>
                             <tr>
                                 <th>원점수</th>
-                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input" type="number"></td>
-                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input" type="number"></td>
-                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input" type="number"></td>
-                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input" type="number"></td>
-                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input" type="number"></td>
-                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input" type="number"></td>
+                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
+                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
                             </tr>
                             <tr>
                                 <th>이름</th>
@@ -225,33 +224,33 @@ $query_string = http_build_query(array(
                                     <?}?>
                                 </td>
                                 <th>최고표점</th>
-                                <td class="kor"><input type="number" class="frm_input chScore" name="kor_TopRate"></td>
-                                <td class="math"><input type="number" class="frm_input chScore" name="math_TopRate"></td>
+                                <td class="kor"><input type="number" class="frm_input chScore isauto" name="kor_TopRate"></td>
+                                <td class="math"><input type="number" class="frm_input chScore isauto" name="math_TopRate"></td>
                                 <td></td>
-                                <td class="tam1"><input type="number" class="frm_input chScore" name="tam1_TopRate"></td>
-                                <td class="tam2"><input type="number" class="frm_input chScore" name="tam2_TopRate"></td>
+                                <td class="tam1"><input type="number" class="frm_input chScore isauto" name="tam1_TopRate"></td>
+                                <td class="tam2"><input type="number" class="frm_input chScore isauto" name="tam2_TopRate"></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>학교</th>
                                 <td class="school"></td>
                                 <th>표준점수</th>
-                                <td><input type="number" name="kor_Pscore" class="frm_input chScore"></td>
-                                <td><input type="number" name="math_Pscore" class="frm_input chScore"></td>
+                                <td><input type="number" name="kor_Pscore" class="frm_input chScore isauto"></td>
+                                <td><input type="number" name="math_Pscore" class="frm_input chScore isauto"></td>
                                 <td></td>
-                                <td><input type="number" name="tam1_Pscore" class="frm_input chScore"></td>
-                                <td><input type="number" name="tam2_Pscore" class="frm_input chScore"></td>
+                                <td><input type="number" name="tam1_Pscore" class="frm_input chScore isauto"></td>
+                                <td><input type="number" name="tam2_Pscore" class="frm_input chScore isauto"></td>
                                 <td></td>
                             </tr>
                             <tr>
                                 <th>학년</th>
                                 <td class="layer"></td>
                                 <th>백분위</th>
-                                <td><input type="text" name="kor_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td><input type="text" name="math_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="kor_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="math_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
                                 <td></td>
-                                <td><input type="text" name="tam1_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td><input type="text" name="tam2_Sscore" class="frm_input chScore" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="tam1_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                <td><input type="text" name="tam2_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
                                 <td></td>
                             </tr>
                             <tr>
@@ -410,6 +409,7 @@ $query_string = http_build_query(array(
         if("<?=$_SESSION['mb_profile']?>" == 'C40000003'){
             viewScores('<?=$_SESSION['mb_no']?>');
             viewColleges('<?=$_SESSION['mb_no']?>');
+            removeIsauto();
         }
     });
 
@@ -469,18 +469,49 @@ $query_string = http_build_query(array(
         $("#fsearch").submit();
     });
 
+    function removeIsauto(){
+        $("#korSelect").removeClass('isauto');
+        $("#mathSelect").removeClass('isauto');
+        $("#tam1Select").removeClass('isauto');
+        $("#tam2Select").removeClass('isauto');
+
+        $("input[name='kor_Origin']").removeClass('isauto');
+        $("input[name='math_Origin']").removeClass('isauto');
+        $("input[name='eng_Origin']").removeClass('isauto');
+        $("input[name='tam1_Origin']").removeClass('isauto');
+        $("input[name='tam2_Origin']").removeClass('isauto');
+        $("input[name='his_Origin']").removeClass('isauto');
+
+        $("input[name='kor_TopRate']").removeClass('isauto');
+        $("input[name='math_TopRate']").removeClass('isauto');
+        $("input[name='tam1_TopRate']").removeClass('isauto');
+        $("input[name='tam2_TopRate']").removeClass('isauto');
+
+        $("input[name='kor_Pscore']").removeClass('isauto');
+        $("input[name='math_Pscore']").removeClass('isauto');
+        $("input[name='tam1_Pscore']").removeClass('isauto');
+        $("input[name='tam2_Pscore']").removeClass('isauto');
+
+        $("input[name='kor_Sscore']").removeClass('isauto');
+        $("input[name='math_Sscore']").removeClass('isauto');
+        $("input[name='tam1_Sscore']").removeClass('isauto');
+        $("input[name='tam2_Sscore']").removeClass('isauto');
+    }
+
     $("#selStudent").on('change',function(){
         let vl = $(this).val();
         if(vl){
             viewScores(vl);
             viewColleges(vl);
+            removeIsauto();
         } else {
-            rePage();
+            location.reload();
         }
     });
 
     $("#selMonth").on('change',function(){
         if($("#selStudent").val()){
+            removeIsauto();
             showView(json);
         }
     });
