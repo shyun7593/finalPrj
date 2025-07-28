@@ -1131,7 +1131,7 @@ function calcJuScore(json){
             // subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
         }
         // console.log(changeScore);
-        // console.log(subArr);
+        console.log(subArr);
         let popTam = "";
         if(json[i]['juTamSub'] == tam1 || json[i]['juTamSub'] == tam2){
             popTam = "<br><span style='color:red;'>(" + (tam1 ? tam1 : tam2) + "제외)</span>";

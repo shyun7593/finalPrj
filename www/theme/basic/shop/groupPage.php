@@ -52,6 +52,9 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
         width: 100%;
         height: 45px;
     }
+    #smb_my_od, #smb_my{
+        margin:unset;
+    }
 </style>
 <!-- 등급관리 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
@@ -62,7 +65,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
             <div class="smb_my_more" style="cursor:pointer;">
                 <a onclick="popupBranch('insert','')">등록</a>
             </div>
-            <div class="tbl_wrap border-tb" style="height: 80vh;overflow-y:auto;">
+            <div class="tbl_wrap border-tb" style="height: 85vh;overflow-y:auto;">
                 <table class="tbl_head01">
                     <colgroup width="15%">
                     <colgroup width="25%">
@@ -151,7 +154,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                     </table>
                 </div>
             </form>
-            <div class="tbl_wrap border-tb" style="height: 73vh;overflow-y:auto;">
+            <div class="tbl_wrap border-tb" style="height: 77vh;overflow-y:auto;">
                 <table class="tbl_head01">
                     <colgroup width="12.5%">
                     <colgroup width="12.5%">

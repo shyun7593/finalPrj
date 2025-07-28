@@ -141,7 +141,7 @@ $query_string = http_build_query(array(
 <!-- 등급관리 시작 { -->
 <div id="smb_my" style="display: grid;grid-template-columns: 1fr;">
             
-            <div style="display: flex;flex-direction:column;row-gap:10px;background:white;padding:10px 5px;">
+            <div style="display: flex;flex-direction:column;row-gap:10px;background:white;padding:5px 0;">
                 <div style="display: flex;align-items:center;gap:10px;">
                     <div style="font-weight:800;">분&nbsp;&nbsp;&nbsp;류 : </div>
                     <div>
@@ -188,7 +188,7 @@ $query_string = http_build_query(array(
                 <!-- <a onclick="popupBranch('insert','')">등록</a> -->
             </div>
             
-            <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));grid-auto-rows: 160px;gap: 20px;height: 71vh;overflow-y: auto;padding:10px;">
+            <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));grid-auto-rows: 160px;gap: 20px;height: 71vh;overflow-y: auto;padding:10px;">
                 <?
                     foreach($res as $k => $v){
                 ?>

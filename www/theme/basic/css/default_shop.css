@@ -623,7 +623,7 @@ box-shadow:0 2px 5px rgba(0,0,0,0.2)}
 #wrapper.full {margin-left:20px;width: calc(100% - 20px);}
 #wrapper.is_community{background:#fff}
 #wrapper:after {display:block;visibility:hidden;clear:both;content:""}
-#wrapper_title {padding:20px 0;font-size:2em;font-weight:bold;}
+#wrapper_title {padding:20px 0 10px;font-size:2em;font-weight:bold;}
 
 .lt_wr {width:49%}
 .lt_wr:nth-child(2n+1) {clear:both}
