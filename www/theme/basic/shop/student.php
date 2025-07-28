@@ -465,10 +465,16 @@ $query_string = http_build_query(array(
                             let bujue = 0;
                             let situp = 0;
                             let surgent = 0;
-                            let dCnt = 0;
+                            let baeCnt = 0;
+                            let wangCnt = 0;
+                            let mediCnt = 0;
+                            let leftCnt = 0;
+                            let standCnt = 0;
+                            let buCnt = 0;
+                            let stiupCnt = 0;
+                            let surCnt = 0;
                             for (const tag in json['data']) {
                                 json['data'][tag];
-                                dCnt++;
                                 html += `
                                     <tr class="connt">
                                         <td style="max-width:100px;text-align:center;">${json['data'][tag]['date']}</td>
@@ -493,6 +499,14 @@ $query_string = http_build_query(array(
                                         <td style="width:150px;text-align:center;" class="avg">${json['data'][tag]['total_Rev'] ? json['data'][tag]['total_Rev'] : '-'}</td>
                                     </tr>
                                 `;
+                                if(json['data'][tag]['core_score']){baeCnt++;}
+                                if(json['data'][tag]['10m_score']){wangCnt++;}
+                                if(json['data'][tag]['medicine_score']){mediCnt++;}
+                                if(json['data'][tag]['left_score']){leftCnt++;}
+                                if(json['data'][tag]['stand_score']){standCnt++;}
+                                if(json['data'][tag]['20mBu_score']){buCnt++;}
+                                if(json['data'][tag]['situp_score']){stiupCnt++;}
+                                if(json['data'][tag]['surgent_score']){surCnt++;}
                                 bae += Math.round(json['data'][tag]['core_score'],1);
                                 wangbok += Math.round(json['data'][tag]['10m_score'],1);
                                 medicine += Math.round(json['data'][tag]['medicine_score'],1);
@@ -518,14 +532,14 @@ $query_string = http_build_query(array(
                         columns: [
                         ["x", "배근력", "10m왕복", "메디신", "좌전굴", "제멀","20m부저","윗몸","서전트"],
                         ["점수",
-                         Math.round(bae/dCnt,1), 
-                         Math.round(wangbok/dCnt,1), 
-                         Math.round(medicine/dCnt,1), 
-                         Math.round(leftfront/dCnt,1), 
-                         Math.round(stand/dCnt,1), 
-                         Math.round(bujue/dCnt,1), 
-                         Math.round(situp/dCnt,1), 
-                         Math.round(surgent/dCnt,1)]
+                         Math.round(bae/baeCnt,1), 
+                         Math.round(wangbok/wangCnt,1), 
+                         Math.round(medicine/mediCnt,1), 
+                         Math.round(leftfront/leftCnt,1), 
+                         Math.round(stand/standCnt,1), 
+                         Math.round(bujue/buCnt,1), 
+                         Math.round(situp/stiupCnt,1), 
+                         Math.round(surgent/surCnt,1)]
                         ],
                         type: "radar", // for ESM specify as: radar()
                         labels: false
