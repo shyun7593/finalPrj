@@ -381,14 +381,15 @@ $query_string = http_build_query(array(
             url: "/bbs/searchTopRate.php",
             type: "POST",
             data: {},
-            async: false,
+            async: true,
+            dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');
                 return false;
             },
             success: function(data) {
-                console.log(eval("(" + data + ");"));
-                topRate = eval("(" + data + ");");
+                console.log(data);
+                topRate = data;
             }
         });
 
@@ -396,13 +397,14 @@ $query_string = http_build_query(array(
             url: "/bbs/searchTransScores.php",
             type: "POST",
             data: {},
-            async: false,
+            async: true,
+            dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');
                 return false;
             },
             success: function(data) {
-                transDatas = eval("(" + data + ");");
+                transDatas =data;
             }
         });
 
@@ -608,12 +610,13 @@ $query_string = http_build_query(array(
                 mb_no : val,
             },
             async: false,
+            dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');
                 return false;
             },
             success: function(data) {
-                json = eval("(" + data + ");");
+                json = data;
                 console.log(json);
                 showView(json);
             }
@@ -662,12 +665,13 @@ $query_string = http_build_query(array(
                 textSub : $("#textSub").val(),
             },
             async: false,
+            dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');
                 return false;
             },
             success: function(data) {
-                coll = eval("(" + data + ");");
+                coll = data;
                 console.log(coll);
                 // drawPaging(val,coll['paging'].page, coll['paging'].total_page, 'viewColleges');
                 $(".totalCnt").html(coll['paging'].total_count + '개');
@@ -832,11 +836,12 @@ $query_string = http_build_query(array(
                 id : $("#selStudent option:selected").data('id'),
             },
             async: false,
+            dataType: "json",
             error: function(data) {
                 alert('저장 실패! 관리자에게 문의하세요.');
             },
             success: function(data) {
-                silg = eval("(" + data + ");");
+                silg = data;
             }
         });
         const count = Object.keys(silg['data']).length;
