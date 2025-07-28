@@ -13,7 +13,8 @@ $sql = "SELECT
     gcs.sName,
     gcc.codeName as 'gun',
     gcc2.codename as 'area',
-    gcs.collegeType
+    gcs.collegeType,
+    COUNT(gac.idx) as 'cnt'
 FROM g5_add_college gac 
 JOIN g5_college_subject gcs on 
     gcs.sIdx = gac.subIdx
@@ -24,6 +25,8 @@ JOIN g5_cmmn_code gcc on
 JOIN g5_cmmn_code gcc2 on
     gcc2.code = gcs.areaCode
 WHERE gac.memId = '{$mb_Id}'
+GROUP BY
+    gcs.sIdx
 ORDER BY 
     CASE
         WHEN gac.memId != gac.regId THEN 1
@@ -46,7 +49,8 @@ foreach ($mres as $k => $v) {
         'sName' => $v['sName'], // 학과명
         'gun' => $v['gun'], // 군
         'area' => $v['area'], // 지역
-        'collegeType' => $v['collegeType'] // 국립/사립
+        'collegeType' => $v['collegeType'], // 국립/사립
+        'cnt' => $v['cnt']
     ];
 }
 

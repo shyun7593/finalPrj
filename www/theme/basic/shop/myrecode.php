@@ -405,15 +405,21 @@ include_once('./_head.php');
                 console.log(json);
                 if(!Array.isArray(json)){
                     let html = ``;
+                    let prevIdx = 0;
                     for (const tag in json['data']) {
                         let cls = "";
                         let recommend = "";
-                        if(json['data'][tag]['memId'] == json['data'][tag]['regId']){
-                            cls = " class='myColl'";
-                            recommend = "";
-                        } else {
+                        if(json['data'][tag]['cnt'] == 2){
                             cls = " class='teacherColl'";
-                            recommend = "선생님 추천";
+                            recommend = "선생님 추천, 내 희망대학";
+                        } else {
+                            if(json['data'][tag]['memId'] == json['data'][tag]['regId']){
+                                cls = " class='myColl'";
+                                recommend = "내 희망대학";
+                            } else {
+                                cls = " class='teacherColl'";
+                                recommend = "선생님 추천";
+                            }
                         }
                         html += `
                             <tr${cls}>
