@@ -772,7 +772,7 @@ $query_string = http_build_query(array(
                 <td style="border:1px solid #ccc;padding:5px;">${thData['juKorSelect'] ? thData['juKorSelect'] : '-'}</td>
                 <td style="border:1px solid #ccc;padding:5px;">${thData['juMathSelect'] ? thData['juMathSelect'] : '-'}</td>
                 <td style="border:1px solid #ccc;padding:5px;">${thData['juEngSelect'] ? thData['juEngSelect'] : '-'}</td>
-                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamSelect'] ? thData['juTamSelect'] : '-'}</td>
+                <td style="border:1px solid #ccc;padding:5px;">${thData['juTamSelect'] ? thData['juTamSelect'] + '(' + thData['juTamCnt'] + ')' : '-'}</td>
                 <td style="border:1px solid #ccc;padding:5px;">${thData['juHisSelect'] ? thData['juHisSelect'] : '-'}</td>
             </tr>
             <tr>
