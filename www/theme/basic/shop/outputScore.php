@@ -321,7 +321,7 @@ $query_string = http_build_query(array(
                         <thead style="position: sticky;top:0;z-index:2;background:rgba(227, 244, 248) !important;">
                             <tr style="border-bottom:1px solid #e4e4e4 !important;">
                                 <td style="width:60px;"></td>
-                                <td colspan="2">추천대학</td>
+                                <td style="width:200px;" colspan="2">추천대학</td>
                                 <td colspan="6">대학정보</td>
                                 <td>수능</td>
                                 <td class="cutline" colspan="5">커트라인</td>
@@ -329,8 +329,8 @@ $query_string = http_build_query(array(
                             </tr>
                             <tr>
                                 <td style="width:60px;"></td>
-                                <td>선생님</td>
-                                <td>본인</td>
+                                <td style="width:100px;">선생님</td>
+                                <td style="width:100px;">본인</td>
                                 <td>지역</td>
                                 <td>형태</td>
                                 <td>군</td>

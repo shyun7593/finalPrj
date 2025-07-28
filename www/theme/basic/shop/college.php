@@ -143,7 +143,7 @@ $query_string = http_build_query(array(
             
             <div style="display: flex;flex-direction:column;row-gap:10px;background:white;padding:10px 5px;">
                 <div style="display: flex;align-items:center;gap:10px;">
-                    <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                    <div style="font-weight:800;">분&nbsp;&nbsp;&nbsp;류 : </div>
                     <div>
                         <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
                         <button type="button" data-value="정시" class="ctype btn-n" onclick="viewTypeChange(event)">정시</button>
