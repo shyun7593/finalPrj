@@ -878,7 +878,7 @@ function calcJuScore(json){
         subArr.push({
             'TopRate' : $(`input[name='${subNm[u]}_TopRate']`).val(),
             'Pscore' : $(`input[name='${subNm[u]}_Pscore']`).val(),
-            'Sscore' : Math.round($(`input[name='${subNm[u]}_Sscore']`).val()),
+            'Sscore' : $(`input[name='${subNm[u]}_Sscore']`).val(),
             'Grade' : $(`input[name='${subNm[u]}_Grade']`).val() - 1,
             'Rate': 0,
             'Score' : 0,
