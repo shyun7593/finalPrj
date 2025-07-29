@@ -664,9 +664,10 @@ function updateMember(no){
     });
 
     $("#memberDel").on('click',function(){
+        console.log($("#mb_no").val());
         swal({
             title : '삭제하시겠습니까?',
-            text : '연관된 모든 데이터는 삭제됩니다.',
+            text : '삭제 후 복구 할 수 없습니다.\n연관된 모든 데이터는 삭제됩니다.',
             type : "warning",
             showCancelButton : true,
             confirmButtonClass : "btn-danger",
@@ -678,16 +679,10 @@ function updateMember(no){
             function(isConfirm){
                 if(isConfirm){
                     $.ajax({
-                        url: "/bbs/update_branch.php",
+                        url: "/bbs/delmember.php",
                         type: "POST",
                         data: {
-                            branchName : $("#branchName").val(),
-                            branchManager : $("#branchManager").val(),
-                            branchHp: $("#branchHp").val(),
-                            branchMemo: $("#branchMemo").val(),
-                            branchActive : $("#branchActive").val(),
-                            branchPopIdx : $("#branchPopIdx").val(),
-                            type : $("#btype").val(),
+                            mb_no : $("#mb_no").val(),
                         },
                         async: false,
                         error: function(data) {
@@ -696,7 +691,7 @@ function updateMember(no){
                         },
                         success: function(data) {
                             if(data == 'success'){
-                                swal('성공!','성공적으로 등록되었습니다.','success');
+                                swal('삭제!','삭제되었습니다.','success');
                                 setTimeout(() => {
                                     swal.close();
                                     location.reload();

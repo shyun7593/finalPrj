@@ -72,6 +72,15 @@ if($type == 'reg'){
     ");
     echo 'success';
     exit;
+} else if($type=='delYn'){
+    $mb_no = isset($_POST['mb_no']) ? trim($_POST['mb_no']) : '';
+    $mb_delYn = isset($_POST['mb_delYn']) ? trim($_POST['mb_delYn']) : '';
+    sql_query("UPDATE g5_member SET
+            mb_delYn = {$mb_delYn}
+        WHERE mb_no = '{$mb_no}'
+    ");
+    echo 'success';
+    exit;
 }
 
 run_event('member_login_check_before', $mb_id);
