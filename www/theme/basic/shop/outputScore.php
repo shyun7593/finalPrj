@@ -587,7 +587,7 @@ $query_string = http_build_query(array(
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
         if($(".outputScore").hasClass('viewType')){
-            $('.collegeInfos').css('height','87vh');
+            $('.collegeInfos').css('height','90vh');
         } else {
             $('.collegeInfos').css('height','58vh')
         }
