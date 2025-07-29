@@ -23,7 +23,7 @@ if($_SESSION['mb_student']){
 $bcnt = sql_query("select COUNT(*) as 'cnt'
                         from g5_branch");
 
-$m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+$m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
 
 
 ?>

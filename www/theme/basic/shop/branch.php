@@ -130,8 +130,8 @@ $query_string = http_build_query(array(
                         <th>성별</th>
                         <th>휴대폰번호</th>
                         <th>생년월일</th>
-                        <th>상담</th>
                         <th>성적</th>
+                        <th>상담</th>
                     </thead>
                     <tbody>
                         <?
@@ -170,8 +170,27 @@ $query_string = http_build_query(array(
                             <td><?= $gender ?></td>
                             <td><?= hyphen_hp_number($m['mb_hp']) ?></td>
                             <td><?= hyphen_birth_number($m['mb_birth']) ?></td>
+                            <td>
+                            <?
+                                    $scres = sql_query("WITH RECURSIVE dateMonth AS (
+                                                            SELECT code,codeName
+                                                            FROM g5_cmmn_code gcc 
+                                                            WHERE upperCode = 'C60000000' AND useYN = 1
+                                                        )
+                                                        SELECT 
+                                                            d.code,
+                                                            d.codeName,
+                                                            (SELECT COUNT(*) FROM g5_member_score gms WHERE gms.scoreMonth = d.code AND gms.memId = '{$m['mb_id']}') as 'cnt'
+                                                        FROM dateMonth d
+                                                        GROUP BY d.code
+                                                        ORDER BY d.code;");
+                                    foreach($scres as $k => $s){
+                                ?>
+                                    <button type="button" style="pointer-events: none;" class="btn-n <?if($s['cnt'] > 0) echo 'iswrite';?>" value="<?=$s['code']?>"><?=$s['codeName']?></button>
+                                <?}?>
+                            </td>
                             <!-- <td>
-                                <?
+                            <?
                                     $meres = sql_fetch("SELECT * FROM g5_memo gm WHERE gm.memberIdx = {$m['mb_no']}");
                                 ?>
                                 <button type="button" style="pointer-events: none;" class="btn-n <?if($meres['idx'] && $meres['memo']) echo 'iswrite';?>">상담내역</button>
@@ -181,7 +200,7 @@ $query_string = http_build_query(array(
                                     $meres = sql_query("WITH RECURSIVE dateMonth AS (
                                                 SELECT code,codeName
                                                 FROM g5_cmmn_code gcc 
-                                                WHERE upperCode = 'C60000000' OR code = 'C00000000'
+                                                WHERE (upperCode = 'C60000000' OR code = 'C00000000') AND useYN = 1
                                             )
                                             SELECT 
                                                 *
@@ -196,25 +215,6 @@ $query_string = http_build_query(array(
                                         }
                                 ?>
                                     <button type="button" class="btn-n <?if($me['idx']) echo 'iswrite';?>"  onclick="viewMemberInfo(event,'<?=$m['mb_no']?>','<?=$me['code']?>','<?=$m['mb_name']?>')" value="<?=$me['code']?>"><?=$me['codeName']?></button>
-                                <?}?>
-                            </td>
-                            <td>
-                            <?
-                                    $scres = sql_query("WITH RECURSIVE dateMonth AS (
-                                                            SELECT code,codeName
-                                                            FROM g5_cmmn_code gcc 
-                                                            WHERE upperCode = 'C60000000'
-                                                        )
-                                                        SELECT 
-                                                            d.code,
-                                                            d.codeName,
-                                                            (SELECT COUNT(*) FROM g5_member_score gms WHERE gms.scoreMonth = d.code AND gms.memId = '{$m['mb_id']}') as 'cnt'
-                                                        FROM dateMonth d
-                                                        GROUP BY d.code
-                                                        ORDER BY d.code;");
-                                    foreach($scres as $k => $s){
-                                ?>
-                                    <button type="button" style="pointer-events: none;" class="btn-n <?if($s['cnt'] > 0) echo 'iswrite';?>" value="<?=$s['code']?>"><?=$s['codeName']?></button>
                                 <?}?>
                             </td>
                         </tr>
@@ -336,8 +336,8 @@ $query_string = http_build_query(array(
         
         let html1 = `
             <div id="memoMonth" style="margin-bottom:15px;">
-                <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">등록상담</button>
-                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+                <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">상담</button>
+                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
                 foreach($buttons as $bt => $b){?>
                     <button type="button" class="btn-n" value="<?=$b['code']?>" onclick="showMonthMemo(event)"><?=$b['codeName']?></button>
                 <?}?>

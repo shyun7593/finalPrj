@@ -13,7 +13,7 @@ if(!$end_date){
 }
 
 $add_sql = " 1=1 AND (DATE_FORMAT(sp.date,'%Y-%m') between '{$str_date}' AND '{$end_date}')";
-$branch_sql = " 1=1 ";
+$branch_sql = " branchActive = 1 ";
 
 if($gender){
     $add_sql .= " AND mb.mb_sex = '{$gender}' ";

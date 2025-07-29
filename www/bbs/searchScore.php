@@ -26,7 +26,7 @@ $data3 = [
 $msql = "WITH RECURSIVE dateMonth AS (
     SELECT code,codeName
     FROM g5_cmmn_code gcc 
-    WHERE upperCode = 'C60000000'
+    WHERE upperCode = 'C60000000' AND useYN = 1
 )
 SELECT 
     gms.scoreMonth,
@@ -39,7 +39,7 @@ SELECT
     (SELECT 
         codeName
     FROM g5_cmmn_code gcc 
-    WHERE gcc.code = gms.upperCode  
+    WHERE gcc.code = gms.upperCode
     ) as 'subjectSub',
     gms.origin,
     gms.pscore ,
@@ -94,7 +94,7 @@ foreach ($mres as $k => $v) {
 
 $monthArr = sql_query(" SELECT code,codeName
                     FROM g5_cmmn_code gcc 
-                    WHERE upperCode = 'C60000000' ORDER BY code");
+                    WHERE upperCode = 'C60000000' AND useYN = 1 ORDER BY code");
 
 $data2 = [];
 foreach ($monthArr as $k => $v) {

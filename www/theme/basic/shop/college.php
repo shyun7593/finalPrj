@@ -667,7 +667,7 @@ $query_string = http_build_query(array(
                                         html += `<p class="p_title">졸업/고등학교<span style="font-weight:normal;font-size:0.9em;">${json['data']['susi'][k]['suGraduDate'] && json['data']['susi'][k]['suGraduDate'] != '-' ? ' - ' + json['data']['susi'][k]['suGraduDate'] + '년' : ''} / ${json['data']['susi'][k]['suSchoolType']}</span></p>`;
                                     }
                                     html+=`
-                                        <p class="p_title">내신반/영구분</p>
+                                        <p class="p_title">내신반영구분</p>
                                         <div class="subject_trans" style="padding: 0 0 0 10px;margin:0 0 0 5px;font-size:0.9em;">
                                             <table style="text-align:center;" border="1">
                                                 <colgroup width='*'>
@@ -677,8 +677,7 @@ $query_string = http_build_query(array(
                                                 <colgroup width='*'>
                                                 <thead>
                                                     <tr>
-                                                        <th>내신</th>
-                                                        <th>영구분</th>
+                                                        <th colspan="2">내신반영구분</th>
                                                         <th colspan="2">1단계</th>
                                                         <th colspan="4">2단계</th>
                                                         <th rowspan="2">총점</th>

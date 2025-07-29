@@ -113,7 +113,7 @@ $query_string = http_build_query(array(
                                     <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
                                         <option value="">선택</option>
                                         <?
-                                            $camSql = sql_query("SELECT * FROM g5_branch");
+                                            $camSql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
                                             
                                             foreach($camSql as $cm => $c){
                                         ?>
@@ -139,7 +139,7 @@ $query_string = http_build_query(array(
                                     <?if($bid){?>
                                         <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
                                             <?
-                                                $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사')");
+                                                $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
                                                 foreach($msql as $ms => $m){
                                             ?>
                                                 <option value="<?=$m['code']?>" <?if($selMonth == $m['code']) echo "selected";?>><?=$m['codeName']?></option>
@@ -381,14 +381,13 @@ $query_string = http_build_query(array(
             url: "/bbs/searchTopRate.php",
             type: "POST",
             data: {},
-            async: true,
+            async: false,
             dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');
                 return false;
             },
             success: function(data) {
-                console.log(data);
                 topRate = data;
             }
         });
@@ -397,7 +396,7 @@ $query_string = http_build_query(array(
             url: "/bbs/searchTransScores.php",
             type: "POST",
             data: {},
-            async: true,
+            async: false,
             dataType: "json",
             error: function(data) {
                 alert('에러가 발생하였습니다.');

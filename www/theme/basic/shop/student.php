@@ -284,7 +284,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 const count = Object.keys(data['monthList']).length;
-
+                console.log(data);
                 const getValue = (monthCode, subject, field) => {
                     return data['scoreData'][monthCode]?.data?.[subject]?.[field] ?? '-';
                 };

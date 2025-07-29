@@ -1,13 +1,19 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
-if($_SESSION['mb_profile'] != 'C40000001'){
+if($_SESSION['mb_profile'] != 'C40000001' && $_SESSION['mb_profile'] != 'C40000002'){
     goto_url('/index');
 }
 
 $g5['title'] = '등급관리';
 include_once('./_head.php');
 
+$sql_add = " 1=1 ";
+
+if($_SESSION['mb_profile'] == 'C40000002'){
+    $bid = $_SESSION['mb_signature'];
+    $sql_add .= " AND gm.mb_profile in ('C40000003','C40000004') ";
+}
 
 $bcnt = sql_fetch("SELECT 
     COUNT(
@@ -20,7 +26,7 @@ $bcnt = sql_fetch("SELECT
     END) as 'cnt2'
 FROM g5_branch");
 
-$sql_add = " 1=1 ";
+
 
 if($cid){
     $sql_add .= " AND gm.mb_profile = '{$cid}' ";
@@ -57,8 +63,12 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
     }
 </style>
 <!-- 등급관리 시작 { -->
-<div id="smb_my" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
-<div id="smb_my_list">
+<?if($_SESSION['mb_profile'] == 'C40000002'){?>
+    <div id="smb_my">
+<?}else{?>
+    <div id="smb_my" style="display: grid;grid-template-columns: 1fr 2.5fr;column-gap: 20px;">
+<?}?>
+<div id="smb_my_list" <?if($_SESSION['mb_profile'] == 'C40000002') echo 'style="display:none;"';?>>
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od">
             <h2>지점 리스트<span style="font-size: small;">&nbsp;&nbsp;&nbsp; 총 지점수 : <?= $bcnt['cnt'] + $bcnt['cnt2'] ?> / </span><span style="color:red;font-size: small;">비활성 : <?=$bcnt['cnt2']?></span></h2>
@@ -126,7 +136,7 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                             <tr>
                                 <td style="text-align: center;font-size:1.2em;font-weight:800;padding:10px;">검색</td>
                                 <td style="padding:10px;">
-                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid">
+                                    <select style="border:1px solid #e4e4e4;height: 45px;width:100%;padding:5px;" name="bid" id="bid" <?if($_SESSION['mb_profile'] == 'C40000002') echo 'class="isauto"';?>>
                                         <option value="" <?if(!$bid) echo "selected";?>>지점</option>
                                         <?
                                             $bsql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1 ORDER BY branchName");
@@ -310,7 +320,11 @@ $cnt = sql_fetch("select COUNT(*) as 'cnt'
                         <td>
                             <select class="frm_input" name="mb_profile" id="mb_profile" style="width: 100%;">
                                 <?
-                                    $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' AND useYn = 1 ORDER BY code");
+                                    if($_SESSION['mb_profile'] == 'C40000002'){
+                                        $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' AND useYn = 1 AND code in ('C40000003','C40000004') ORDER BY code");
+                                    } else {
+                                        $ggsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C40000000' AND useYn = 1 ORDER BY code");
+                                    }
                                     foreach($ggsql as $ggs => $g){?>
                                       <option value="<?=$g['code']?>"><?=$g['codeName']?></option>  
                                     <?}
