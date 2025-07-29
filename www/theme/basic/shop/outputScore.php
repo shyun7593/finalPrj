@@ -525,7 +525,7 @@ $query_string = http_build_query(array(
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
-            <div class="tbl_wrap collegeInfos border-tb" style="height: 50vh;overflow-y:auto;">
+            <div class="tbl_wrap collegeInfos border-tb" style="height: 58vh;overflow-y:auto;">
                     <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;border-collapse: separate !important;border-spacing: 0 !important;">
                         <colgroup>
                         </colgroup>
@@ -589,7 +589,7 @@ $query_string = http_build_query(array(
         if($(".outputScore").hasClass('viewType')){
             $('.collegeInfos').css('height','87vh');
         } else {
-            $('.collegeInfos').css('height','50vh')
+            $('.collegeInfos').css('height','58vh')
         }
     });
     $(document).ready(function(){
