@@ -1090,12 +1090,22 @@ function calcJuScore(json){
         }
         
         if(selPil.length > 0){
+            let sumbs = 0;
             let selCnt = ""; // 선택할 과목 수
             let selSubScores = [];
             if(subArr[selPil[0]]['Rate'].includes(',')){
                 selCnt = subArr[selPil[0]]['Rate'].split(',').length;
             } else {
-                selCnt = Math.ceil(selPil.length * (subArr[selPil[0]]['Rate'].split("%")[0]/100));
+                if(selPil.length == 2){
+                    selCnt = 1;
+                } else {
+                    for(let q = 0; q < selPil.length; q++){
+                        sumbs += Number(subArr[selPil[0]]['Rate'].split("%")[0]);
+                        if(sumbs <= 100){
+                            selCnt++;
+                        }
+                    }
+                }
             }
             for(let j = 0; j < selPil.length ;j++){
                 let score = subArr[selPil[j]]['Score'];

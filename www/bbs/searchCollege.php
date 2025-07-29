@@ -199,7 +199,7 @@ LEFT JOIN (
 ) silgiTbl ON silgiTbl.csubIdx = gcs.sIdx
 WHERE {$add_sql}
 ) AS A
-ORDER BY A.addT DESC, A.addS DESC, A.collegeName, A.subName
+ORDER BY A.addT DESC, A.addS DESC, A.gun, A.collegeName, A.subName
 ";
 
 $mres = sql_query($sql);
