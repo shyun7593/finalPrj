@@ -301,7 +301,7 @@ $query_string = http_build_query(array(
                             </div>
                         </div>
                     </div> -->
-                    <div class="outputScore" style="display: grid;grid-template-columns:1.5fr 1fr; gap: 10px;border: 2px solid black;border-radius: 5px;overflow: hidden;">
+                    <div class="outputScore" style="display: grid;grid-template-columns:1.5fr 1fr;border: 2px solid black;border-radius: 5px;overflow: hidden;">
                         <div class="tbl_wrap">
                             <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
                                 <colgroup>
@@ -477,9 +477,9 @@ $query_string = http_build_query(array(
                                 </tbody>
                             </table>
                         </div>
-                        <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 5px;">
+                        <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 20px 0 0">
                             <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
-                                <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                                <div style="font-weight:800;text-align:center;">모&nbsp;&nbsp;&nbsp;집 : </div>
                                 <div>
                                     <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
                                     <?
@@ -490,8 +490,8 @@ $query_string = http_build_query(array(
                                     <?}?>
                                 </div>
                             </div>
-                            <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
-                                <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
+                            <div style="display: grid;grid-template-columns:1fr 10fr;align-items:start;gap:10px;">
+                                <div style="font-weight:800;text-align:center;">지&nbsp;&nbsp;&nbsp;역 : </div>
                                 <div class="search_btns">
                                     <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
                                     <?
@@ -503,7 +503,7 @@ $query_string = http_build_query(array(
                                 </div>
                             </div>
                             <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
-                                <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
+                                <div style="font-weight:800;text-align:center;">검&nbsp;&nbsp;&nbsp;색 : </div>
                                 <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
                                     <td style="padding:10px;"><input type="text" name="textCol" id="textCol" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textCol?>"></td>
                                     <td style="padding:10px;"><input type="text" name="textSub" id="textSub" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textSub?>"></td>
