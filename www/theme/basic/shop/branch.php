@@ -200,7 +200,7 @@ $query_string = http_build_query(array(
                                     $meres = sql_query("WITH RECURSIVE dateMonth AS (
                                                 SELECT code,codeName
                                                 FROM g5_cmmn_code gcc 
-                                                WHERE (upperCode = 'C60000000' OR code = 'C00000000') AND useYN = 1
+                                                WHERE (upperCode = 'C60000000' OR code = 'C00000000') AND useYN = 1 AND code != 'C60000004'
                                             )
                                             SELECT 
                                                 *
@@ -337,7 +337,7 @@ $query_string = http_build_query(array(
         let html1 = `
             <div id="memoMonth" style="margin-bottom:15px;">
                 <button type="button" class="btn-n" value="C00000000" onclick="showMonthMemo(event)">상담</button>
-                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
+                <?$buttons = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1 AND code != 'C60000004'");
                 foreach($buttons as $bt => $b){?>
                     <button type="button" class="btn-n" value="<?=$b['code']?>" onclick="showMonthMemo(event)"><?=$b['codeName']?></button>
                 <?}?>
