@@ -39,7 +39,7 @@ $mcnt = sql_fetch("select COUNT(*) as 'cnt'
                         where 
                         {$sql_add}
                         AND gm.mb_id NOT IN ( '{$member['mb_id']}')
-                        AND gm.mb_profile in ('C40000003','C40000004')
+                        AND gm.mb_profile = 'C40000003'
                         AND gm.mb_id != 'admin'");
 
 $query_string = http_build_query(array(
@@ -143,7 +143,7 @@ $query_string = http_build_query(array(
                             {$sql_add}
                             AND gm.mb_id NOT IN ( '{$member['mb_id']}')
                             AND gm.mb_id != 'admin'
-                            AND gm.mb_profile in ('C40000003','C40000004')";
+                            AND gm.mb_profile ='C40000003'";
                         if($mcnt['cnt']>0){
 
                         

@@ -31,7 +31,7 @@ $msql = " select *
     {$sql_add}
     AND gm.mb_id NOT IN ( '{$member['mb_id']}')
     AND gm.mb_id != 'admin'
-    AND gm.mb_profile in ('C40000003','C40000004')";
+    AND gm.mb_profile ='C40000003'";
 $result = sql_query($msql);
 $data = array();
 foreach($result as $k => $v){

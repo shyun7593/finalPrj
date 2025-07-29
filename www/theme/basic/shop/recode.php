@@ -66,6 +66,7 @@ $sql = "SELECT
         sp.memberIdx = mb.mb_id
         WHERE
          {$add_sql}
+         AND mb.mb_profile = 'C40000003'
         ORDER BY `date`,grade
 ";
 $scnt = sql_fetch("SELECT 
@@ -75,6 +76,7 @@ $scnt = sql_fetch("SELECT
         sp.memberIdx = mb.mb_id
         WHERE
          {$add_sql}
+         AND mb.mb_profile = 'C40000003'
         ORDER BY `date`,grade");
 $bsql = "SELECT * FROM g5_branch b WHERE {$branch_sql} ORDER BY branchName";
 
