@@ -97,7 +97,6 @@ box-sizing:border-box;
 .btn-n.active{
     background-color: black !important;
     color: white;
-    border: unset !important;
 }
 
 .btn-n.active2{
@@ -129,18 +128,30 @@ box-sizing:border-box;
     border-bottom: 1px solid #d3d3d3;
 }
 
-.outputScore{
+/* .outputScore{
     transition: transform 0.5s ease;
 }
 .outputScore.viewType{
-    transform: translateX(100%);
+    transform: translateY(-450px);
+    position: fixed !important;
+} */
+.outputScore {
+    max-height: 1000px; /* 충분히 큰 값으로 설정 */
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+    padding:1px;
+}
+
+.outputScore.viewType {
+    max-height: 0;
+    padding: 0; /* 줄어드는 애니메이션을 부드럽게 */
 }
 
 #viewhideOutput{
     transition: transform 0.5s ease;
 }
 #viewhideOutput.viewType{
-    transform: rotate(-90deg) !important;
+    transform: rotate(-180deg) !important;
 }
 
 /* .tbl_2n_color tr:nth-child(2n){
@@ -177,9 +188,10 @@ box-sizing:border-box;
 }
 
 .isauto {
-    background-color: #e4e4e4 !important;
+    background-color: unset !important;
     border: none !important;
     pointer-events: none;
+    box-shadow: unset !important;
     -webkit-appearance: none; /* 기본 스타일 제거 (Safari, Chrome) */
     -moz-appearance: none;    /* Firefox에서 기본 스타일 제거 */
     appearance: none; 

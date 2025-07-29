@@ -27,6 +27,9 @@ $query_string = http_build_query(array(
 
 ?>
 <style>
+    #wrapper_title{
+        display: none;
+    }
     .collegeInfos tbody td{
         border-bottom: 1px solid #e4e4e4;
     }
@@ -37,18 +40,12 @@ $query_string = http_build_query(array(
     
     .outputScore th, .outputScore td{
         border: 1px solid white !important;   
-        padding:8px 5px !important;
+        padding:5px !important;
         text-align: center !important;
     }
     .outputScore table input{
         width:100%;
         text-align: center;
-    }
-    .isauto{
-        pointer-events: none;
-        border: unset !important;
-        background-color: unset !important;
-        box-shadow: unset !important;
     }
     .collegeInfos table td{
         text-align: center;
@@ -80,6 +77,9 @@ $query_string = http_build_query(array(
     .tbl_head01 td{
         padding : 10px 5px;
     }
+    .search_btns button{
+        margin-bottom:5px;
+    }
 </style>
 <!-- 마이페이지 시작 { -->
 <div id="smb_my">
@@ -91,230 +91,441 @@ $query_string = http_build_query(array(
                 <input type="hidden" id="tam1_Code" name="tam1_Code">
                 <input type="hidden" id="tam2_Code" name="tam2_Code">
                 <input type="hidden" id="his_Code" name="his_Code" value="C20060001">
-                <div class="tbl_wrap outputScore border-tb" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;">
-                    <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
-                    <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
-                        <colgroup>
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                            <col width="100px">
-                        </colgroup>
-                        <tbody>
-                            <tr>
-                                <th rowspan="2">캠퍼스</th>
-                                <td rowspan="2">
-                                <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
-                                    <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
-                                        <option value="">선택</option>
-                                        <?
-                                            $camSql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
-                                            
-                                            foreach($camSql as $cm => $c){
-                                        ?>
-                                            <option value="<?=$c['idx']?>" <?if($bid == $c['idx']) echo 'selected';?>><?=$c['branchName']?></option>
-                                        <?}?>
-                                    </select>
-                                </form>
-                                </td>
-                                <th colspan="7">성적표</th>
-                            </tr>
-                            <tr>
-                                <th><button class="btn-n active" onclick="resetScore()">점수 초기화</button></th>
-                                <th>국어</th>
-                                <th>수학</th>
-                                <th>영어</th>
-                                <th>탐구1</th>
-                                <th>탐구2</th>
-                                <th>한국사</th>
-                            </tr>
-                            <tr>
-                                <th rowspan="2">시험구분</th>
-                                <td rowspan="2" class="selMonth">
-                                    <?if($bid){?>
-                                        <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                    <!-- <div class="tbl_wrap outputScore" style="border:2px solid #828282 !important;border-radius:5px;position:fixed;top:5px;right:5px;z-index:3;display:flex;gap:10px;background:white;">
+                        <button type="button" id="viewhideOutput" style="width:30px;height:30px;top:-3px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(90deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
+                        <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
+                            <colgroup>
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                                <col width="100px">
+                            </colgroup>
+                            <tbody>
+                                <tr>
+                                    <th rowspan="2">캠퍼스</th>
+                                    <td rowspan="2">
+                                    <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                                        <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
+                                            <option value="">선택</option>
                                             <?
-                                                $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
-                                                foreach($msql as $ms => $m){
+                                                $camSql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                                
+                                                foreach($camSql as $cm => $c){
                                             ?>
-                                                <option value="<?=$m['code']?>" <?if($selMonth == $m['code']) echo "selected";?>><?=$m['codeName']?></option>
+                                                <option value="<?=$c['idx']?>" <?if($bid == $c['idx']) echo 'selected';?>><?=$c['branchName']?></option>
                                             <?}?>
                                         </select>
-                                    <?}else{?>
-                                        캠퍼스 먼저 선택해주세요.
-                                    <?}?>
-                                </td>
-                                <th>과목</th>
-                                <td>
-                                    <select class="frm_input isauto" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
-                                        <option value="">선택해주세요</option>
-                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20010000' AND useYN = 1");
-                                        foreach($korsub as $ks => $k){?>
-                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                    </form>
+                                    </td>
+                                    <th colspan="7">성적표</th>
+                                </tr>
+                                <tr>
+                                    <th><button class="btn-n active" onclick="resetScore()">점수 초기화</button></th>
+                                    <th>국어</th>
+                                    <th>수학</th>
+                                    <th>영어</th>
+                                    <th>탐구1</th>
+                                    <th>탐구2</th>
+                                    <th>한국사</th>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2">시험구분</th>
+                                    <td rowspan="2" class="selMonth">
+                                        <?if($bid){?>
+                                            <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                                                <?
+                                                    $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
+                                                    foreach($msql as $ms => $m){
+                                                ?>
+                                                    <option value="<?=$m['code']?>" <?if($selMonth == $m['code']) echo "selected";?>><?=$m['codeName']?></option>
+                                                <?}?>
+                                            </select>
+                                        <?}else{?>
+                                            캠퍼스 먼저 선택해주세요.
                                         <?}?>
-                                    </select>
-                                    <input type="hidden" class="frm_input isauto" name="korSub">
-                                </td>
-                                <td>
-                                    <select class="frm_input isauto" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
-                                        <option value="">선택해주세요</option>
-                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20020000' AND useYN = 1");
-                                        foreach($korsub as $ks => $k){?>
-                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
-                                        <?}?>
-                                    </select>
-                                    <input type="hidden" class="frm_input isauto" name="mathSub">
-                                </td>
-                                <td>
-                                    <input type="text" class="frm_input isauto" name="engSub">
-                                </td>
-                                <td>
-                                    <select class="frm_input isauto" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
-                                        <option value="">선택해주세요</option>
-                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20040000' AND useYN = 1");
-                                        foreach($korsub as $ks => $k){?>
-                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
-                                        <?}?>
-                                    </select>
-                                    <input type="hidden" class="frm_input isauto" name="tam1Sub"> 
-                                </td>
-                                <td>
-                                    <select class="frm_input isauto" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
-                                        <option value="">선택해주세요</option>
-                                        <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20050000' AND useYN = 1");
-                                        foreach($korsub as $ks => $k){?>
-                                            <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
-                                        <?}?>
-                                    </select>
-                                    <input type="hidden" class="frm_input isauto" name="tam2Sub"> 
-                                </td>
-                                <td>
-                                    <input type="text" class="frm_input isauto" name="hisSub">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>원점수</th>
-                                <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
-                                <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
-                            </tr>
-                            <tr>
-                                <th>이름</th>
-                                <td class="studentNm">
-                                    <?if($bid){?>
-                                        <select name="selStudent" id="selStudent" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;text-align:center;" <?if($_SESSION['mb_profile'] != 'C40000001' && $_SESSION['mb_profile'] != 'C40000002') echo 'class="isauto"';?>>
-                                            <option value="">선택하세요.</option>
-                                            <?
-                                                $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}' AND mb_profile = 'C40000003'");
-                                                foreach($memsql as $mm => $me){
-                                            ?>
-                                                <option value="<?=$me['mb_no']?>" data-id="<?=$me['mb_id']?>" <?if($_SESSION['mb_profile'] == 'C40000003' && $_SESSION['mb_no'] == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
+                                    </td>
+                                    <th>과목</th>
+                                    <td>
+                                        <select class="frm_input isauto" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
+                                            <option value="">선택해주세요</option>
+                                            <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20010000' AND useYN = 1");
+                                            foreach($korsub as $ks => $k){?>
+                                                <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
                                             <?}?>
                                         </select>
-                                    <?}else{?>
-                                        캠퍼스 먼저 선택해주세요.
+                                        <input type="hidden" class="frm_input isauto" name="korSub">
+                                    </td>
+                                    <td>
+                                        <select class="frm_input isauto" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
+                                            <option value="">선택해주세요</option>
+                                            <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20020000' AND useYN = 1");
+                                            foreach($korsub as $ks => $k){?>
+                                                <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                            <?}?>
+                                        </select>
+                                        <input type="hidden" class="frm_input isauto" name="mathSub">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="frm_input isauto" name="engSub">
+                                    </td>
+                                    <td>
+                                        <select class="frm_input isauto" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
+                                            <option value="">선택해주세요</option>
+                                            <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20040000' AND useYN = 1");
+                                            foreach($korsub as $ks => $k){?>
+                                                <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                            <?}?>
+                                        </select>
+                                        <input type="hidden" class="frm_input isauto" name="tam1Sub"> 
+                                    </td>
+                                    <td>
+                                        <select class="frm_input isauto" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
+                                            <option value="">선택해주세요</option>
+                                            <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20050000' AND useYN = 1");
+                                            foreach($korsub as $ks => $k){?>
+                                                <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                            <?}?>
+                                        </select>
+                                        <input type="hidden" class="frm_input isauto" name="tam2Sub"> 
+                                    </td>
+                                    <td>
+                                        <input type="text" class="frm_input isauto" name="hisSub">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>원점수</th>
+                                    <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
+                                    <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
+                                    <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
+                                    <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
+                                    <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
+                                    <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
+                                </tr>
+                                <tr>
+                                    <th>이름</th>
+                                    <td class="studentNm">
+                                        <?if($bid){?>
+                                            <select name="selStudent" id="selStudent" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;text-align:center;" <?if($_SESSION['mb_profile'] != 'C40000001' && $_SESSION['mb_profile'] != 'C40000002') echo 'class="isauto"';?>>
+                                                <option value="">선택하세요.</option>
+                                                <?
+                                                    $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}' AND mb_profile = 'C40000003'");
+                                                    foreach($memsql as $mm => $me){
+                                                ?>
+                                                    <option value="<?=$me['mb_no']?>" data-id="<?=$me['mb_id']?>" <?if($_SESSION['mb_profile'] == 'C40000003' && $_SESSION['mb_no'] == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
+                                                <?}?>
+                                            </select>
+                                        <?}else{?>
+                                            캠퍼스 먼저 선택해주세요.
+                                        <?}?>
+                                    </td>
+                                    <th>최고표점</th>
+                                    <td class="kor"><input type="number" class="frm_input chScore isauto" name="kor_TopRate"></td>
+                                    <td class="math"><input type="number" class="frm_input chScore isauto" name="math_TopRate"></td>
+                                    <td></td>
+                                    <td class="tam1"><input type="number" class="frm_input chScore isauto" name="tam1_TopRate"></td>
+                                    <td class="tam2"><input type="number" class="frm_input chScore isauto" name="tam2_TopRate"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>학교</th>
+                                    <td class="school"></td>
+                                    <th>표준점수</th>
+                                    <td><input type="number" name="kor_Pscore" class="frm_input chScore isauto"></td>
+                                    <td><input type="number" name="math_Pscore" class="frm_input chScore isauto"></td>
+                                    <td></td>
+                                    <td><input type="number" name="tam1_Pscore" class="frm_input chScore isauto"></td>
+                                    <td><input type="number" name="tam2_Pscore" class="frm_input chScore isauto"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>학년</th>
+                                    <td class="layer"></td>
+                                    <th>백분위</th>
+                                    <td><input type="text" name="kor_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                    <td><input type="text" name="math_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                    <td></td>
+                                    <td><input type="text" name="tam1_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                    <td><input type="text" name="tam2_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>성별</th>
+                                    <td class="gender"></td>
+                                    <th>등급</th>
+                                    <td><input type="text" name="kor_Grade" class="frm_input isauto" /></td>
+                                    <td><input type="text" name="math_Grade" class="frm_input isauto" /></td>
+                                    <td><input type="text" name="eng_Grade" class="frm_input isauto" /></td>
+                                    <td><input type="text" name="tam1_Grade" class="frm_input isauto" /></td>
+                                    <td><input type="text" name="tam2_Grade" class="frm_input isauto" /></td>
+                                    <td><input type="text" name="his_Grade" class="frm_input isauto" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 5px;">
+                        <div style="display: flex;align-items:center;gap:10px;">
+                            <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                            <div>
+                                <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
+                                <?
+                                    $gsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C30000000' AND useYN = 1");
+                                    foreach($gsql as $gs => $g){
+                                ?>
+                                    <button type="button" data-value="<?=$g['code']?>" class="ctype btn-n" onclick="viewTypeChange(event)"><?=$g['codeName']?></button>
+                                <?}?>
+                            </div>
+                        </div>
+                        <div style="display: flex;align-items:center;gap:10px;">
+                            <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
+                            <div>
+                                <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
+                                <?
+                                    $asql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C10000000' AND useYN = 1");
+                                    foreach($asql as $as => $a){
+                                ?>
+                                    <button type="button" data-value="<?=$a['code']?>" class="areaCode btn-n" onclick="viewArea(event,'<?=$a['codeName']?>')"><?=$a['codeName']?></button>
+                                <?}?>
+                            </div>
+                        </div>
+                        <div style="display: flex;align-items:center;gap:10px;">
+                            <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
+                            <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
+                                <td style="padding:10px;"><input type="text" name="textCol" id="textCol" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textCol?>"></td>
+                                <td style="padding:10px;"><input type="text" name="textSub" id="textSub" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textSub?>"></td>
+                                <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" style="width:50px !important;" onclick="viewColleges('',1)"></td>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="outputScore" style="display: grid;grid-template-columns:1.5fr 1fr; gap: 10px;border: 2px solid black;border-radius: 5px;overflow: hidden;">
+                        <div class="tbl_wrap">
+                            <table class="tbl_head01 tbl_2n_color" style="margin:0px !important;padding:5px;">
+                                <colgroup>
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                    <col width="100px">
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th rowspan="2">캠퍼스</th>
+                                        <td rowspan="2">
+                                        <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
+                                            <select id="bid" name="bid" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo 'class="isauto"';?>>
+                                                <option value="">선택</option>
+                                                <?
+                                                    $camSql = sql_query("SELECT * FROM g5_branch WHERE branchActive = 1");
+                                                    
+                                                    foreach($camSql as $cm => $c){
+                                                ?>
+                                                    <option value="<?=$c['idx']?>" <?if($bid == $c['idx']) echo 'selected';?>><?=$c['branchName']?></option>
+                                                <?}?>
+                                            </select>
+                                        </form>
+                                        </td>
+                                        <th colspan="7">성적표</th>
+                                    </tr>
+                                    <tr>
+                                        <th><button class="btn-n active" onclick="resetScore()">초기화</button></th>
+                                        <th>국어</th>
+                                        <th>수학</th>
+                                        <th>영어</th>
+                                        <th>탐구1</th>
+                                        <th>탐구2</th>
+                                        <th>한국사</th>
+                                    </tr>
+                                    <tr>
+                                        <th rowspan="2">시험구분</th>
+                                        <td rowspan="2" class="selMonth">
+                                            <?if($bid){?>
+                                                <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
+                                                    <?
+                                                        $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
+                                                        foreach($msql as $ms => $m){
+                                                    ?>
+                                                        <option value="<?=$m['code']?>" <?if($selMonth == $m['code']) echo "selected";?>><?=$m['codeName']?></option>
+                                                    <?}?>
+                                                </select>
+                                            <?}else{?>
+                                                캠퍼스 먼저 선택해주세요.
+                                            <?}?>
+                                        </td>
+                                        <th>과목</th>
+                                        <td>
+                                            <select class="frm_input isauto" id="korSelect" name="korSelect" onchange="reselect(event,'kor')">
+                                                <option value="">선택해주세요</option>
+                                                <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20010000' AND useYN = 1");
+                                                foreach($korsub as $ks => $k){?>
+                                                    <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                                <?}?>
+                                            </select>
+                                            <input type="hidden" class="frm_input isauto" name="korSub">
+                                        </td>
+                                        <td>
+                                            <select class="frm_input isauto" id="mathSelect" name="mathSelect" onchange="reselect(event,'math')">
+                                                <option value="">선택해주세요</option>
+                                                <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20020000' AND useYN = 1");
+                                                foreach($korsub as $ks => $k){?>
+                                                    <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                                <?}?>
+                                            </select>
+                                            <input type="hidden" class="frm_input isauto" name="mathSub">
+                                        </td>
+                                        <td>
+                                            <input type="text" class="frm_input isauto" name="engSub">
+                                        </td>
+                                        <td>
+                                            <select class="frm_input isauto" id="tam1Select" name="tam1Select" onchange="reselect(event,'tam1')">
+                                                <option value="">선택해주세요</option>
+                                                <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20040000' AND useYN = 1");
+                                                foreach($korsub as $ks => $k){?>
+                                                    <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                                <?}?>
+                                            </select>
+                                            <input type="hidden" class="frm_input isauto" name="tam1Sub"> 
+                                        </td>
+                                        <td>
+                                            <select class="frm_input isauto" id="tam2Select" name="tam2Select" onchange="reselect(event,'tam2')">
+                                                <option value="">선택해주세요</option>
+                                                <?$korsub = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C20050000' AND useYN = 1");
+                                                foreach($korsub as $ks => $k){?>
+                                                    <option value="<?=$k['codeName']?>" data-value="<?=$k['code']?>"><?=$k['codeName']?></option>
+                                                <?}?>
+                                            </select>
+                                            <input type="hidden" class="frm_input isauto" name="tam2Sub"> 
+                                        </td>
+                                        <td>
+                                            <input type="text" class="frm_input isauto" name="hisSub">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>원점수</th>
+                                        <td class="kor"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="kor_Origin" class="frm_input isauto" type="number"></td>
+                                        <td class="math"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="math_Origin" class="frm_input isauto" type="number"></td>
+                                        <td class="eng"><input oninput="this.value = Math.max(0, Math.min(100, this.value))" name="eng_Origin" class="frm_input isauto" type="number"></td>
+                                        <td class="tam1"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam1_Origin" class="frm_input isauto" type="number"></td>
+                                        <td class="tam2"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="tam2_Origin" class="frm_input isauto" type="number"></td>
+                                        <td class="his"><input oninput="this.value = Math.max(0, Math.min(50, this.value))" name="his_Origin" class="frm_input isauto" type="number"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>이름</th>
+                                        <td class="studentNm">
+                                            <?if($bid){?>
+                                                <select name="selStudent" id="selStudent" style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;text-align:center;" <?if($_SESSION['mb_profile'] != 'C40000001' && $_SESSION['mb_profile'] != 'C40000002') echo 'class="isauto"';?>>
+                                                    <option value="">선택하세요.</option>
+                                                    <?
+                                                        $memsql = sql_query("SELECT * FROM g5_member WHERE mb_signature = '{$bid}' AND mb_profile = 'C40000003'");
+                                                        foreach($memsql as $mm => $me){
+                                                    ?>
+                                                        <option value="<?=$me['mb_no']?>" data-id="<?=$me['mb_id']?>" <?if($_SESSION['mb_profile'] == 'C40000003' && $_SESSION['mb_no'] == $me['mb_no']) echo 'selected';?>><?=$me['mb_name']?></option>
+                                                    <?}?>
+                                                </select>
+                                            <?}else{?>
+                                                캠퍼스 먼저 선택해주세요.
+                                            <?}?>
+                                        </td>
+                                        <th>최고표점</th>
+                                        <td class="kor"><input type="number" class="frm_input chScore isauto" name="kor_TopRate"></td>
+                                        <td class="math"><input type="number" class="frm_input chScore isauto" name="math_TopRate"></td>
+                                        <td></td>
+                                        <td class="tam1"><input type="number" class="frm_input chScore isauto" name="tam1_TopRate"></td>
+                                        <td class="tam2"><input type="number" class="frm_input chScore isauto" name="tam2_TopRate"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>학교</th>
+                                        <td class="school"></td>
+                                        <th>표준점수</th>
+                                        <td><input type="number" name="kor_Pscore" class="frm_input chScore isauto"></td>
+                                        <td><input type="number" name="math_Pscore" class="frm_input chScore isauto"></td>
+                                        <td></td>
+                                        <td><input type="number" name="tam1_Pscore" class="frm_input chScore isauto"></td>
+                                        <td><input type="number" name="tam2_Pscore" class="frm_input chScore isauto"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>학년</th>
+                                        <td class="layer"></td>
+                                        <th>백분위</th>
+                                        <td><input type="text" name="kor_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                        <td><input type="text" name="math_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                        <td></td>
+                                        <td><input type="text" name="tam1_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                        <td><input type="text" name="tam2_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>성별</th>
+                                        <td class="gender"></td>
+                                        <th>등급</th>
+                                        <td><input type="text" name="kor_Grade" class="frm_input isauto" /></td>
+                                        <td><input type="text" name="math_Grade" class="frm_input isauto" /></td>
+                                        <td><input type="text" name="eng_Grade" class="frm_input isauto" /></td>
+                                        <td><input type="text" name="tam1_Grade" class="frm_input isauto" /></td>
+                                        <td><input type="text" name="tam2_Grade" class="frm_input isauto" /></td>
+                                        <td><input type="text" name="his_Grade" class="frm_input isauto" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 5px;">
+                            <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
+                                <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
+                                <div>
+                                    <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
+                                    <?
+                                        $gsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C30000000' AND useYN = 1");
+                                        foreach($gsql as $gs => $g){
+                                    ?>
+                                        <button type="button" data-value="<?=$g['code']?>" class="ctype btn-n" onclick="viewTypeChange(event)"><?=$g['codeName']?></button>
                                     <?}?>
-                                </td>
-                                <th>최고표점</th>
-                                <td class="kor"><input type="number" class="frm_input chScore isauto" name="kor_TopRate"></td>
-                                <td class="math"><input type="number" class="frm_input chScore isauto" name="math_TopRate"></td>
-                                <td></td>
-                                <td class="tam1"><input type="number" class="frm_input chScore isauto" name="tam1_TopRate"></td>
-                                <td class="tam2"><input type="number" class="frm_input chScore isauto" name="tam2_TopRate"></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>학교</th>
-                                <td class="school"></td>
-                                <th>표준점수</th>
-                                <td><input type="number" name="kor_Pscore" class="frm_input chScore isauto"></td>
-                                <td><input type="number" name="math_Pscore" class="frm_input chScore isauto"></td>
-                                <td></td>
-                                <td><input type="number" name="tam1_Pscore" class="frm_input chScore isauto"></td>
-                                <td><input type="number" name="tam2_Pscore" class="frm_input chScore isauto"></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>학년</th>
-                                <td class="layer"></td>
-                                <th>백분위</th>
-                                <td><input type="text" name="kor_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td><input type="text" name="math_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td></td>
-                                <td><input type="text" name="tam1_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td><input type="text" name="tam2_Sscore" class="frm_input chScore isauto" oninput="this.value = Math.max(0, Math.min(100, this.value))"></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>성별</th>
-                                <td class="gender"></td>
-                                <th>등급</th>
-                                <td><input type="text" name="kor_Grade" class="frm_input isauto" /></td>
-                                <td><input type="text" name="math_Grade" class="frm_input isauto" /></td>
-                                <td><input type="text" name="eng_Grade" class="frm_input isauto" /></td>
-                                <td><input type="text" name="tam1_Grade" class="frm_input isauto" /></td>
-                                <td><input type="text" name="tam2_Grade" class="frm_input isauto" /></td>
-                                <td><input type="text" name="his_Grade" class="frm_input isauto" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="display: flex;flex-direction:column;row-gap:7px;background:white;padding:10px 5px;">
-                <div style="display: flex;align-items:center;gap:10px;">
-                    <div style="font-weight:800;">모&nbsp;&nbsp;&nbsp;집 : </div>
-                    <div>
-                        <button type="button" data-value="" class="ctype btn-n active" onclick="viewTypeChange(event)">전체</button>
-                        <?
-                            $gsql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C30000000' AND useYN = 1");
-                            foreach($gsql as $gs => $g){
-                        ?>
-                            <button type="button" data-value="<?=$g['code']?>" class="ctype btn-n" onclick="viewTypeChange(event)"><?=$g['codeName']?></button>
-                        <?}?>
+                                </div>
+                            </div>
+                            <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
+                                <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
+                                <div class="search_btns">
+                                    <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
+                                    <?
+                                        $asql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C10000000' AND useYN = 1");
+                                        foreach($asql as $as => $a){
+                                    ?>
+                                        <button type="button" data-value="<?=$a['code']?>" class="areaCode btn-n" onclick="viewArea(event,'<?=$a['codeName']?>')"><?=$a['codeName']?></button>
+                                    <?}?>
+                                </div>
+                            </div>
+                            <div style="display: grid;grid-template-columns:1fr 10fr;align-items:center;gap:10px;">
+                                <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
+                                <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
+                                    <td style="padding:10px;"><input type="text" name="textCol" id="textCol" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textCol?>"></td>
+                                    <td style="padding:10px;"><input type="text" name="textSub" id="textSub" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textSub?>"></td>
+                                    <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" style="width:50px !important;" onclick="viewColleges('',1)"></td>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <button type="button" id="viewhideOutput" style="width:30px;height:30px;bottom:-10px;left:-30px;position: absolute;border: unset;border-radius: 50%;color: white;background: #0c2233;transform: rotate(0deg);"><i id="hide_btn" class="xi-caret-up"></i></button>
                 </div>
-                <div style="display: flex;align-items:center;gap:10px;">
-                    <div style="font-weight:800;">지&nbsp;&nbsp;&nbsp;역 : </div>
-                    <div>
-                        <button type="button" data-value="" class="areaCode btn-n active" onclick="viewArea(event,'')">전체</button>
-                        <?
-                            $asql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode ='C10000000' AND useYN = 1");
-                            foreach($asql as $as => $a){
-                        ?>
-                            <button type="button" data-value="<?=$a['code']?>" class="areaCode btn-n" onclick="viewArea(event,'<?=$a['codeName']?>')"><?=$a['codeName']?></button>
-                        <?}?>
-                    </div>
-                </div>
-                <div style="display: flex;align-items:center;gap:10px;">
-                    <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
-                    <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
-                        <td style="padding:10px;"><input type="text" name="textCol" id="textCol" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textCol?>"></td>
-                        <td style="padding:10px;"><input type="text" name="textSub" id="textSub" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$textSub?>"></td>
-                        <td style="padding:10px;"><input type="button" class="search-btn" id="searchEnter" value="" style="width:50px !important;" onclick="viewColleges('',1)"></td>
-                    </div>
-                </div>
-                <div>
-                    <h2 style="margin:5px 0 0px !important;">전체 : <span class="totalCnt"></span>
-                     <!-- / 현재 페이지 : <span class="now-page"></span> -->
-                    </h2>
-                </div>
-            </div>
             </form>
         </section>
-        <!-- } 지원대학 끝 -->
-    </div>
     <div id="smb_my_list">
+        <div>
+            <h2 style="padding:15px 0 !important;font-size: 1.2em;background:white;">전체 : <span class="totalCnt"></span>
+            <!-- / 현재 페이지 : <span class="now-page"></span> -->
+            </h2>
+        </div>
         <!-- 최근 주문내역 시작 { -->
         <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
-            <div class="tbl_wrap collegeInfos border-tb" style="height: 74vh;overflow-y:auto;">
+            <div class="tbl_wrap collegeInfos border-tb" style="height: 50vh;overflow-y:auto;">
                     <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;border-collapse: separate !important;border-spacing: 0 !important;">
                         <colgroup>
                         </colgroup>
@@ -375,6 +586,11 @@ $query_string = http_build_query(array(
     $("#viewhideOutput").on('click',function(){
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
+        if($(".outputScore").hasClass('viewType')){
+            $('.collegeInfos').css('height','87vh');
+        } else {
+            $('.collegeInfos').css('height','50vh')
+        }
     });
     $(document).ready(function(){
         $.ajax({
