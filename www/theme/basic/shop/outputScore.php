@@ -526,6 +526,7 @@ $query_string = http_build_query(array(
         <section id="smb_my_od" style="margin-bottom: 0px;">
             <div class="mb20">
             <div class="tbl_wrap collegeInfos border-tb" style="height: 58vh;overflow-y:auto;">
+                <button class="btn-n active" id="scrollTopBtn" style="position: absolute;bottom:0px; right:-45px;" onclick="goScrollTop(event)"><i id="hide_btn" class="xi-caret-up"></i></button>
                     <table class="tbl_head01 tbl_2n_color" style="margin-bottom: 0px;border-collapse: separate !important;border-spacing: 0 !important;">
                         <colgroup>
                         </colgroup>
@@ -629,7 +630,7 @@ $query_string = http_build_query(array(
             removeIsauto();
         }
     });
-
+    
     function viewTypeChange(e){
         document.querySelectorAll('.ctype').forEach((el,i,arr)=>{
             if(el == e.currentTarget){
@@ -898,6 +899,7 @@ $query_string = http_build_query(array(
                 if(coll.data.length>0){
                     calcJuScore(coll.data);
                 }
+                checkScroll();
             }
         });
     }
@@ -1337,7 +1339,6 @@ $query_string = http_build_query(array(
             showView(json);
         }
     }
-
 </script>
 <!-- } 마이페이지 끝 -->
 

@@ -1150,3 +1150,17 @@ function calcJuScore(json){
         $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) ? json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) : formatScore(changeScore,json[i]['juSrate'].split("%")[0]) + popTam);
     }
 }
+function checkScroll(){
+    let div = document.getElementById('scrollTopBtn').parentElement;
+    let btn = document.getElementById('scrollTopBtn');
+
+    if(div.scrollHeight > div.clientHeight){
+        btn.style.display = '';
+    } else {
+        btn.style.display = 'none';
+    }
+}
+function goScrollTop(e){
+    let div = e.currentTarget.parentNode;
+    div.scrollTo({ top: 0, behavior: 'smooth' });
+}

@@ -189,6 +189,7 @@ $query_string = http_build_query(array(
             </div>
             
             <div class="yes-college" <?if($cnt['cnt'] == 0) echo ' no-view';?> style="display: grid;grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));grid-auto-rows: 160px;gap: 20px;height: 71vh;overflow-y: auto;padding:10px;">
+                <button class="btn-n active" id="scrollTopBtn" style="position: absolute;bottom:0px; right:-45px;" onclick="goScrollTop(event)"><i id="hide_btn" class="xi-caret-up" style="font-size: 1em;"></i></button>
                 <?
                     foreach($res as $k => $v){
                 ?>
@@ -1114,6 +1115,7 @@ $query_string = http_build_query(array(
             $(".yes-college").css('display','grid');
             $(".no-college").css('display','none');
         }
+        checkScroll();
     }
     let popupWin = "";
     function transPopup(collNm,subIdx){
