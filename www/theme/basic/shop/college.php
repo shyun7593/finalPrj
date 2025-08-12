@@ -278,15 +278,15 @@ $query_string = http_build_query(array(
                             <div class="hashT">
                                 # ${json['data']['college']['collegeType']}
                             </div>`;
-                    if(!Array.isArray(json['data']['jungsi']) && json['data']['susi'].length > 0){
+                    if(!Array.isArray(json['data']['jungsi']) && (json['data']['susi'] && json['data']['susi'].length > 0)){
                         html+=`<div class="hashT">
                                 # 정시/수시
                             </div>`;
-                    } else if(!Array.isArray(json['data']['jungsi']) && json['data']['susi'].length == 0){
+                    } else if(!Array.isArray(json['data']['jungsi']) && (!json['data']['susi'])){
                         html+=`<div class="hashT">
                                 # 정시
                             </div>`;
-                    } else if(Array.isArray(json['data']['jungsi']) && json['data']['susi'].length > 0){
+                    } else if(Array.isArray(json['data']['jungsi']) && (json['data']['susi'] && json['data']['susi'].length > 0)){
                         html+=`<div class="hashT">
                                 # 수시
                             </div>`;
@@ -307,9 +307,9 @@ $query_string = http_build_query(array(
                         html += `<div class="top_menu jInfo" style="pointer-events:none !important;color:#e4e4e4;" data-type="jInfo" data-rm="sInfo">정시</div>`;
                     }
                 
-                    if(json['data']['susi'].length > 0 && !Array.isArray(json['data']['jungsi'])){
+                    if((json['data']['susi'] && json['data']['susi'].length > 0) && !Array.isArray(json['data']['jungsi'])){
                         html += `<div class="top_menu sInfo" data-type="sInfo" data-rm="jInfo">수시</div>`;
-                    } else if(json['data']['susi'].length > 0){
+                    } else if((json['data']['susi'] && json['data']['susi'].length > 0)){
                         html += `<div class="top_menu sInfo active" data-type="sInfo" data-rm="jInfo">수시</div>`;
                     } else{
                         html += `<div class="top_menu sInfo" style="pointer-events:none !important;color:#e4e4e4;"  data-type="sInfo" data-rm="jInfo">수시</div>`;
@@ -606,7 +606,7 @@ $query_string = http_build_query(array(
                 }
 
                 // 수시영역
-                if(json['data']['susi'].length > 0){
+                if((json['data']['susi'] && json['data']['susi'].length > 0)){
                     html += `<div id="sInfo" class="info-Content cnt${json['data']['susi'].length}">`;
                     for(let q = 0; q<json['data']['susi'].length; q++){
                         html += `
