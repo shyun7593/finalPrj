@@ -117,7 +117,7 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
             ?>
                 <li style="width: 100%;cursor:pointer;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="<?= $m['me_link'] ?>.php"><?if($m['me_link'] == 'notice') echo $newNotice;?><?= $m['me_name']?></a></li>
             <?}?>
-            <li style="width: 100%;cursor:pointer;" class="<?if('myInfo' == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="myInfo">내 정보</a></li>
+            <li style="width: 100%;cursor:pointer;" class="<?if('myInfo' == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="myInfo.php">내 정보</a></li>
         </ul>
     </div>
 </div>
