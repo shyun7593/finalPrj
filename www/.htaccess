@@ -1,0 +1,12 @@
+####  rewrite BEGIN #####
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+
+RewriteRule ^/?$ /html/index.php [L]
+RewriteRule ^shop/([0-9a-zA-Z_]+)$  shop/$1.php  [QSA,L]
+
+</IfModule>
+#### rewrite END #####
