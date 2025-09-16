@@ -813,14 +813,27 @@ function getTopNScores(arr, n) {
 }
 
 function formatScore(value,rate) {
-    const rounded = Math.round((value*(rate/100)) * 100) / 100; // 소수 둘째 자리에서 반올림
-    const final = Math.round(rounded * 10) / 10;   // 소수 첫째 자리에서 다시 반올림
+    // const rounded = Math.round((value*(rate/100)) * 100) / 100; // 소수 둘째 자리에서 반올림
+    // const final = Math.round(rounded * 10) / 10;   // 소수 첫째 자리에서 다시 반올림
+    const final = Math.floor(value * (rate / 100) * 10) / 10;
+
   
     // 정수면 소수점 없이, 아니면 소수 첫째 자리까지
     return Number.isInteger(final) ? String(final) : final.toFixed(1);
   }
   
-  
+function getTransScore(val, rate){
+    let res = 0;
+    if(rate.includes('33')){
+        res = val / 3;
+    } else if(rate.includes('66')){
+        res = (val / 3) * 2;
+    } else {
+        res = val * (rate/100);
+    }
+
+    return res;
+}
   
 
 // subArr[] 
@@ -1035,7 +1048,7 @@ function calcJuScore(json){
     
         switch(json[i]['juKorSelect']){
             case '필수':
-                subArr[0]['TransScore'] = subArr[0]['Score'] * (subArr[0]['Rate'].split("%")[0]/100);
+                subArr[0]['TransScore'] = getTransScore(subArr[0]['Score'],(subArr[0]['Rate'].split("%")[0]));
                 break;
             case '선택':
                 selPil.push(0);
@@ -1044,7 +1057,7 @@ function calcJuScore(json){
     
         switch(json[i]['juMathSelect']){
             case '필수':
-                subArr[1]['TransScore'] = subArr[1]['Score'] * (subArr[1]['Rate'].split("%")[0]/100);
+                subArr[1]['TransScore'] = getTransScore(subArr[1]['Score'],(subArr[1]['Rate'].split("%")[0]));
                 break;
             case '선택':
                 selPil.push(1);
@@ -1056,7 +1069,7 @@ function calcJuScore(json){
                 if(subArr[4]['Rate'].includes('점')){
                     subArr[4]['TransScore'] = subArr[4]['Score'];
                 } else {
-                    subArr[4]['TransScore'] = subArr[4]['Score'] * (subArr[4]['Rate'].split("%")[0]/100);
+                    subArr[4]['TransScore'] = getTransScore(subArr[4]['Score'],(subArr[4]['Rate'].split("%")[0]));
                 }
                 break;
             case '선택':
@@ -1068,12 +1081,12 @@ function calcJuScore(json){
             case '필수':
                 if(json[i]['juTamCnt'] == 1){
                     if(subArr[2]['Score'] >= subArr[3]['Score']){
-                        subArr[2]['TransScore'] = subArr[2]['Score'] * (subArr[2]['Rate'].split("%")[0]/100);
+                        subArr[2]['TransScore'] = getTransScore(subArr[2]['Score'],(subArr[2]['Rate'].split("%")[0]));
                     } else {
-                        subArr[3]['TransScore'] = subArr[3]['Score'] * (subArr[3]['Rate'].split("%")[0]/100);
+                        subArr[3]['TransScore'] = getTransScore(subArr[3]['Score'],(subArr[3]['Rate'].split("%")[0]));
                     }                
                 } else if(json[i]['juTamCnt'] == 2){
-                    subArr[2]['TransScore'] = ((subArr[2]['Score'] + subArr[3]['Score']) / 2) * (subArr[3]['Rate'].split("%")[0]/100);
+                    subArr[2]['TransScore'] = getTransScore((subArr[2]['Score'] + subArr[3]['Score']) / 2,(subArr[3]['Rate'].split("%")[0]));
                 }
                 break;
             case '선택':
@@ -1109,8 +1122,8 @@ function calcJuScore(json){
             }
             for(let j = 0; j < selPil.length ;j++){
                 let score = subArr[selPil[j]]['Score'];
-                if(selPil[j] == 3){
-                    if(data['juTamCnt'] == 1){
+                if(selPil[j] == 2){
+                    if(json[i]['juTamCnt'] == 1){
                         if(subArr[2]['Score']>=subArr[3]['Score']){
                             score = subArr[2]['Score'];
                         } else {
@@ -1125,28 +1138,27 @@ function calcJuScore(json){
                    'idx' : selPil[j]
                 }); // 선택 과목들 변환 점수
             }
+
             let rSubs = getTopNScores(selSubScores,selCnt);
+            
             if(subArr[selPil[0]]['Rate'].includes(',')){
                 for(let t = 0; t < subArr[selPil[0]]['Rate'].split(',').length; t++){
-                    subArr[rSubs[t]['idx']]['TransScore'] = rSubs[t]['score'] * (subArr[selPil[0]]['Rate'].split(',')[t].split("%")[0]/100);
+                    subArr[rSubs[t]['idx']]['TransScore']= getTransScore(rSubs[t]['score'],subArr[selPil[0]]['Rate'].split(',')[t].split("%")[0]);
                 }
             } else {
                 for(let t = 0; t < rSubs.length; t++){
-                    subArr[rSubs[t]['idx']]['TransScore'] = rSubs[t]['score'] * (subArr[selPil[0]]['Rate'].split("%")[0]/100);
+                    subArr[rSubs[t]['idx']]['TransScore']= getTransScore(rSubs[t]['score'],subArr[selPil[0]]['Rate'].split("%")[0]);
                 }
             }
         }
         for(let o = 0; o < 6; o++){
             changeScore += subArr[o]['TransScore'];
-            // subArr[o]['TransScore'] = Math.round(subArr[o]['TransScore']);
         }
-        // console.log(changeScore);
         console.log(subArr);
         let popTam = "";
         if(json[i]['juTamSub'] == tam1 || json[i]['juTamSub'] == tam2){
             popTam = "<br><span style='color:red;'>(" + (tam1 ? tam1 : tam2) + "제외)</span>";
         }
-        // console.log('원본:', changeScore, '표시용:', formatScore(changeScore,json[i]['juSrate'].split("%")[0]));
         $(`.changeScore${i+1}`).html(formatScore(changeScore,json[i]['juSrate'].split("%")[0]) > json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) ? json[i]['juTotal']*(json[i]['juSrate'].split("%")[0]/100) : formatScore(changeScore,json[i]['juSrate'].split("%")[0]) + popTam);
     }
 }
