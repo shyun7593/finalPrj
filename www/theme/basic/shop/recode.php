@@ -1,6 +1,8 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
-
+if($_SESSION['mb_profile'] == 'C40000010'){
+    goto_url("/index");
+}
 $g5['title'] = '실기기록';
 include_once('./_head.php');
 

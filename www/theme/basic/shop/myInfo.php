@@ -3,7 +3,9 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $g5['title'] = '내 정보';
 include_once('./_head.php');
-
+if($_SESSION['mb_profile'] == 'C40000010'){
+    goto_url("/index");
+}
 $sql = " select *
             from g5_member gm
             LEFT JOIN g5_branch gb on

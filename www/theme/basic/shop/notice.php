@@ -1,6 +1,10 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
+if($_SESSION['mb_profile'] != "C40000001" && $_SESSION['mb_profile'] != 'C40000002'){
+    goto_url('/index');
+}
+
 $g5['title'] = '게시판';
 include_once('./_head.php');
 

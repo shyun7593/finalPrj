@@ -3,7 +3,9 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $g5['title'] = '대학정보';
 include_once('./_head.php');
-
+if($_SESSION['mb_profile'] == 'C40000010'){
+    goto_url("/index");
+}
 $sql_add = " 1=1 ";
 
 switch($stype){

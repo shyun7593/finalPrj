@@ -4,6 +4,10 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '성적입력';
 include_once('./_head.php');
 
+if($_SESSION['mb_profile'] == 'C40000010'){
+    goto_url("/index");
+}
+
 if(!$month){
     $month = 'C60000001';
 }

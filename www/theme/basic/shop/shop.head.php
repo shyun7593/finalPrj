@@ -57,6 +57,8 @@ $nowUrl = str_replace('.php', '', $conte[count($conte) - 1]);
 if($nowUrl == 'index'){
     if($_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000003'){
         $nowUrl = 'myscore';
+    } else if($_SESSION['mb_profile'] == 'C40000010'){
+        $nowUrl = 'susiPage';
     } else {
         $nowUrl = 'student';
     }
@@ -117,7 +119,11 @@ add_stylesheet('<link rel="stylesheet" href="'.G5_JS_URL.'/owlcarousel/owl.carou
             ?>
                 <li style="width: 100%;cursor:pointer;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="<?= $m['me_link'] ?>.php"><?if($m['me_link'] == 'notice') echo $newNotice;?><?= $m['me_name']?></a></li>
             <?}?>
+            <?
+                if($_SESSION['mb_profile'] != 'C40000010'){
+            ?>
             <li style="width: 100%;cursor:pointer;" class="<?if('myInfo' == $nowUrl) echo ' active';?>"><a style="padding:12px 0;display: flex;justify-content: center;align-items: center;" href="myInfo.php">내 정보</a></li>
+            <?}?>
         </ul>
     </div>
 </div>

@@ -3,7 +3,9 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 
 $g5['title'] = '성적산출';
 include_once('./_head.php');
-
+if($_SESSION['mb_profile'] == 'C40000010'){
+    goto_url('/index');
+}
 
 switch($_SESSION['mb_profile']){
     case 'C40000001':

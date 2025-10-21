@@ -4,9 +4,10 @@ if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
 $g5['title'] = '학생별차트';
 include_once('./_head.php');
 
-if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C40000004'){
+if($_SESSION['mb_profile'] == 'C40000003' || $_SESSION['mb_profile'] == 'C40000004' || $_SESSION['mb_profile'] == 'C40000010'){
     goto_url('/index');
 }
+
 
 $sql_add = " 1=1 ";
 if(!$bid){

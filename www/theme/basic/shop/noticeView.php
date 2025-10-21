@@ -1,6 +1,8 @@
 <?php
 if (!defined("_GNUBOARD_")) exit; // 개별 페이지 접근 불가
-
+if(!$note){
+    goto_url("/notice");
+}
 $g5['title'] = '게시판';
 include('./_head.php');
 
