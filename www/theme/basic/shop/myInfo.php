@@ -115,14 +115,9 @@ $res = sql_fetch($sql);
             <?if($_SESSION['mb_profile'] == 'C40000001'){?>
                 <div id="wrapper_title">데이터 업데이트</div>
                 <div>
-                    <h2>등급컷</h2>
+                    <!-- <h2>등급컷</h2> -->
                     <div style="margin-top: 10px;">
-                        <?
-                            $csql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = 'C60000000' AND useYn = 1");
-                            foreach($csql as $cs => $c){
-                        ?>
-                            <button type="button" value="<?=$c['code']?>" style="cursor:pointer;height:40px;width: 100px;" class="updateGradeCut btn-n active no-hover"><?=$c['codeName']?></button>
-                        <?}?>
+                        <button type="button" style="cursor:pointer;height:40px;width: 100px;" class="updateGradeCut btn-n active no-hover">등급컷</button>
                     </div>
                 </div>
             <?}?>
@@ -282,11 +277,9 @@ function changePass(){
 
 
 $(".updateGradeCut").on('click',function(){
-    let code = $(this).val();
-    let mon = $(this).text();
     
     swal({
-        title : '<?=date('Y')?>' + '년 ' + mon +' 등급컷',
+        title : '<?=date('Y')?>' + '년 등급컷',
         text : '수정하시겠습니까?',
         type : "info",
         showCancelButton : true,
@@ -305,7 +298,6 @@ $(".updateGradeCut").on('click',function(){
                     type: "POST",
                     data: {
                         gradeYear: <?=date('Y')?>,
-                        gradeMonth: code,
                     },
                     contentType: "application/x-www-form-urlencoded",
                     async: true,
