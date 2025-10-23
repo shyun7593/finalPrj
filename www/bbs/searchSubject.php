@@ -56,11 +56,13 @@ switch($stype){
 
 $sql = "SELECT 
             gcs.*,
-            gj.*,
             gc.*,
+            gj2.*,
             gcc.codeName as 'gun',
             gcc2.codeName as 'areaName',
-            gac.idx as 'addC'
+            gac.idx as 'addC',
+            (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx ) as 'su',
+            (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx ) as 'ju'
         FROM g5_college_subject gcs 
         JOIN g5_college gc on
             gc.cIdx = gcs.collegeIdx
@@ -68,10 +70,10 @@ $sql = "SELECT
             gcc.code = gcs.cmmn1
         JOIN g5_cmmn_code gcc2 on
             gcc2.code = gcs.areaCode
-        LEFT JOIN g5_jungsi gj on
-            gj.juIdx = gcs.jungsiIdx
         LEFT JOIN g5_add_college gac on
             gac.subIdx = gcs.sIdx AND memId = '{$_SESSION['ss_mb_id']}' AND gac.memId = gac.regId 
+        LEFT JOIN g5_jungsi gj2 on
+            gj2.juIdx = gcs.jungsiIdx
         WHERE {$add_sql}";
 
 $mres = sql_query($sql);
@@ -96,8 +98,8 @@ foreach ($mres as $k => $v) {
         'addYn' => $v['addC']
     ];
 
-    if($v['susiIdx']){
-        $sures = sql_query("SELECT * FROM g5_susi WHERE FIND_IN_SET(suIdx,'{$v['susiIdx']}')");
+    if($v['su']>0){
+        $sures = sql_query("SELECT * FROM g5_susi WHERE suSubIdx = {$v['sIdx']}");
         $sucnt = 0;
         foreach($sures as $sr => $s){
             
@@ -136,7 +138,7 @@ foreach ($mres as $k => $v) {
         $data['susi'] = [];
     }
 
-    if($v['juIdx']){
+    if($v['ju'] > 0){
         $jh = sql_query("SELECT * FROM g5_history_score WHERE hSubIdx = '{$v['sIdx']}'");
         foreach($jh as $hv => $h){
             $jhis[$h['hGrade']] = [
@@ -157,7 +159,6 @@ foreach ($mres as $k => $v) {
             'score' => $e['eScore']
             ];
         }
-
         $data['jungsi'] = [
             'person' => $v['juPerson'], // 모집인원
             'history' => $jhis, // 한국사 등급

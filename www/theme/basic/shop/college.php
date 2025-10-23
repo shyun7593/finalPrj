@@ -10,10 +10,10 @@ $sql_add = " 1=1 ";
 
 switch($stype){
     case 'jungsi':
-        $sql_add .= " AND gcs.jungsiIdx is not null ";
+        $sql_add .= " AND (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx ) > 0 ";
         break;
     case 'susi':
-        $sql_add .= " AND gcs.susiIdx is not null ";
+        $sql_add .= " AND (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx ) > 0 ";
         break;
     default:
         break;
@@ -32,17 +32,37 @@ $cnt = sql_fetch("SELECT
 FROM g5_college gc JOIN g5_college_subject gcs on gcs.collegeIdx = gc.cIdx
 WHERE {$sql_add}");
 
+// $res = sql_query("select 
+//                     gc.*,
+//                     gcs.*, 
+//                     CASE
+//                         WHEN gcs.susiIdx is null OR gcs.susiIdx = '' THEN 0
+//                         ELSE 1
+//                     END as 'su',
+//                     CASE
+//                         WHEN gcs.jungsiIdx is null OR gcs.jungsiIdx = '' THEN 0
+//                         ELSE 1
+//                     END as 'ju',
+//                     gac.idx as 'myIdx',
+//                     gcc.codeName as 'areaName',
+//                     gcc2.codeName as 'gun'
+//                 from g5_college gc
+//                     LEFT JOIN g5_college_subject gcs on
+//                         gc.cIdx = gcs.collegeIdx
+//                     LEFT JOIN g5_add_college gac on
+//                         gac.subIdx = gcs.sIdx AND gac.memId = '{$_SESSION['ss_mb_id']}' AND gac.memId = gac.regId
+//                     JOIN g5_cmmn_code gcc on
+//                         gcc.code = gcs.areaCode
+//                     LEFT JOIN g5_cmmn_code gcc2 on
+//                         gcc2.code = gcs.cmmn1
+//                 where 
+//                     {$sql_add}
+//                 ORDER BY gc.cName, gcs.sName");
 $res = sql_query("select 
                     gc.*,
                     gcs.*, 
-                    CASE
-                        WHEN gcs.susiIdx is null OR gcs.susiIdx = '' THEN 0
-                        ELSE 1
-                    END as 'su',
-                    CASE
-                        WHEN gcs.jungsiIdx is null OR gcs.jungsiIdx = '' THEN 0
-                        ELSE 1
-                    END as 'ju',
+                    (SELECT COUNT(*) FROM g5_susi gs WHERE gs.suSubIdx = gcs.sIdx ) as 'su',
+                    (SELECT COUNT(*) FROM g5_jungsi gj WHERE gj.juSubIdx = gcs.sIdx ) as 'ju',
                     gac.idx as 'myIdx',
                     gcc.codeName as 'areaName',
                     gcc2.codeName as 'gun'
