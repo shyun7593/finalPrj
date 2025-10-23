@@ -43,21 +43,20 @@ function getReturnRes($val) {
 
 
 
-switch($stype){
-    case 'jungsi':
-        $sql_add .= " AND gcs.jungsiIdx is not null ";
-        break;
-    case 'susi':
-        $sql_add .= " AND gcs.susiIdx is not null ";
-        break;
-    default:
-        break;
-}
+// switch($stype){
+//     case 'jungsi':
+//         $sql_add .= " AND gcs.jungsiIdx is not null ";
+//         break;
+//     case 'susi':
+//         $sql_add .= " AND gcs.susiIdx is not null ";
+//         break;
+//     default:
+//         break;
+// }
 
 $sql = "SELECT 
             gcs.*,
             gc.*,
-            gj2.*,
             gcc.codeName as 'gun',
             gcc2.codeName as 'areaName',
             gac.idx as 'addC',
@@ -72,8 +71,6 @@ $sql = "SELECT
             gcc2.code = gcs.areaCode
         LEFT JOIN g5_add_college gac on
             gac.subIdx = gcs.sIdx AND memId = '{$_SESSION['ss_mb_id']}' AND gac.memId = gac.regId 
-        LEFT JOIN g5_jungsi gj2 on
-            gj2.juIdx = gcs.jungsiIdx
         WHERE {$add_sql}";
 
 $mres = sql_query($sql);
@@ -159,44 +156,46 @@ foreach ($mres as $k => $v) {
             'score' => $e['eScore']
             ];
         }
+
+        $ju = sql_fetch("SELECT * FROM g5_jungsi WHERE juSubIdx = '{$v['sIdx']}'");
         $data['jungsi'] = [
-            'person' => $v['juPerson'], // 모집인원
+            'person' => $ju['juPerson'], // 모집인원
             'history' => $jhis, // 한국사 등급
             'lang' => $jlang, // 제2외국어 등급
             'eng' => $jeng, // 영어 등급
-            'total' => $v['juTotal'], // 전형 총점
-            'Srate' => $v['juSrate'], // 수능 반영비율
-            'Nrate' => $v['juNrate'], // 내신 반영비율
-            'Prate' => $v['juPrate'], // 실기 반영비율
-            'Orate' => $v['juOrate'], // 기타 반영비율
-            'Korrate' => getReturnRes($v['juKorrate']), // 국어 반영비율
-            'KorSelect' => $v['juKorSelect'], // 국어 선필
-            'Mathrate' => getReturnRes($v['juMathrate']), // 수학 반영비율
-            'MathSelect' => $v['juMathSelect'], // 수학 선필
-            'Engrate' => getReturnRes($v['juEngrate']), // 영어 반영비율
-            'EngSelect' => $v['juEngSelect'], // 영어 선필
-            'Tamrate' => getReturnRes($v['juTamrate']), // 탐구 반영비율
-            'TamSelect' => $v['juTamSelect'], // 탐구 선필
-            'TamCnt' => $v['juTamCnt'], // 탐구 선택 수
-            'HisAdd' => $v['juHisAdd'], // 한국사 가산
-            'HisSelect' => $v['juHisSelect'], // 한국사 선필
-            'LanSelect' => $v['juLanSelect'], // 제2외국어 선필
-            'Char' => $v['juChar'], // 국,수 활용지표
-            'TamChar' => $v['juTamChar'], // 탐구 활용지표
-            'TransIdx' => $v['juTransIdx'], // 변표 인덱스
-            'KorSub' => $v['juKorSub'], // 국어 제외과목
-            'MathSub' => $v['juMathSub'], // 수학 제외과목
-            'TamSub' => $v['juTamSub'], // 탐구 제외과목
-            'KorAdd' => $v['juKorAdd'], // 국어 가산점
-            'MathAdd' => $v['juMathAdd'], // 수학 가산점
-            'TamAdd' => $v['juTamAdd'], // 탐구 가산점
-            'Psub' => $v['juPsub'], // 실기 종목
-            'AppStart' => $v['juAppStart'], // 원서 시작일
-            'AppEnd' => $v['juAppEnd'], // 원서 종료일
-            'PrStart' => $v['juPrStart'], // 실기 시작일
-            'PrEnd' => $v['juPrEnd'], // 실기 종료일
-            'PsDate' => $v['juPsDate'], // 합격자 발표
-            'Pro' => $v['juPro'] // 교직여부
+            'total' => $ju['juTotal'], // 전형 총점
+            'Srate' => $ju['juSrate'], // 수능 반영비율
+            'Nrate' => $ju['juNrate'], // 내신 반영비율
+            'Prate' => $ju['juPrate'], // 실기 반영비율
+            'Orate' => $ju['juOrate'], // 기타 반영비율
+            'Korrate' => getReturnRes($ju['juKorrate']), // 국어 반영비율
+            'KorSelect' => $ju['juKorSelect'], // 국어 선필
+            'Mathrate' => getReturnRes($ju['juMathrate']), // 수학 반영비율
+            'MathSelect' => $ju['juMathSelect'], // 수학 선필
+            'Engrate' => getReturnRes($ju['juEngrate']), // 영어 반영비율
+            'EngSelect' => $ju['juEngSelect'], // 영어 선필
+            'Tamrate' => getReturnRes($ju['juTamrate']), // 탐구 반영비율
+            'TamSelect' => $ju['juTamSelect'], // 탐구 선필
+            'TamCnt' => $ju['juTamCnt'], // 탐구 선택 수
+            'HisAdd' => $ju['juHisAdd'], // 한국사 가산
+            'HisSelect' => $ju['juHisSelect'], // 한국사 선필
+            'LanSelect' => $ju['juLanSelect'], // 제2외국어 선필
+            'Char' => $ju['juChar'], // 국,수 활용지표
+            'TamChar' => $ju['juTamChar'], // 탐구 활용지표
+            'TransIdx' => $ju['juTransIdx'], // 변표 인덱스
+            'KorSub' => $ju['juKorSub'], // 국어 제외과목
+            'MathSub' => $ju['juMathSub'], // 수학 제외과목
+            'TamSub' => $ju['juTamSub'], // 탐구 제외과목
+            'KorAdd' => $ju['juKorAdd'], // 국어 가산점
+            'MathAdd' => $ju['juMathAdd'], // 수학 가산점
+            'TamAdd' => $ju['juTamAdd'], // 탐구 가산점
+            'Psub' => $ju['juPsub'], // 실기 종목
+            'AppStart' => $ju['juAppStart'], // 원서 시작일
+            'AppEnd' => $ju['juAppEnd'], // 원서 종료일
+            'PrStart' => $ju['juPrStart'], // 실기 시작일
+            'PrEnd' => $ju['juPrEnd'], // 실기 종료일
+            'PsDate' => $ju['juPsDate'], // 합격자 발표
+            'Pro' => $ju['juPro'] // 교직여부
         ];
     } else {
         $data['jungsi'] = [];
