@@ -812,14 +812,11 @@ function getTopNScores(arr, n) {
         .slice(0, n); // 상위 n개만 추출
 }
 
-function formatScore(value,rate,his=0) {
-    // const rounded = Math.round((value*(rate/100)) * 100) / 100; // 소수 둘째 자리에서 반올림
-    // const final = Math.round(rounded * 10) / 10;   // 소수 첫째 자리에서 다시 반올림
-    const final = Math.floor((value * (rate / 100) + his) * 10) / 10;
-
+function formatScore(value, rate, his = 0) {
+    const final = Math.floor((value * (rate / 100) + his) * 100) / 100;
   
-    // 정수면 소수점 없이, 아니면 소수 첫째 자리까지
-    return Number.isInteger(final) ? String(final) : final.toFixed(1);
+    // 소수점 이하가 있으면 필요할 만큼만 표시
+    return Number.isInteger(final) ? String(final) : parseFloat(final.toFixed(2)).toString();
   }
   
 function getTransScore(val, rate){
@@ -1140,7 +1137,7 @@ function calcJuScore(json){
             }
 
             let rSubs = getTopNScores(selSubScores,selCnt);
-            console.log(rSubs);
+            // console.log(rSubs);
             if(subArr[selPil[0]]['Rate'].includes(',')){
                 for(let t = 0; t < subArr[selPil[0]]['Rate'].split(',').length; t++){
                     subArr[rSubs[t]['idx']]['TransScore']= getTransScore(rSubs[t]['score'],subArr[selPil[0]]['Rate'].split(',')[t].split("%")[0]);
@@ -1154,7 +1151,7 @@ function calcJuScore(json){
         for(let o = 0; o < 5; o++){
             changeScore += subArr[o]['TransScore'];
         }
-        console.log(subArr);
+        // console.log(subArr);
         let popTam = "";
         if(json[i]['juTamSub'] == tam1 || json[i]['juTamSub'] == tam2){
             popTam = "<br><span style='color:red;'>(" + (tam1 ? tam1 : tam2) + "제외)</span>";

@@ -384,6 +384,7 @@ $query_string = http_build_query(array(
     let coll;
     let json ="";
     let transDatas = [];
+    let records = "";
     $("#viewhideOutput").on('click',function(){
         $(".outputScore").toggleClass('viewType');
         $(this).toggleClass('viewType');
@@ -853,6 +854,7 @@ $query_string = http_build_query(array(
             data: {
                 subIdx : subIdx,
                 id : $("#selStudent option:selected").data('id'),
+                gender : $(".gender").text(),
             },
             async: false,
             dataType: "json",
@@ -861,6 +863,7 @@ $query_string = http_build_query(array(
             },
             success: function(data) {
                 silg = data;
+                records = silg['records'];
             }
         });
         const count = Object.keys(silg['data']).length;
@@ -890,7 +893,7 @@ $query_string = http_build_query(array(
                 html += `
                     <tr style="font-size:1.2em;">
                         <td style="border:1px solid #e4e4e4;">${silg['data'][j]['subject']}</td>
-                        <td style="border:1px solid #e4e4e4;"><input name="${silg['data'][j]['subject']}" type="text" class="frm_input" value="${silg['data'][j]['recode']}"></td>
+                        <td style="border:1px solid #e4e4e4;"><input name="${silg['data'][j]['subject']}" type="text" class="frm_input" value="${silg['data'][j]['recode']}" oninput="updateScore('${silg['data'][j]['subject']}', this.value, event)"></td>
                         <td style="border:1px solid #e4e4e4;">${silg['data'][j]['score']}</td>
                     </tr>
                 `;
@@ -928,6 +931,28 @@ $query_string = http_build_query(array(
             $('#popupBackground').fadeOut(); // 배경 숨기기
             $('#collegePopup').fadeOut(); // 팝업 숨기기
         });
+    }
+
+    function updateScore(subName, value, e) {
+        const input = e.currentTarget;
+        const row = input.closest('tr'); // 같은 행 찾기
+        const scoreCell = row.querySelector('td:last-child'); // 마지막 셀(점수칸)
+
+        const score = getScore(subName, parseFloat(value));
+        scoreCell.textContent = score;
+    }
+
+    function getScore(subName, value) {
+        
+        const list = records.filter(r => r.subName === subName);
+
+        for (const r of list) {
+            if (value >= r.min && value < r.max) {
+            return r.score;
+            }
+        }
+        // 해당 구간이 없으면 0점
+        return 0;
     }
 
     function calcSilgi(idx,type){

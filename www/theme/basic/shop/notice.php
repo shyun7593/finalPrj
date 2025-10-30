@@ -323,7 +323,7 @@ const editor = new toastui.Editor({
     });
 
     function noticeView(idx){
-        location.href = './noticeView?note='+idx+'&stype=<?=$stype?>&text=<?=$text?>&page=<?=$page?>';
+        location.href = './noticeView.php?note='+idx+'&stype=<?=$stype?>&text=<?=$text?>&page=<?=$page?>';
     }
 </script>
 <!-- } 마이페이지 끝 -->

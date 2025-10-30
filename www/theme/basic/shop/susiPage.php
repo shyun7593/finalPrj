@@ -11,20 +11,25 @@ if($gender){
 }
 
 if($college){
-    $sql_add .= " AND college like '%{$college}%' ";
-}
-
-if($subject){
-    $sql_add .= " AND `subject` like '%{$subject}%' ";
+    $sql_add .= " AND college = '{$college}' ";
 }
 
 if($susi){
-    $sql_add .= " AND susi like '%{$susi}%' ";
+    $sql_add .= " AND susi = '{$susi}' ";
+}
+
+if($subject){
+    $s = sql_fetch("SELECT `subject` FROM g5_suhab WHERE college = '{$college}' GROUP BY `subject` limit 1")['subject'];
+    $sql_add .= " AND `subject` = '{$s}' ";
+}
+
+if(!$orderType){
+    $orderd = " ORDER BY total desc";
 }
 
 $cnt = sql_fetch("SELECT COUNT(*) as 'cnt' FROM g5_suhab WHERE $sql_add");
 
-$sql = "SELECT * FROM g5_suhab WHERE $sql_add";
+$sql = "SELECT * FROM g5_suhab WHERE $sql_add $orderd";
 
 ?>
 <style>
@@ -57,6 +62,9 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
         <section id="smb_my_od" style="margin:0;">
             <form id="fsearch" name="fsearch" onsubmit="return fsearch_submit(this);" class="local_sch01 local_sch" method="get">
                 <input type="hidden" id="gender" name="gender" value="<?=$gender?>">
+                <input type="hidden" id="college" name="college" value="<?=$college?>">
+                <input type="hidden" id="subject" name="subject" value="<?=$subject?>">
+                <input type="hidden" id="susi" name="susi" value="<?=$susi?>">
                 <div style="display: flex;flex-direction:column;row-gap:10px;margin-bottom:10px;background:white;padding:10px 5px;">
                     <div style="display: flex;align-items:center;gap:10px;">
                         <div style="font-weight:800;">성&nbsp;&nbsp;&nbsp;별 : </div>
@@ -68,20 +76,57 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
                     </div>
                     
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div style="font-weight:800;">검&nbsp;&nbsp;&nbsp;색 : </div>
-                        <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
-                            <td style="padding:10px;"><input type="text" name="college" id="college" placeholder="대학명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$college?>"></td>
-                            <td style="padding:10px;"><input type="text" name="subject" id="subject" placeholder="학과명" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$subject?>"></td>
-                            <td style="padding:10px;"><input type="submit" class="search-btn" id="searchEnter" value="" style="width:50px !important;"></td>
+                        <div style="font-weight:800;">학&nbsp;&nbsp;&nbsp;교 : </div>
+                        <div>
+                            <select name="selectcollege" id="selectcollege" class="frm_input">
+                                <option value="">선택하세요.</option>
+                                <?
+                                    $passRes = sql_query("SELECT college FROM g5_suhab GROUP BY college ORDER BY college");
+                                    foreach($passRes as $pr => $p){?>
+                                        <option value="<?=$p['college']?>" <?if($p['college'] == $college) echo 'selected';?>><?=$p['college']?></option>
+                                <? }
+                                ?>
+                            </select>
+                        </div>
+                        <div style="font-weight:800;">학&nbsp;&nbsp;&nbsp;과 : </div>
+                        <div>
+                            <select name="selectsubject" id="selectsubject" class="frm_input">
+                                
+                                <?if($college){?>
+                                    <option value="">선택하세요.</option>
+                                    <?$subRes = sql_query("SELECT `subject` FROM g5_suhab WHERE college = '{$college}' GROUP BY `subject`");
+                                    foreach($subRes as $sr => $s){?>
+                                        <option value="<?=$s['subject']?>" <?if($s['subject'] == $subject) {echo 'selected';}?>><?=$s['subject']?></option>
+                                <?  }
+                                }else {?>
+                                    <option>대학을 먼저 선택해주세요.</option>
+                                <?}?>
+                            </select>
+                        </div>
+                        <div style="font-weight:800;">전&nbsp;&nbsp;&nbsp;형 : </div>
+                        <div>
+                            <select name="selectsusi" id="selectsusi" class="frm_input">
+                                <option value="">선택하세요.</option>
+                                <?
+                                    $su_add = " 1=1 ";
+                                    if($college){
+                                        $su_add .= " AND college = '{$college}' ";
+                                    }
+
+                                    if($subject){
+                                        $su_add .= " AND `subject` = '{$subject}' ";
+                                    }
+                                    $subRes = sql_query("SELECT susi FROM g5_suhab WHERE $su_add GROUP BY susi");
+                                    foreach($subRes as $sr => $s){?>
+                                        <option value="<?=$s['susi']?>" <?if($s['susi'] == $susi) {echo 'selected';}?>><?=$s['susi']?></option>
+                                <?  }?>
+                            </select>
                         </div>
                     </div>
-
                     <div style="display: flex;align-items:center;gap:10px;">
-                        <div style="font-weight:800;">전&nbsp;&nbsp;&nbsp;형 : </div>
-                        <div style="display: flex;justify-content:center;align-items:center;gap:10px;min-width:500px;">
-                            <td style="padding:10px;"><input type="text" name="susi" id="susi" placeholder="전형" class="frm_input textSearch" style="width: 100%;padding:0 10px;" value="<?=$susi?>"></td>
-                            <td style="padding:10px;"></td>
-                            <td style="padding:10px;"><input type="submit" class="search-btn" id="searchEnter" value="" style="width:23px !important;"></td>
+                        <div style="font-weight:800;">필&nbsp;&nbsp;&nbsp;터 : </div>
+                        <div>
+                            <button type="button" class="subje btn-n" id="sScores" onclick="viewTypeChange(event)">접기</button>
                         </div>
                     </div>
                 </div>
@@ -95,23 +140,23 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">지점</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">이름</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">학교</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:150px;width:150px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">대학</th>
+                            <!-- <th style="position:sticky;top:0;z-index:13;min-width:150px;width:150px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">대학</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:200px;width:200px;background:rgba(227, 244, 248);border-right:1px solid white;" rowspan="2">학과</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:150px;width:150px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;" rowspan="2">전형</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;"colspan="5">점수</th>
-                            <th style="position:sticky;top:0;z-index:13;min-width:160px;width:160px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;"colspan="2">합격</th>
+                            <th style="position:sticky;top:0;z-index:13;min-width:150px;width:150px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;" rowspan="2">전형</th> -->
+                            <th class="sScores" style="position:sticky;top:0;z-index:13;min-width:50px;width:50px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;"colspan="5">점수</th>
+                            <th class="sScores" style="position:sticky;top:0;z-index:13;min-width:160px;width:160px;background:rgba(227, 244, 248);border-right:1px solid white;border-right:1px solid #e4e4e4;"colspan="2">합격</th>
                             <th style="position:sticky;top:0;z-index:13;min-width:100px;width:100px;background:rgba(227, 244, 248);" colspan="18">실기</th>
                         </tr>
                     <tr class="sub-header">
                         
-                        <th style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등급</th>
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">내신</th>
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">실기</th>
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">기타</th>
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;border-right:1px solid #e4e4e4;">총점</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:70px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">등급</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">내신</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">실기</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">기타</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;border-right:1px solid #e4e4e4;">총점</th>
 
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
-                        <th style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;border-right:1px solid #e4e4e4;">최종</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;">최초</th>
+                        <th class="sScores" style="position:sticky;top:45px;min-width:80px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom:1px solid #d3d3d3;border-right:1px solid #e4e4e4;">최종</th>
 
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">종목</th>
                         <th style="position:sticky;top:45px;min-width:100px;background:rgba(227, 244, 248);border-right:1px solid white;border-bottom: 1px solid #d3d3d3;">기록</th>
@@ -152,17 +197,17 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
                                 <td style="max-width:50px;text-align:center;"><?=$g?></td>
                                 <td style="max-width:100px;text-align:center;"><?=$s['branch']?></td>
                                 <td style="max-width:50px;text-align:center;"><?=$s['studentNm']?></td>
-                                <td style="max-width:50px;text-align:center;"><?=$s['school']?></td>
-                                <td style="max-width:50px;text-align:center;"><?=$s['college']?></td>
+                                <td style="max-width:50px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['school']?></td>
+                                <!-- <td style="max-width:50px;text-align:center;"><?=$s['college']?></td>
                                 <td style="max-width:200px;text-align:center;"><?=$s['subject']?></td>
-                                <td style="max-width:150px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['susi']?></td>
-                                <td style="width:50px;text-align:center;"><?=$s['grade']?></td>
-                                <td style="width:50px;text-align:center;"><?=$s['naesin']?></td>
-                                <td style="width:50px;text-align:center;"><?=$s['silgi']?></td>
-                                <td style="width:50px;text-align:center;"><?=$s['other']?></td>
-                                <td style="width:50px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['total']?></td>
-                                <td style="width:50px;text-align:center;"><?=$s['firstA']?></td>
-                                <td style="width:100px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['lastA']?></td>
+                                <td style="max-width:150px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['susi']?></td> -->
+                                <td class="sScores" style="width:50px;text-align:center;"><?=$s['grade']?></td>
+                                <td class="sScores" style="width:50px;text-align:center;"><?=$s['naesin']?></td>
+                                <td class="sScores" style="width:50px;text-align:center;"><?=$s['silgi']?></td>
+                                <td class="sScores" style="width:50px;text-align:center;"><?=$s['other']?></td>
+                                <td class="sScores" style="width:50px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['total']?></td>
+                                <td class="sScores" style="width:50px;text-align:center;"><?=$s['firstA']?></td>
+                                <td class="sScores" style="width:100px;text-align:center;border-right:1px solid #e4e4e4;"><?=$s['lastA']?></td>
 
                                 <td style="width:200px;text-align:center;"><?=$s['sil_type1']?></td>
                                 <td style="width:80px;text-align:center;"><?=$s['sil_record1']?></td>
@@ -193,7 +238,7 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
                         <?}?>
                     </tbody>
                 </table>
-        </div>
+            </div>
             <?} else {?>
                 <div class="tbl_wrap border-tb">
                 <table class="tbl_head01">
@@ -211,108 +256,7 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
 </div>
 
 <script>
-    function viewTypeChange(e){
-        let id = e.currentTarget.id;
-        let classes = e.currentTarget.classList;
-        let cnt = $(".subje.active").length;
-        if(id == 'tall'){
-            if(classes.contains('active')){
-
-            } else {
-                document.querySelectorAll('.subje').forEach((el,i,arr)=>{
-                    if(el.id != id){
-                        el.classList.remove('active');
-                    } else{
-                        el.classList.add('active');
-                    }
-                });
-            }
-            
-        } else {
-            $("#tall").removeClass('active');
-            if(classes.contains('active')){
-                if(cnt == 1){
-                    document.querySelectorAll('.subje').forEach((el,i,arr)=>{
-                        if(el.id != 'tall'){
-                            el.classList.remove('active');
-                        } else{
-                            el.classList.add('active');
-                        }
-                    });
-                } else {
-                    classes.remove('active');
-                }
-            } else {
-                $(`#${id}`).addClass('active');
-                if($(".subje.active").length == $(".subje").length -1){
-                    document.querySelectorAll('.subje').forEach((el,i,arr)=>{
-                        if(el.id != 'tall'){
-                            el.classList.remove('active');
-                        } else{
-                            el.classList.add('active');
-                        }
-                    });
-                }
-            }
-        }
-        resetView();
-    }
-
     function fsearch_submit(e) {
-    }
-
-    function resetView(){
-        var arrs = [];
-        var arrs2 = [];
-        if($("#tall").hasClass('active')){
-            document.querySelectorAll('.subje').forEach((el,i,arr)=>{
-                arrs.push(el.id);
-            });
-            for(let i = 0; i < arrs.length; i++){
-                document.querySelectorAll(`.${arrs[i]}`).forEach((el,i,arr)=>{
-                    el.style.display = '';
-                });
-            }
-        } else {
-            document.querySelectorAll('.subje').forEach((el,i,arr)=>{
-                if(el.classList.contains('active')){
-                    arrs.push(el.id);
-                } else {
-                    arrs2.push(el.id);
-                }
-            });
-    
-            for(let i = 0; i < arrs2.length; i++){
-                document.querySelectorAll(`.${arrs2[i]}`).forEach((el,i,arr)=>{
-                    el.style.display = 'none';
-                });
-            }
-    
-            for(let i = 0; i < arrs.length; i++){
-                document.querySelectorAll(`.${arrs[i]}`).forEach((el,i,arr)=>{
-                    el.style.display = '';
-                });
-            }
-        }
-        
-        document.querySelectorAll(".avg").forEach((el,i,arr)=>{
-            let total = 0;
-            let cnt = 0;
-            for(let j=7; j<el.parentElement.children.length - 2;j++){
-                if(arrs.some(cls => el.parentElement.children[j].classList.contains(cls)) && el.parentElement.children[j].classList[1] == `${el.parentElement.children[j].classList[0]}_score`){
-                    if(el.parentElement.children[j].textContent != ''){
-                        total+=Number(el.parentElement.children[j].textContent);
-                        cnt++;
-                    }
-                }
-            }
-            el.previousElementSibling.textContent = total;
-            if(cnt == 0){
-                el.textContent = 0;
-            } else {
-                el.textContent = Math.round((total/cnt)*100)/100;
-            }
-        });
     }
 
     function viewGender(e){
@@ -320,16 +264,17 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
         $("#fsearch").submit();
     }
 
-    function viewJuSu(e){
-        $("#college").val('');
-        $("#subject").val('');
-        $("#coltype").val(e);
-        $("#fsearch").submit();
-    }
+    // function viewJuSu(e){
+    //     $("#college").val('');
+    //     $("#subject").val('');
+    //     $("#coltype").val(e);
+    //     $("#fsearch").submit();
+    // }
 
     $("#selectcollege").on('change',function(){
         $("#college").val($(this).val());
         $("#subject").val('');
+        $("#susi").val('');
         $("#fsearch").submit();
     });
 
@@ -337,6 +282,29 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add";
         $("#subject").val($(this).val());
         $("#fsearch").submit();
     });
+
+    $("#selectsusi").on('change',function(){
+        $("#susi").val($(this).val());
+        $("#fsearch").submit();
+    });
+
+    function viewTypeChange(e){
+        e.currentTarget.classList.toggle('active');
+        let id = e.currentTarget.id;
+        let classes = e.currentTarget.classList;
+        if(id == 'sScores'){
+            if(classes.contains('active')){
+                document.querySelectorAll('.sScores').forEach((el,i,arr)=>{
+                    el.style.display='none';
+                });
+            } else {
+                document.querySelectorAll('.sScores').forEach((el,i,arr)=>{
+                    el.style.display='';
+                });
+            }
+            
+        }
+    }
 </script>
 <!-- } 마이페이지 끝 -->
 
