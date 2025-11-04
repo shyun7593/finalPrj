@@ -22,7 +22,7 @@ $mshop_categories = get_shop_category_array(true);
         <?php echo outlogin('theme/shop_basic'); // 외부 로그인 ?>
         <ul id="cate_tnb">
             <? 
-                $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_use = 1 ORDER BY me_order");
+                $menus= sql_query("SELECT * FROM g5_menu WHERE me_code='{$_SESSION['mb_profile']}' AND me_mobile_use = 1 ORDER BY me_order");
                 foreach($menus as $mu => $m){
             ?>
                 <li style="width: 100%;" class="<?if($m['me_link'] == $nowUrl) echo ' active';?>"><a style="padding:12px 0;" href="<?= $m['me_link'] ?>"><?= $m['me_name']?></a></li>

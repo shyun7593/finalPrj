@@ -1,4 +1,7 @@
 <?php
+
+use Google\Service\CloudControlsPartnerService\Console;
+
 define('G5_CERT_IN_PROG', true);
 include_once('./_common.php');
 
@@ -96,6 +99,7 @@ $sql = "SELECT
 	addS,
 	addT,
     silgi,
+    silSum,
     hisList,
     langList,
     engList,
@@ -131,6 +135,7 @@ SELECT
     IFNULL(addc.addS, 0) AS addS,
     IFNULL(addc.addT, 0) AS addT,
     IFNULL(silgiTbl.silgi, 0) AS silgi,
+    IFNULL(silgiTbl.silgiSum, 0) as silSum,
     hist.hisList,
     lang.langList,
     eng.engList,
@@ -193,7 +198,8 @@ LEFT JOIN (
 LEFT JOIN (
   SELECT 
     csubIdx,
-    COUNT(*) AS silgi
+    COUNT(*) AS silgi,
+    IFNULL(SUM(subScore), 0) as 'silgiSum'
   FROM g5_college_silgi
   WHERE memId = '{$mb_id['mb_id']}' AND subRecode + 0 > 0
   GROUP BY csubIdx
@@ -202,7 +208,6 @@ WHERE {$add_sql}
 ) AS A
 ORDER BY A.addT DESC, A.addS DESC, A.gun, A.collegeName, A.subName
 ";
-
 $mres = sql_query($sql);
 $data = [];
 
@@ -251,7 +256,8 @@ foreach ($mres as $k => $v) {
         'juTamChar' => $v['juTamChar'], // 탐구 변표최등
         'juLanSelect' => $v['juLanSelect'], // 제2외국어 필선
         'juPrate' => $v['juPrate'], // 실기 반영비율
-        'juTamSub' => $v['juTamSub'] // 탐구 제외과목
+        'juTamSub' => $v['juTamSub'], // 탐구 제외과목
+        'silSum' => $v['silSum'] // 실기점수
     ];
 }
 

@@ -697,7 +697,7 @@ $query_string = http_build_query(array(
                 // $(".now-page").html(coll['paging'].page + ' of ' + coll['paging'].total_page);
                 coll.data.forEach(function(row, idx){
                     let no = (coll['paging'].page - 1) * 20 + (idx + 1);
-                    addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi);
+                    addCollegeRow(no,row.subIdx,row.teacher,row.student,row.areaNm,row.collegeType,row.gun,row.collegeNm,row.subjectNm,row.person,row.pSub,row.silgi,row.silSum);
                 });
                 if(coll.data.length>0){
                     calcJuScore(coll.data);
@@ -707,7 +707,7 @@ $query_string = http_build_query(array(
         });
     }
 
-    function addCollegeRow(no,subIdx,teacher,student,area,type,gun,college,subject,person,silgi,silgiexist){
+    function addCollegeRow(no,subIdx,teacher,student,area,type,gun,college,subject,person,silgi,silgiexist,silSum){
         if(!person){
             person = '-';
         }
@@ -747,7 +747,7 @@ $query_string = http_build_query(array(
                 <td class="cutline"></td>
                 <td class="cutline"></td>
                 <td class="cutline"></td>
-                <td>0</td>
+                <td>${silSum}</td>
                 <td>`;
         if(silgi){
             html += `<button type="button" class="btn-n`;
@@ -864,6 +864,7 @@ $query_string = http_build_query(array(
             success: function(data) {
                 silg = data;
                 records = silg['records'];
+                console.log(records);
             }
         });
         const count = Object.keys(silg['data']).length;
@@ -903,7 +904,7 @@ $query_string = http_build_query(array(
                 html += `
                     <tr style="font-size:1.2em;">
                         <td style="border:1px solid #e4e4e4;">${subs[i]}</td>
-                        <td style="border:1px solid #e4e4e4;"><input name="${subs[i]}" type="text" class="frm_input"></td>
+                        <td style="border:1px solid #e4e4e4;"><input name="${subs[i]}" type="text" class="frm_input" oninput="updateScore('${subs[i]}', this.value, event)"></td>
                         <td style="border:1px solid #e4e4e4;">0</td>
                     </tr>
                 `;
@@ -943,14 +944,15 @@ $query_string = http_build_query(array(
     }
 
     function getScore(subName, value) {
-        
         const list = records.filter(r => r.subName === subName);
 
         for (const r of list) {
             if (value >= r.min && value < r.max) {
+                console.log(r.score);
             return r.score;
             }
         }
+        
         // 해당 구간이 없으면 0점
         return 0;
     }

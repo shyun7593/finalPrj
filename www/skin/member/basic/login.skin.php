@@ -201,6 +201,7 @@ function doAct(type){
             return false;
         },
         success: function(data) {
+            console.log(data);
             if(type == 'reg'){
                 switch(data){
                     case 'success':
