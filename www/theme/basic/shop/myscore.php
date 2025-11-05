@@ -204,7 +204,7 @@ $m_cmmn = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code F
 
     function viewMonth(e){
         let id = e.currentTarget.id;
-        location.href = './myscore?month=' + id;
+        location.href = './myscore.php?month=' + id;
     }
 
     function saveGrade(){
