@@ -294,10 +294,12 @@ $sql = "SELECT * FROM g5_suhab WHERE $sql_add $orderd";
         let classes = e.currentTarget.classList;
         if(id == 'sScores'){
             if(classes.contains('active')){
+                e.currentTarget.textContent = '열기';
                 document.querySelectorAll('.sScores').forEach((el,i,arr)=>{
                     el.style.display='none';
                 });
             } else {
+                e.currentTarget.textContent = '접기';
                 document.querySelectorAll('.sScores').forEach((el,i,arr)=>{
                     el.style.display='';
                 });
