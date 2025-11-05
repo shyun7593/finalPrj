@@ -74,7 +74,7 @@ if($res['idx']){
     });
     
     function goBack(){
-        location.href = './notice?stype=<?=$stype?>&text=<?=$text?>&page=<?=$page?>';
+        location.href = './notice.php?stype=<?=$stype?>&text=<?=$text?>&page=<?=$page?>';
     }
 
     function resetUpdate(){
