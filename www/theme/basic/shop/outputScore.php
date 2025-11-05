@@ -142,7 +142,7 @@ $query_string = http_build_query(array(
                                         <th rowspan="2">시험구분</th>
                                         <td rowspan="2" class="selMonth">
                                             <?if($bid){?>
-                                                <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;" <?if($_SESSION['mb_profile'] != 'C40000001') echo "class='isauto text-center'";?>>
+                                                <select name="selMonth" id="selMonth"  style="border:1px solid #d3d3d3;height: 45px;width:100%;padding:5px;">
                                                     <?
                                                         $msql = sql_query("SELECT * FROM g5_cmmn_code WHERE upperCode = (SELECT code FROM g5_cmmn_code WHERE codeName = '모의고사') AND useYN = 1");
                                                         foreach($msql as $ms => $m){
@@ -530,7 +530,9 @@ $query_string = http_build_query(array(
 
     $("#selMonth").on('change',function(){
         if($("#selStudent").val()){
-            removeIsauto();
+            if('<?=$_SESSION['mb_profile']?>' != 'C40000003'){
+                removeIsauto();
+            }
             showView(json);
         }
     });
